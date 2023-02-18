@@ -16,6 +16,6 @@ function get_temp_forecast(city::String)
 	df_temp = DataFrame(TIME = TIME,
 	                    TEMP = TEMP)
 
-	return df_temp
+	return df_temp, location
 
 end

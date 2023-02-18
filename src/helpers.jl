@@ -2,15 +2,17 @@ function fetch_lat_long(city::String)
 	
 	df_city = filter(row -> row.CITY == city, DF_CITIES)
 	lat, long = 0, 0
+    timezone  = ""
 
 	if isempty(df_city)
         error("Coordinates for city not found!")
 	else
         lat  = df_city[!, :LATITUDE][1]
         long = df_city[!, :LONGITUDE][1]
+        timezone = df_city[!, :TIMEZONE][1]
 	end
 
-	return GeogCoord(lat, long)
+	return GeogCoord(lat, long, timezone)
 	
 end
 
