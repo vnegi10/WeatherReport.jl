@@ -3,9 +3,9 @@
     for city in ["Eindhoven", "Veldhoven", "Groningen"]
 
         results = Weather.get_rain_forecast(city)
-        df_temp = results[1]
+        df_rain = results[1]
 
-        rows, cols = size(df_temp)
+        rows, cols = size(df_rain)
 
         @test rows == 24*7
         @test cols == 2
@@ -17,9 +17,9 @@
     for city in ["Haldwani", "Delhi", "Mumbai"]
 
         results = Weather.get_rain_forecast(city)
-        df_temp = results[1]
+        df_rain = results[1]
 
-        rows, cols = size(df_temp)
+        rows, cols = size(df_rain)
 
         @test rows == 24*7
         @test cols == 2

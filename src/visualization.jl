@@ -23,12 +23,12 @@ function plot_temp_forecast(city::String;
         border = :bold,
         color = :yellow,
         canvas = BrailleCanvas,
-        width = 100,
-        height = :auto,
+        width = 75,
+        height = 15,
         grid = true
     )
 
-    label!(plt, :t, "Timezone: $(time_zone)")
+    label!(plt, :tl, "Timezone: $(time_zone)")
     label!(plt, :tr, ATTRIBUTION)
 
     return plt
@@ -90,11 +90,45 @@ function plot_rain_forecast(city::String;
         border = :bold,
         color = :red,
         canvas = BrailleCanvas,
-        width = 100,
-        height = :auto,
+        width = 75,
+        height = 15,
     )
 
-    label!(plt, :t, "Timezone: $(time_zone)")
+    label!(plt, :tl, "Timezone: $(time_zone)")
+    label!(plt, :tr, ATTRIBUTION)
+
+    return plt
+
+end
+
+"""
+"""
+function plot_snow_forecast(city::String;
+                            days::Int64 = 7)
+
+    results = get_snow_forecast(city)
+    df_snow, location = results[1], results[2]
+    time_zone = location.timezone
+
+    @assert days*24 ≤ nrow(df_snow) "Not enough data, try again with less days!"
+    df_snow = df_snow[1:days*24, :]
+
+    plt = lineplot(
+        df_snow[!, :TIME],
+        df_snow[!, :SNOW],
+        title  = "$(city)",
+        xlabel = "Time [days]",
+        ylabel = "Snowfall [cm]",
+        xticks = true,
+        yticks = true,
+        border = :bold,
+        color = :white,
+        canvas = BrailleCanvas,
+        width = 75,
+        height = 15,
+    )
+
+    label!(plt, :tl, "Timezone: $(time_zone)")
     label!(plt, :tr, ATTRIBUTION)
 
     return plt
