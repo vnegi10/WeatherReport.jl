@@ -1,5 +1,8 @@
 # Weather.jl
 
+[![License](http://img.shields.io/badge/license-MIT-brightgreen.svg?style=flat)](LICENSE.md)
+[![Build status (Github Actions)](https://github.com/vnegi10/Weather.jl/workflows/CI/badge.svg)](https://github.com/vnegi10/Weather.jl/actions)
+
 This package provides basic weather information right within the
 terminal. Most major cities around the world are supported.
 
