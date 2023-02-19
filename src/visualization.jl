@@ -66,3 +66,37 @@ function show_current_weather(city::String)
     return p_table
 
 end
+
+"""
+"""
+function plot_rain_forecast(city::String;
+                            days::Int64 = 7)
+
+    results = get_rain_forecast(city)
+    df_rain, location = results[1], results[2]
+    time_zone = location.timezone
+
+    @assert days*24 ≤ nrow(df_rain) "Not enough data, try again with less days!"
+    df_rain = df_rain[1:days*24, :]
+
+    plt = lineplot(
+        df_rain[!, :TIME],
+        df_rain[!, :RAIN],
+        title  = "$(city)",
+        xlabel = "Time [days]",
+        ylabel = "Rain [mm]",
+        xticks = true,
+        yticks = true,
+        border = :bold,
+        color = :red,
+        canvas = BrailleCanvas,
+        width = 100,
+        height = :auto,
+    )
+
+    label!(plt, :t, "Timezone: $(time_zone)")
+    label!(plt, :tr, ATTRIBUTION)
+
+    return plt
+
+end
