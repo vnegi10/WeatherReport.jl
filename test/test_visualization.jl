@@ -12,4 +12,9 @@
         @test sizeof(plt) > 0
     end
 
+    @testset "plot_snow_forecast" begin
+        plt = plot_snow_forecast("Helsinki", days = 3)
+        @test sizeof(plt) > 0
+    end
+
 end
