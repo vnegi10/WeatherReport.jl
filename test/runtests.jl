@@ -31,7 +31,8 @@ end
 ################# All test groups #################
 
 test_files = ["test_temperature.jl",
-              "test_rain.jl"]
+              "test_rain.jl",
+              "test_visualization.jl"]
 
 ###################################################
 
