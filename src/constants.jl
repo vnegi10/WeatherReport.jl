@@ -1,7 +1,6 @@
 const URL = "https://api.open-meteo.com/v1/forecast"
 
-const DF_CITIES = joinpath(@__DIR__, "..", "data", 
-                           "cities15000.txt") |> get_cities_lat_long
+const DF_CITIES = url_to_df("https://raw.githubusercontent.com/vnegi10/GeoNames_analysis/master/cities500_lat_long.csv")
 
 const ATTRIBUTION = "[Weather data by Open-Meteo.com]"
 

@@ -1,6 +1,7 @@
 function fetch_lat_long(city::String)
 	
-	df_city = filter(row -> row.CITY == city, DF_CITIES)
+	df_city = filter(row -> ~ismissing(row.CITY) &&
+                             row.CITY == city, DF_CITIES)
 	lat, long = 0, 0
     timezone  = ""
 
@@ -16,7 +17,17 @@ function fetch_lat_long(city::String)
 	
 end
 
-function get_cities_lat_long(file::String)
+function url_to_df(url::String)
+	
+	df = CSV.File(HTTP.get(url,
+	                       require_ssl_verification = false).body,
+                           header = 1) |> DataFrame
+	
+	return df
+	
+end
+
+#=function get_cities_lat_long(file::String)
 
 	all_lines  = readlines(file)
 	
@@ -46,4 +57,4 @@ function get_cities_lat_long(file::String)
 
 	return df_cities
 	
-end
+end=#

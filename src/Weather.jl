@@ -6,6 +6,7 @@ export plot_temp_forecast,
 
 using HTTP,
       JSON,
+      CSV,
       DataFrames,
       Dates,
       UnicodePlots,
