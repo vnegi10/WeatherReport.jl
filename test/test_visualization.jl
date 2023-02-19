@@ -17,4 +17,9 @@
         @test sizeof(plt) > 0
     end
 
+    @testset "show_current_weather" begin
+        result = @capture_out show_current_weather("Oslo")
+        @test length(result) > 0
+    end
+
 end
