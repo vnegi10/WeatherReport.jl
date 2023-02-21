@@ -20,10 +20,7 @@ include("helpers.jl")
 include("constants.jl")
 
 include("hourly.jl")
-include("temperature.jl")
 include("current.jl")
-include("rain.jl")
-include("snow.jl")
 include("visualization.jl")
 
 end # module Weather
