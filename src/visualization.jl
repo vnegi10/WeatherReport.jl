@@ -3,18 +3,18 @@
 function plot_temp_forecast(city::String;
                             days::Int64 = 7)
 
-    results = get_temp_forecast(city)
+    results = get_hourly_forecast(city, "temperature_2m")
     df_temp, location = results[1], results[2]
     time_zone = location.timezone
 
     @assert days*24 ≤ nrow(df_temp) "Not enough data, try again with less days!"
     df_temp = df_temp[1:days*24, :]
 
-    T_min, T_max = minimum(df_temp[!, :TEMP]), maximum(df_temp[!, :TEMP])
+    T_min, T_max = minimum(df_temp[!, :FORECAST]), maximum(df_temp[!, :FORECAST])
 
     plt = lineplot(
         df_temp[!, :TIME],
-        df_temp[!, :TEMP],
+        df_temp[!, :FORECAST],
         title  = "$(city): min $(T_min) °C, max $(T_max) °C",
         xlabel = "Time [days]",
         ylabel = "Temperature [°C]",
