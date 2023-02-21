@@ -1,6 +1,6 @@
 """
 """
-function plot_temp_forecast(city::String;
+function plot_temp_hourly(city::String;
                             days::Int64 = 7)
 
     results = get_hourly_forecast(city, "temperature_2m")
@@ -69,7 +69,7 @@ end
 
 """
 """
-function plot_rain_forecast(city::String;
+function plot_rain_hourly(city::String;
                             days::Int64 = 7)
 
     results = get_hourly_forecast(city, "rain")
@@ -103,8 +103,8 @@ end
 
 """
 """
-function plot_snow_forecast(city::String;
-                            days::Int64 = 7)
+function plot_snow_hourly(city::String;
+                          days::Int64 = 7)
 
     results = get_hourly_forecast(city, "snowfall")
     df_snow, location = results[1], results[2]

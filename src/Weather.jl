@@ -1,8 +1,8 @@
 module Weather
 
-export plot_temp_forecast,
-       plot_rain_forecast,
-       plot_snow_forecast,
+export plot_temp_hourly,
+       plot_rain_hourly,
+       plot_snow_hourly,
        show_current_weather
 
 using HTTP,
