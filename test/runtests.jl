@@ -30,9 +30,7 @@ end
 
 ################# All test groups #################
 
-test_files = ["test_temperature.jl",
-              "test_rain.jl",
-              "test_snow.jl",
+test_files = ["test_hourly.jl",
               "test_visualization.jl",
               "test_current.jl",
               "test_helpers.jl"]

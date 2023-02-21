@@ -2,18 +2,18 @@
 
 @testset verbose = true "Plotting functions" begin
 
-    @testset "plot_temp_forecast" begin
-        plt = plot_temp_forecast("Veldhoven", days = 3)
+    @testset "plot_temp_hourly" begin
+        plt = plot_temp_hourly("Veldhoven", days = 3)
         @test sizeof(plt) > 0
     end
 
-    @testset "plot_rain_forecast" begin
-        plt = plot_rain_forecast("Osaka", days = 3)
+    @testset "plot_rain_hourly" begin
+        plt = plot_rain_hourly("Osaka", days = 3)
         @test sizeof(plt) > 0
     end
 
-    @testset "plot_snow_forecast" begin
-        plt = plot_snow_forecast("Helsinki", days = 3)
+    @testset "plot_snow_hourly" begin
+        plt = plot_snow_hourly("Helsinki", days = 3)
         @test sizeof(plt) > 0
     end
 
