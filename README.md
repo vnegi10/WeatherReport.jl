@@ -1,8 +1,8 @@
-# Weather.jl
+# WeatherReport.jl
 
 [![License](http://img.shields.io/badge/license-MIT-brightgreen.svg?style=flat)](LICENSE.md)
-[![Build status (Github Actions)](https://github.com/vnegi10/Weather.jl/workflows/CI/badge.svg)](https://github.com/vnegi10/Weather.jl/actions)
-[![Coverage Status](https://codecov.io/gh/vnegi10/Weather.jl/branch/main/graphs/badge.svg?branch=main)](https://app.codecov.io/gh/vnegi10/Weather.jl)
+[![Build status (Github Actions)](https://github.com/vnegi10/WeatherReport.jl/workflows/CI/badge.svg)](https://github.com/vnegi10/WeatherReport.jl/actions)
+[![Coverage Status](https://codecov.io/gh/vnegi10/WeatherReport.jl/branch/main/graphs/badge.svg?branch=main)](https://app.codecov.io/gh/vnegi10/WeatherReport.jl)
 
 This package provides basic weather information right within the
 terminal. Your location is not tracked, therefore, you need to specify
@@ -12,7 +12,7 @@ the world are supported.
 ## How to install?
 
 * Press ']' to enter Pkg prompt
-* add Weather
+* add WeatherReport
 
 ## Data credits
 

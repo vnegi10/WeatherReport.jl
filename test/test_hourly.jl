@@ -2,7 +2,7 @@
 
     for city in ["Eindhoven", "Veldhoven", "Groningen"]
 
-        results = Weather.get_hourly_forecast(city, "temperature_2m")
+        results = WeatherReport.get_hourly_forecast(city, "temperature_2m")
         df_temp = results[1]
 
         rows, cols = size(df_temp)
@@ -16,7 +16,7 @@
 
     for city in ["Haldwani", "Delhi", "Mumbai"]
 
-        results = Weather.get_hourly_forecast(city, "temperature_2m")
+        results = WeatherReport.get_hourly_forecast(city, "temperature_2m")
         df_temp = results[1]
 
         rows, cols = size(df_temp)
@@ -34,7 +34,7 @@ end
 
     for city in ["Eindhoven", "Veldhoven", "Groningen"]
 
-        results = Weather.get_hourly_forecast(city, "rain")
+        results = WeatherReport.get_hourly_forecast(city, "rain")
         df_rain = results[1]
 
         rows, cols = size(df_rain)
@@ -48,7 +48,7 @@ end
 
     for city in ["Haldwani", "Delhi", "Mumbai"]
 
-        results = Weather.get_hourly_forecast(city, "rain")
+        results = WeatherReport.get_hourly_forecast(city, "rain")
         df_rain = results[1]
 
         rows, cols = size(df_rain)
@@ -66,7 +66,7 @@ end
 
     for city in ["Oslo", "Tromso", "Trondheim"]
 
-        results = Weather.get_hourly_forecast(city, "snowfall")
+        results = WeatherReport.get_hourly_forecast(city, "snowfall")
         df_snow = results[1]
 
         rows, cols = size(df_snow)
@@ -80,7 +80,7 @@ end
 
     for city in ["Tokyo", "Osaka", "Nagasaki"]
 
-        results = Weather.get_hourly_forecast(city, "snowfall")
+        results = WeatherReport.get_hourly_forecast(city, "snowfall")
         df_snow = results[1]
 
         rows, cols = size(df_snow)

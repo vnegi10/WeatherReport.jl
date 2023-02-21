@@ -1,4 +1,4 @@
-using Test, Suppressor, Weather
+using Test, Suppressor, WeatherReport
 
 errors = false
 all_tests = false
