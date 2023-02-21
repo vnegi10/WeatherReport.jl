@@ -72,7 +72,7 @@ end
 function plot_rain_forecast(city::String;
                             days::Int64 = 7)
 
-    results = get_rain_forecast(city)
+    results = get_hourly_forecast(city, "rain")
     df_rain, location = results[1], results[2]
     time_zone = location.timezone
 
@@ -81,7 +81,7 @@ function plot_rain_forecast(city::String;
 
     plt = lineplot(
         df_rain[!, :TIME],
-        df_rain[!, :RAIN],
+        df_rain[!, :FORECAST],
         title  = "$(city)",
         xlabel = "Time [days]",
         ylabel = "Rain [mm]",
