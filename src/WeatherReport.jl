@@ -1,4 +1,4 @@
-module Weather
+module WeatherReport
 
 export plot_temp_hourly,
        plot_rain_hourly,
@@ -23,4 +23,4 @@ include("hourly.jl")
 include("current.jl")
 include("visualization.jl")
 
-end # module Weather
+end # module WeatherReport

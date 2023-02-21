@@ -1,4 +1,4 @@
-name = "Weather"
+name = "WeatherReport"
 uuid = "3c954167-71e4-4212-9688-830d6b8fcbc2"
 authors = ["Vikas Negi <vikas.negi10@gmail.com>"]
 version = "0.1.0"
@@ -19,3 +19,4 @@ HTTP = "1.7"
 JSON = "0.21"
 PrettyTables = "2.2"
 UnicodePlots = "3.4"
+julia = "1.6"

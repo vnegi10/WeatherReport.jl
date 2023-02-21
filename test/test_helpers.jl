@@ -2,7 +2,7 @@
 
     url = "https://raw.githubusercontent.com/vnegi10/GeoNames_analysis/master/cities500_lat_long.csv"
 
-    df_cities = Weather.url_to_df(url)
+    df_cities = WeatherReport.url_to_df(url)
     rows, cols = size(df_cities)
 
     @test cols == 4

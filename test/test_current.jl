@@ -1,6 +1,6 @@
 @testset "Check if current weather conditions are available" begin
 
-    current_dict = Weather.get_current("Tokyo")
+    current_dict = WeatherReport.get_current("Tokyo")
 
     @test current_dict["latitude"] ≈ 35.7
     @test isapprox(current_dict["longitude"], 139.688, atol = 1e-2)
