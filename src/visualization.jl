@@ -106,7 +106,7 @@ end
 function plot_snow_forecast(city::String;
                             days::Int64 = 7)
 
-    results = get_snow_forecast(city)
+    results = get_hourly_forecast(city, "snowfall")
     df_snow, location = results[1], results[2]
     time_zone = location.timezone
 
@@ -115,7 +115,7 @@ function plot_snow_forecast(city::String;
 
     plt = lineplot(
         df_snow[!, :TIME],
-        df_snow[!, :SNOW],
+        df_snow[!, :FORECAST],
         title  = "$(city)",
         xlabel = "Time [days]",
         ylabel = "Snowfall [cm]",
