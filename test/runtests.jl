@@ -9,7 +9,7 @@ if isempty(ARGS) || "all" in ARGS
 end
 
 # Execute test in a try-catch block for each file
-function execute_test(file::String, ARGS; all_tests::Bool, errors::Bool)
+function execute_test(file::String, ARGS; all_tests::Bool)
 
     if all_tests || file in ARGS
         try
@@ -17,30 +17,42 @@ function execute_test(file::String, ARGS; all_tests::Bool, errors::Bool)
             println("\t\033[1m\033[32mPASSED\033[0m: $(file)")
         catch e
             println("\t\033[1m\033[31mFAILED\033[0m: $(file)")
-            errors = true
+            global errors = true
             showerror(stdout, e, backtrace())
             println()
         end
     end
 
-    if errors
-        @warn "Some tests have failed! Check the results summary above."
-    end
 end
 
 ################# All test groups #################
 
-test_files = ["test_hourly.jl",
-              "test_visualization.jl",
-              "test_current.jl",
-              "test_helpers.jl"]
+# Using @test_throws in "test_exceptions.jl" with string
+# message as exception requires at least Julia v1.8 or later
+
+if VERSION ≥ v"1.8.0"
+    test_files = ["test_hourly.jl",
+                  "test_visualization.jl",
+                  "test_current.jl",
+                  "test_helpers.jl",
+                  "test_exceptions.jl"]
+else
+    test_files = ["test_hourly.jl",
+                  "test_visualization.jl",
+                  "test_current.jl",
+                  "test_helpers.jl"]
+end
 
 ###################################################
 
 ################# Execute tests ###################
 
 @time for file in test_files
-    execute_test(file, ARGS, all_tests = all_tests, errors = errors)
+    execute_test(file, ARGS, all_tests = all_tests)
+end
+
+if errors
+    throw("Some tests have failed! Check the results summary above.")
 end
 
 ###################################################
