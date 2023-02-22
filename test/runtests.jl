@@ -33,7 +33,8 @@ end
 test_files = ["test_hourly.jl",
               "test_visualization.jl",
               "test_current.jl",
-              "test_helpers.jl"]
+              "test_helpers.jl",
+              "test_exceptions.jl"]
 
 ###################################################
 
