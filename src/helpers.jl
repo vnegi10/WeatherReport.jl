@@ -1,6 +1,6 @@
 function fetch_lat_long(city::String, i_row::Int64)
 	
-	df_city = filter(row -> ~ismissing(row.CITY) &&
+    df_city = filter(row -> ~ismissing(row.CITY) &&
                              row.CITY == city, DF_CITIES)
 
     if nrow(df_city) > 1
