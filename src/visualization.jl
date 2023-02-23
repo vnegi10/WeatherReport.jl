@@ -1,5 +1,6 @@
 """
-    plot_temp_hourly(city::String;
+    plot_temp_hourly(city::String,
+                     i_row::Int64 = 1;
                      days::Int64 = 7)
 
 Shows the hourly air temperature [°C] at 2 meter above
@@ -7,6 +8,9 @@ ground (starting from 0:00 today) for a given city.
 
 # Arguments
 - `city::String` : Valid city name, e.g. "Oslo", "Paris", "Amsterdam" etc.
+- `i_row::Int64` : In case of more than one match for a given location,
+                   select the desired timezone by providing the row index
+                   from the printed DataFrame. Default is set to 1.
 
 # Optional keywords
 - `days::Int64` : Number of days for which data are returned. Default is 7
@@ -39,10 +43,11 @@ julia> plot_temp_hourly("Veldhoven", days = 2)
 
 ```
 """
-function plot_temp_hourly(city::String;
+function plot_temp_hourly(city::String,
+                          i_row::Int64 = 1;
                           days::Int64 = 7)
 
-    results = get_hourly_forecast(city, "temperature_2m")
+    results = get_hourly_forecast(city, "temperature_2m", i_row)
     df_temp, location = results[1], results[2]
     time_zone = location.timezone
 
@@ -75,16 +80,33 @@ function plot_temp_hourly(city::String;
 end
 
 """
-    show_current_weather(city::String)
+    show_current_weather(city::String, i_row::Int64 = 1)
 
 Shows the current weather conditions for a given city.
 
 # Arguments
 - `city::String` : Valid city name, e.g. "Oslo", "Paris", "Amsterdam" etc.
+- `i_row::Int64` : In case of more than one match for a given location,
+                   select the desired timezone by providing the row index
+                   from the printed DataFrame. Default is set to 1.
 
 # Example
 ```julia-repl
 julia> show_current_weather("Lisbon")
+[ Info: More than one match found, showing report for location in row 1.
+[ Info: You can select another location by its row index.
+8×4 DataFrame
+ Row │ CITY     TIMEZONE          LATITUDE  LONGITUDE 
+     │ String?  String31          Float64   Float64   
+─────┼────────────────────────────────────────────────
+   1 │ Lisbon   Europe/Lisbon      38.7167   -9.13333
+   2 │ Lisbon   America/New_York   39.8609  -83.6352
+   3 │ Lisbon   America/New_York   41.604   -72.0117
+   4 │ Lisbon   America/Chicago    41.9211  -91.3855
+   5 │ Lisbon   America/New_York   44.0315  -70.1045
+   6 │ Lisbon   America/Chicago    46.4416  -97.6812
+   7 │ Lisbon   America/New_York   44.2134  -71.9109
+   8 │ Lisbon   America/New_York   40.772   -80.7681
 ┌───────────────┬───────────┬────────────┬─────────────┬───────────┬─────────┬─────────┐
 │      Timezone │ Elevation │ Wind speed │ Temperature │ Condition │      🌅 │      🌆 │
 │         [WET] │       [m] │     [km/h] │        [°C] │        [] │ [hh:mm] │ [hh:mm] │
@@ -93,9 +115,9 @@ julia> show_current_weather("Lisbon")
 └───────────────┴───────────┴────────────┴─────────────┴───────────┴─────────┴─────────┘
 ```
 """
-function show_current_weather(city::String)
+function show_current_weather(city::String, i_row::Int64 = 1)
 
-    current_dict = get_current(city)
+    current_dict = get_current(city, i_row)
 
     timezone     = current_dict["timezone"]
     timezone_abb = current_dict["timezone_abbreviation"]
@@ -124,7 +146,8 @@ function show_current_weather(city::String)
 end
 
 """
-    plot_rain_hourly(city::String;
+    plot_rain_hourly(city::String,
+                     i_row::Int64 = 1;
                      days::Int64 = 7)
 
 Shows the hourly rain (starting from 0:00 today) from large scale weather
@@ -132,6 +155,9 @@ systems of the preceding hour in millimeter [mm] for a given city.
 
 # Arguments
 - `city::String` : Valid city name, e.g. "Oslo", "Paris", "Amsterdam" etc.
+- `i_row::Int64` : In case of more than one match for a given location,
+                   select the desired timezone by providing the row index
+                   from the printed DataFrame. Default is set to 1.
 
 # Optional keywords
 - `days::Int64` : Number of days for which data are returned. Default is 7
@@ -140,6 +166,25 @@ systems of the preceding hour in millimeter [mm] for a given city.
 # Example
 ```julia-repl
 julia> plot_rain_hourly("Berlin", days = 3)
+[ Info: More than one match found, showing report for location in row 1.
+[ Info: You can select another location by its row index.
+13×4 DataFrame
+ Row │ CITY     TIMEZONE             LATITUDE  LONGITUDE 
+     │ String?  String31             Float64   Float64   
+─────┼───────────────────────────────────────────────────
+   1 │ Berlin   Europe/Berlin         52.5244    13.4105
+   2 │ Berlin   America/Tegucigalpa   14.8428   -88.4945
+   3 │ Berlin   America/Mexico_City   18.9183   -96.9219
+   4 │ Berlin   Asia/Yekaterinburg    54.006     61.1931
+   5 │ Berlin   America/El_Salvador   13.5      -88.5333
+   6 │ Berlin   America/New_York      31.0682   -83.6238
+   7 │ Berlin   America/New_York      38.3226   -75.2177
+   8 │ Berlin   America/New_York      39.7912   -74.9291
+   9 │ Berlin   America/New_York      39.9206   -78.9578
+  10 │ Berlin   America/New_York      42.3812   -71.637
+  11 │ Berlin   America/New_York      44.4687   -71.1851
+  12 │ Berlin   America/New_York      40.5612   -81.7943
+  13 │ Berlin   America/Chicago       43.968    -88.9434
                  ⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀Berlin⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀ 
                  ⠀Timezone: Europe/Berlin⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀[Weather data by Open-Meteo.com]⠀ 
                  ┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓ 
@@ -163,10 +208,11 @@ julia> plot_rain_hourly("Berlin", days = 3)
                  ⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀Time [days]⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀ 
 ```
 """
-function plot_rain_hourly(city::String;
-                            days::Int64 = 7)
+function plot_rain_hourly(city::String,
+                          i_row::Int64 = 1;
+                          days::Int64 = 7)
 
-    results = get_hourly_forecast(city, "rain")
+    results = get_hourly_forecast(city, "rain", i_row)
     df_rain, location = results[1], results[2]
     time_zone = location.timezone
 
@@ -196,7 +242,8 @@ function plot_rain_hourly(city::String;
 end
 
 """
-    plot_snow_hourly(city::String;
+    plot_snow_hourly(city::String,
+                     i_row::Int64 = 1;
                      days::Int64 = 7)
 
 Shows the snowfall amount (starting from 0:00 today) for the preceding hour
@@ -204,6 +251,9 @@ in centimeter [cm] for a given city.
 
 # Arguments
 - `city::String` : Valid city name, e.g. "Oslo", "Paris", "Amsterdam" etc.
+- `i_row::Int64` : In case of more than one match for a given location,
+                   select the desired timezone by providing the row index
+                   from the printed DataFrame. Default is set to 1.
 
 # Optional keywords
 - `days::Int64` : Number of days for which data are returned. Default is 7
@@ -235,10 +285,11 @@ julia> plot_snow_hourly("Tromso", days = 3)
                       ⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀Time [days]⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀ 
 ```
 """
-function plot_snow_hourly(city::String;
+function plot_snow_hourly(city::String,
+                          i_row::Int64 = 1;
                           days::Int64 = 7)
 
-    results = get_hourly_forecast(city, "snowfall")
+    results = get_hourly_forecast(city, "snowfall", i_row)
     df_snow, location = results[1], results[2]
     time_zone = location.timezone
 

@@ -1,35 +1,42 @@
-function fetch_lat_long(city::String)
+function fetch_lat_long(city::String, i_row::Int64)
 	
-	df_city = filter(row -> ~ismissing(row.CITY) &&
+    df_city = filter(row -> ~ismissing(row.CITY) &&
                              row.CITY == city, DF_CITIES)
-	lat, long = 0, 0
+
+    if nrow(df_city) > 1
+        @info "More than one match found, showing report for location in row $(i_row)."
+        @info "You can select another location by its row index."
+        "$(println(df_city))"
+    end
+
+    lat, long = 0, 0
     timezone  = ""
 
-	if isempty(df_city)
+    if isempty(df_city)
         error("Coordinates for city not found!")
-	else
-        lat  = df_city[!, :LATITUDE][1]
-        long = df_city[!, :LONGITUDE][1]
-        timezone = df_city[!, :TIMEZONE][1]
-	end
+    else
+        lat  = df_city[!, :LATITUDE][i_row]
+        long = df_city[!, :LONGITUDE][i_row]
+        timezone = df_city[!, :TIMEZONE][i_row]
+    end
 
-	return GeogCoord(lat, long, timezone)
+    return GeogCoord(lat, long, timezone)
 	
 end
 
 function url_to_df(url::String)
 
-	df_cities = DataFrame()
+    df_cities = DataFrame()
 
-	try
-		df_cities = CSV.File(HTTP.get(url,
-	                         require_ssl_verification = false).body,
+    try
+        df_cities = CSV.File(HTTP.get(url,
+                             require_ssl_verification = false).body,
                              header = 1) |> DataFrame
-	catch
-		error("Unable to load cities database, check if $(url) is accessible!")
-	end
+    catch
+        error("Unable to load cities database, check if $(url) is accessible!")
+    end
 	
-	return df_cities
+    return df_cities
 	
 end
 
