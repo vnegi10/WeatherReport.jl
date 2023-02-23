@@ -1,4 +1,6 @@
 function fetch_lat_long(city::String, i_row::Int64)
+
+	city = fix_city_name(city)
 	
     df_city = filter(row -> ~ismissing(row.CITY) &&
                              row.CITY == city, DF_CITIES)
@@ -38,6 +40,12 @@ function url_to_df(url::String)
 	
     return df_cities
 	
+end
+
+function fix_city_name(city::String)
+
+	return [uppercase(city[1]), lowercase(city[2:end])] |> join
+
 end
 
 #=function get_cities_lat_long(file::String)
