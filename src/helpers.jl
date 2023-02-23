@@ -4,7 +4,7 @@ function fetch_lat_long(city::String, i_row::Int64)
                              row.CITY == city, DF_CITIES)
 
 	if nrow(df_city) > 1
-		@info "More than one match found, showing report for first location!"
+		@info "More than one match found, showing report for location in row $(i_row)."
 		@info "You can select another location by its row index."
 		"$(println(df_city))"
 	end
