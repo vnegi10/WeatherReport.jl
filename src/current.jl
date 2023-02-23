@@ -1,6 +1,6 @@
-function get_current(city::String)
+function get_current(city::String, i_row::Int64)
 
-	location = fetch_lat_long(city)
+	location = fetch_lat_long(city, i_row)
 	lat      = location.latitude
 	long     = location.longitude
 	timezone = location.timezone

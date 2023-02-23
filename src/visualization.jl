@@ -39,10 +39,11 @@ julia> plot_temp_hourly("Veldhoven", days = 2)
 
 ```
 """
-function plot_temp_hourly(city::String;
+function plot_temp_hourly(city::String,
+                          i_row::Int64 = 1;
                           days::Int64 = 7)
 
-    results = get_hourly_forecast(city, "temperature_2m")
+    results = get_hourly_forecast(city, "temperature_2m", i_row)
     df_temp, location = results[1], results[2]
     time_zone = location.timezone
 
@@ -93,9 +94,9 @@ julia> show_current_weather("Lisbon")
 └───────────────┴───────────┴────────────┴─────────────┴───────────┴─────────┴─────────┘
 ```
 """
-function show_current_weather(city::String)
+function show_current_weather(city::String, i_row::Int64 = 1)
 
-    current_dict = get_current(city)
+    current_dict = get_current(city, i_row)
 
     timezone     = current_dict["timezone"]
     timezone_abb = current_dict["timezone_abbreviation"]
@@ -163,10 +164,11 @@ julia> plot_rain_hourly("Berlin", days = 3)
                  ⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀Time [days]⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀ 
 ```
 """
-function plot_rain_hourly(city::String;
-                            days::Int64 = 7)
+function plot_rain_hourly(city::String,
+                          i_row::Int64 = 1;
+                          days::Int64 = 7)
 
-    results = get_hourly_forecast(city, "rain")
+    results = get_hourly_forecast(city, "rain", i_row)
     df_rain, location = results[1], results[2]
     time_zone = location.timezone
 
@@ -235,10 +237,11 @@ julia> plot_snow_hourly("Tromso", days = 3)
                       ⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀Time [days]⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀ 
 ```
 """
-function plot_snow_hourly(city::String;
+function plot_snow_hourly(city::String,
+                          i_row::Int64 = 1;
                           days::Int64 = 7)
 
-    results = get_hourly_forecast(city, "snowfall")
+    results = get_hourly_forecast(city, "snowfall", i_row)
     df_snow, location = results[1], results[2]
     time_zone = location.timezone
 

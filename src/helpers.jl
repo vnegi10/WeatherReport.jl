@@ -1,16 +1,23 @@
-function fetch_lat_long(city::String)
+function fetch_lat_long(city::String, i_row::Int64)
 	
 	df_city = filter(row -> ~ismissing(row.CITY) &&
                              row.CITY == city, DF_CITIES)
+
+	if nrow(df_city) > 1
+		@info "More than one match found, showing report for first location!"
+		@info "You can select another location by its row value."
+		"$(println(df_city))"
+	end
+
 	lat, long = 0, 0
     timezone  = ""
 
 	if isempty(df_city)
         error("Coordinates for city not found!")
 	else
-        lat  = df_city[!, :LATITUDE][1]
-        long = df_city[!, :LONGITUDE][1]
-        timezone = df_city[!, :TIMEZONE][1]
+        lat  = df_city[!, :LATITUDE][i_row]
+        long = df_city[!, :LONGITUDE][i_row]
+        timezone = df_city[!, :TIMEZONE][i_row]
 	end
 
 	return GeogCoord(lat, long, timezone)
