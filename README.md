@@ -170,7 +170,7 @@ julia> plot_rain_hourly("Dublin", 2)
                 ⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀Time [days]⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀ 
 ```
 
-```
+```julia
 julia> plot_rain_hourly("Dublin", 9, days = 5)
 [ Info: More than one match found, showing report for location in row 9.
 [ Info: You can select another location by its row index.
