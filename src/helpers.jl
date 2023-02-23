@@ -5,7 +5,7 @@ function fetch_lat_long(city::String, i_row::Int64)
 
 	if nrow(df_city) > 1
 		@info "More than one match found, showing report for first location!"
-		@info "You can select another location by its row value."
+		@info "You can select another location by its row index."
 		"$(println(df_city))"
 	end
 

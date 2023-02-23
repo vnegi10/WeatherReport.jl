@@ -1,5 +1,6 @@
 """
-    plot_temp_hourly(city::String;
+    plot_temp_hourly(city::String,
+                     i_row::Int64 = 1;
                      days::Int64 = 7)
 
 Shows the hourly air temperature [°C] at 2 meter above
@@ -7,6 +8,9 @@ ground (starting from 0:00 today) for a given city.
 
 # Arguments
 - `city::String` : Valid city name, e.g. "Oslo", "Paris", "Amsterdam" etc.
+- `i_row::Int64` : In case of more than one match for a given location,
+                   select the desired timezone by providing the row index
+                   from the printed DataFrame. Default is set to 1.
 
 # Optional keywords
 - `days::Int64` : Number of days for which data are returned. Default is 7
@@ -76,12 +80,15 @@ function plot_temp_hourly(city::String,
 end
 
 """
-    show_current_weather(city::String)
+    show_current_weather(city::String, i_row::Int64 = 1)
 
 Shows the current weather conditions for a given city.
 
 # Arguments
 - `city::String` : Valid city name, e.g. "Oslo", "Paris", "Amsterdam" etc.
+- `i_row::Int64` : In case of more than one match for a given location,
+                   select the desired timezone by providing the row index
+                   from the printed DataFrame. Default is set to 1.
 
 # Example
 ```julia-repl
@@ -125,14 +132,19 @@ function show_current_weather(city::String, i_row::Int64 = 1)
 end
 
 """
-    plot_rain_hourly(city::String;
+    plot_rain_hourly(city::String,
+                     i_row::Int64 = 1;
                      days::Int64 = 7)
+
 
 Shows the hourly rain (starting from 0:00 today) from large scale weather
 systems of the preceding hour in millimeter [mm] for a given city.
 
 # Arguments
 - `city::String` : Valid city name, e.g. "Oslo", "Paris", "Amsterdam" etc.
+- `i_row::Int64` : In case of more than one match for a given location,
+                   select the desired timezone by providing the row index
+                   from the printed DataFrame. Default is set to 1.
 
 # Optional keywords
 - `days::Int64` : Number of days for which data are returned. Default is 7
@@ -198,14 +210,18 @@ function plot_rain_hourly(city::String,
 end
 
 """
-    plot_snow_hourly(city::String;
+    plot_snow_hourly(city::String,
+                     i_row::Int64 = 1;
                      days::Int64 = 7)
-
+                     
 Shows the snowfall amount (starting from 0:00 today) for the preceding hour
 in centimeter [cm] for a given city.
 
 # Arguments
 - `city::String` : Valid city name, e.g. "Oslo", "Paris", "Amsterdam" etc.
+- `i_row::Int64` : In case of more than one match for a given location,
+                   select the desired timezone by providing the row index
+                   from the printed DataFrame. Default is set to 1.
 
 # Optional keywords
 - `days::Int64` : Number of days for which data are returned. Default is 7
