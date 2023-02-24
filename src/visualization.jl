@@ -52,20 +52,35 @@ function plot_temp_hourly(city::String,
     time_zone = location.timezone
 
     @assert days*24 ≤ nrow(df_temp) "Not enough data, try again with less days!"
+
+    df_app_temp = get_hourly_forecast(city, "apparent_temperature", i_row)[1]
+
+    try
+        insertcols!(df_temp,
+                    ncol(df_temp)+1,
+                    :APP_TEMP => df_app_temp[!, :FORECAST])
+    catch
+        @info "Unable to add apparent temperature, value set to zeros!"
+        insertcols!(df_temp,
+                    ncol(df_temp)+1,
+                    :APP_TEMP => fill(0.0, nrow(df_temp)))
+    end
+
     df_temp = df_temp[1:days*24, :]
 
     T_min, T_max = minimum(df_temp[!, :FORECAST]), maximum(df_temp[!, :FORECAST])
 
     plt = lineplot(
         df_temp[!, :TIME],
-        df_temp[!, :FORECAST],
-        title  = "$(city): min $(T_min) °C, max $(T_max) °C",
+        [df_temp[!, :FORECAST] df_temp[!, :APP_TEMP]],
+        title  = "$(city): min $(T_min) °C, max $(T_max) °C (air temp)",
         xlabel = "Time [days]",
-        ylabel = "Temperature [°C]",
+        ylabel = "[°C]",
+        name   = ["Air temperature" "Feels like"],
         xticks = true,
         yticks = true,
         border = :bold,
-        color = :yellow,
+        color = [:yellow :cyan],
         canvas = BrailleCanvas,
         width = 75,
         height = 15,
