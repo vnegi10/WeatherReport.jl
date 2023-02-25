@@ -45,13 +45,11 @@ julia> plot_temp_hourly("Veldhoven", days = 3)
 """
 function plot_temp_hourly(city::String,
                           i_row::Int64 = 1;
-                          days::Int64 = 7)
+                          days::Int64 = 6)
 
     results = get_hourly_forecast(city, "temperature_2m", i_row)
     df_temp, location = results[1], results[2]
     time_zone = location.timezone
-
-    @assert days*24 ≤ nrow(df_temp) "Not enough data, try again with less days!"
 
     df_app_temp = get_hourly_forecast(city, "apparent_temperature", i_row)[1]
 
@@ -66,8 +64,15 @@ function plot_temp_hourly(city::String,
                     :APP_TEMP => fill(0.0, nrow(df_temp)))
     end
 
+    # Filter DataFrame to start from current hour
+    df_temp = from_current_time(df_temp)
+
+    @assert days*24 ≤ nrow(df_temp) "Not enough data, try again with less days!"
+
+    # Select based on given number of days
     df_temp = df_temp[1:days*24, :]
 
+    # Get min, max air temp to show on the plot
     T_min, T_max = minimum(df_temp[!, :FORECAST]), maximum(df_temp[!, :FORECAST])
 
     plt = lineplot(

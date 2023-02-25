@@ -48,6 +48,22 @@ function fix_city_name(city::String)
 
 end
 
+function from_current_time(df_hourly::DataFrame)
+
+    time = now()
+    curr_day   = Dates.day(time)
+    curr_month = Dates.month(time)
+    curr_year  = Dates.year(time)
+    curr_hour  = Dates.hour(time)
+
+    time_match = DateTime(curr_year, curr_month, curr_day, curr_hour)
+
+    df_current = filter(row -> row.TIME ≥ time_match, df_hourly)
+
+    return df_current
+
+end
+
 #=function get_cities_lat_long(file::String)
 
 	all_lines  = readlines(file)
