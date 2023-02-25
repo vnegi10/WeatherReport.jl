@@ -17,6 +17,11 @@
         @test sizeof(plt) > 0
     end
 
+    @testset "plot_humidity_hourly" begin
+        plt = plot_humidity_hourly("Singapore", days = 3)
+        @test sizeof(plt) > 0
+    end
+
     @testset "show_current_weather" begin
         result = @capture_out show_current_weather("Oslo")
         @test length(result) > 0
@@ -47,6 +52,14 @@ end
         @test sizeof(plt) > 0
 
         plt = plot_snow_hourly("Madrid", 5, days = 3)
+        @test sizeof(plt) > 0
+    end
+
+    @testset "plot_humidity_hourly" begin
+        plt = plot_humidity_hourly("Dublin", 1, days = 3)
+        @test sizeof(plt) > 0
+
+        plt = plot_humidity_hourly("Dublin", 7, days = 3)
         @test sizeof(plt) > 0
     end
 
