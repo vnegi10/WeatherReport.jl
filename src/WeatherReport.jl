@@ -7,7 +7,7 @@ export plot_temp_hourly,
        plot_windspeed_hourly,
        plot_solar_hourly,
        show_current_weather,
-       show_weekly
+       show_daily
 
 using HTTP,
       JSON,

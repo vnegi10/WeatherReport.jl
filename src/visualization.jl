@@ -165,9 +165,9 @@ function show_current_weather(city::String, i_row::Int64 = 1)
 end
 
 """
-    show_weekly(city::String, i_row::Int64 = 1)
+    show_daily(city::String, i_row::Int64 = 1)
 
-Shows the weekly weather conditions for a given city.
+Shows the daily weather conditions for a given city.
 
 # Arguments
 - `city::String` : Valid city name, e.g. "Oslo", "Paris", "Amsterdam" etc.
@@ -177,7 +177,7 @@ Shows the weekly weather conditions for a given city.
 
 # Example
 ```julia-repl
-julia> show_weekly("Veldhoven")
+julia> show_daily("Veldhoven")
 ┌────────────┬────────┬────────┬────────────┬────────────┬───────────┬────────────────┬─────────────┬─────────────────────┐
 │       Time │ Min. T │ Max. T │ App. min T │ App. max T │ Prec. sum │ Prec. duration │ Prec. prob. │           Condition │
 │     [date] │   [°C] │   [°C] │       [°C] │       [°C] │      [mm] │        [hours] │         [%] │                  [] │
@@ -194,29 +194,29 @@ Europe/Amsterdam CET
 [Weather data by Open-Meteo.com]
 ```
 """
-function show_weekly(city::String, i_row::Int64 = 1)
+function show_daily(city::String, i_row::Int64 = 1)
 
-    weekly_dict  = get_daily(city, i_row)
+    daily_dict  = get_daily(city, i_row)
 
-    timezone     = weekly_dict["timezone"]
-    timezone_abb = weekly_dict["timezone_abbreviation"]
+    timezone     = daily_dict["timezone"]
+    timezone_abb = daily_dict["timezone_abbreviation"]
     
     # Days
-    time         = weekly_dict["daily"]["time"]
+    time         = daily_dict["daily"]["time"]
 
     # Temperature
-    T_min        = weekly_dict["daily"]["temperature_2m_min"]
-    T_max        = weekly_dict["daily"]["temperature_2m_max"]
-    T_app_min    = weekly_dict["daily"]["apparent_temperature_min"]
-    T_app_max    = weekly_dict["daily"]["apparent_temperature_max"]
+    T_min        = daily_dict["daily"]["temperature_2m_min"]
+    T_max        = daily_dict["daily"]["temperature_2m_max"]
+    T_app_min    = daily_dict["daily"]["apparent_temperature_min"]
+    T_app_max    = daily_dict["daily"]["apparent_temperature_max"]
 
     # Precipitation
-    prep_sum     = weekly_dict["daily"]["precipitation_sum"]
-    prep_hours   = weekly_dict["daily"]["precipitation_hours"]
-    prep_prob    = weekly_dict["daily"]["precipitation_probability_mean"]
+    prep_sum     = daily_dict["daily"]["precipitation_sum"]
+    prep_hours   = daily_dict["daily"]["precipitation_hours"]
+    prep_prob    = daily_dict["daily"]["precipitation_probability_mean"]
 
     # Weather code
-    codes        = weekly_dict["daily"]["weathercode"]
+    codes        = daily_dict["daily"]["weathercode"]
     condition    = [WEATHER_CODES[code] for code in codes]
 
     data = [time T_min T_max T_app_min T_app_max prep_sum prep_hours prep_prob condition]

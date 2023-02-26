@@ -37,6 +37,11 @@
         @test length(result) > 0
     end
 
+    @testset "show_daily" begin
+        result = @capture_out show_daily("Zurich")
+        @test length(result) > 0
+    end
+
 end
 
 @testset verbose = true "Plotting with multiple matches" begin
@@ -94,6 +99,14 @@ end
         @test length(result) > 0
 
         result = @capture_out show_current_weather("Madrid", 4)
+        @test length(result) > 0
+    end
+
+    @testset "show_daily" begin
+        result = @capture_out show_daily("Madrid", 1)
+        @test length(result) > 0
+
+        result = @capture_out show_daily("Madrid", 4)
         @test length(result) > 0
     end
 
