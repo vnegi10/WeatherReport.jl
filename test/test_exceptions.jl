@@ -1,6 +1,6 @@
 @testset "Check if expected error appears when city is not found" begin
 
-    @test_throws "Coordinates for city not found!" plot_temp_hourly("EEdinhoven")
+    @test_throws "Coordinates for city not found!" plot_hourly_temp("EEdinhoven")
 
 end
 

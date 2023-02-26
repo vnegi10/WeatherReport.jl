@@ -1,5 +1,5 @@
 """
-    plot_temp_hourly(city::String,
+    plot_hourly_temp(city::String,
                      i_row::Int64 = 1;
                      days::Int64 = 6)
 
@@ -18,7 +18,7 @@ ground and 'feels like' temperature for a given city.
 
 # Example
 ```julia-repl
-julia> plot_temp_hourly("Veldhoven", days = 2)
+julia> plot_hourly_temp("Veldhoven", days = 2)
              ⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀Veldhoven: min -1.5 °C, max 6.3 °C (air temp)⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀                
              ⠀Timezone: Europe/Amsterdam⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀[Weather data by Open-Meteo.com]⠀                
              ┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓                
@@ -42,7 +42,7 @@ julia> plot_temp_hourly("Veldhoven", days = 2)
              ⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀Time [days]⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀    
 ```
 """
-function plot_temp_hourly(city::String,
+function plot_hourly_temp(city::String,
                           i_row::Int64 = 1;
                           days::Int64 = 6)
 
@@ -99,7 +99,7 @@ function plot_temp_hourly(city::String,
 end
 
 """
-    show_current_weather(city::String, i_row::Int64 = 1)
+    show_current(city::String, i_row::Int64 = 1)
 
 Shows the current weather conditions for a given city.
 
@@ -111,7 +111,7 @@ Shows the current weather conditions for a given city.
 
 # Example
 ```julia-repl
-julia> show_current_weather("Lisbon")
+julia> show_current("Lisbon")
 [ Info: More than one match found, showing report for location in row 1.
 [ Info: You can select another location by its row index.
 8×4 DataFrame
@@ -134,7 +134,7 @@ julia> show_current_weather("Lisbon")
 └───────────────┴───────────┴────────────┴─────────────┴───────────┴─────────┴─────────┘
 ```
 """
-function show_current_weather(city::String, i_row::Int64 = 1)
+function show_current(city::String, i_row::Int64 = 1)
 
     current_dict = get_current(city, i_row)
 
@@ -159,13 +159,116 @@ function show_current_weather(city::String, i_row::Int64 = 1)
 
     p_table = pretty_table(data;
                            header = header)
+    
+    println("$(ATTRIBUTION)")
 
     return p_table
 
 end
 
 """
-    plot_rain_hourly(city::String,
+    show_daily(city::String, i_row::Int64 = 1)
+
+Shows the daily weather conditions for a given city.
+
+# Arguments
+- `city::String` : Valid city name, e.g. "Oslo", "Paris", "Amsterdam" etc.
+- `i_row::Int64` : In case of more than one match for a given location,
+                   select the desired timezone by providing the row index
+                   from the printed DataFrame. Default is set to 1.
+
+# Example
+```julia-repl
+julia> show_daily("Veldhoven")
+┌────────────┬────────┬────────┬────────────┬────────────┬───────────┬────────────────┬─────────────┬─────────────────────┐
+│       Time │ Min. T │ Max. T │ App. min T │ App. max T │ Prec. sum │ Prec. duration │ Prec. prob. │           Condition │
+│     [date] │   [°C] │   [°C] │       [°C] │       [°C] │      [mm] │        [hours] │         [%] │                  [] │
+├────────────┼────────┼────────┼────────────┼────────────┼───────────┼────────────────┼─────────────┼─────────────────────┤
+│ 2023-02-26 │   -1.4 │    4.9 │       -5.7 │       -0.7 │       0.0 │            0.0 │           0 │       Partly cloudy │
+│ 2023-02-27 │   -1.6 │    6.2 │       -5.1 │        1.4 │       0.0 │            0.0 │           0 │            Overcast │
+│ 2023-02-28 │   -1.1 │    4.3 │       -5.0 │       -1.3 │       0.0 │            0.0 │           0 │       Partly cloudy │
+│ 2023-03-01 │   -2.0 │    5.3 │       -6.4 │       -0.2 │       0.0 │            0.0 │           0 │            Overcast │
+│ 2023-03-02 │   -1.2 │    6.7 │       -5.1 │        2.0 │       0.0 │            0.0 │           0 │       Partly cloudy │
+│ 2023-03-03 │   -1.1 │    3.3 │       -4.9 │       -0.3 │       0.0 │            0.0 │           0 │ Depositing rime fog │
+│ 2023-03-04 │   -0.8 │    7.5 │       -3.6 │        4.7 │       0.0 │            0.0 │           0 │                 Fog │
+└────────────┴────────┴────────┴────────────┴────────────┴───────────┴────────────────┴─────────────┴─────────────────────┘
+Europe/Amsterdam CET
+[Weather data by Open-Meteo.com]
+```
+"""
+function show_daily(city::String, i_row::Int64 = 1)
+
+    daily_dict  = get_daily(city, i_row)
+
+    timezone     = daily_dict["timezone"]
+    timezone_abb = daily_dict["timezone_abbreviation"]
+    
+    # Days
+    time         = daily_dict["daily"]["time"]
+
+    # Temperature
+    T_min        = daily_dict["daily"]["temperature_2m_min"]
+    T_max        = daily_dict["daily"]["temperature_2m_max"]
+    T_app_min    = daily_dict["daily"]["apparent_temperature_min"]
+    T_app_max    = daily_dict["daily"]["apparent_temperature_max"]
+
+    # Precipitation
+    prep_sum     = daily_dict["daily"]["precipitation_sum"]
+    prep_hours   = daily_dict["daily"]["precipitation_hours"]
+    prep_prob    = daily_dict["daily"]["precipitation_probability_mean"]
+
+    # Weather code
+    codes        = daily_dict["daily"]["weathercode"]
+    condition    = [WEATHER_CODES[code] for code in codes]
+
+    data = [time T_min T_max T_app_min T_app_max prep_sum prep_hours prep_prob condition]
+    header = (
+               ["Time",
+               "Min. T",
+               "Max. T",
+               "App. min T",
+               "App. max T",
+               "Prec. sum",
+               "Prec. duration",
+               "Prec. prob.",
+               "Condition"],
+
+              ["[date]",
+               "[°C]",
+               "[°C]",
+               "[°C]",
+               "[°C]",
+               "[mm]",
+               "[hours]",
+               "[%]",
+               "[]"]
+               )
+
+    h_min(column) = Highlighter((data, i, j) -> j == column &&
+                                 data[i, j] == minimum(data[2:end, column]),
+                                 bold       = true,
+                                 foreground = :blue)
+
+    h_max(column) = Highlighter((data, i, j) -> j == column &&
+                                 data[i, j] == maximum(data[2:end, column]),
+                                 bold       = true,
+                                 foreground = :red)
+
+    p_table = pretty_table(data;
+                           header = header,
+                           header_crayon = crayon"yellow bold",
+                           highlighters = (h_min(2), h_min(4), h_max(3), h_max(5))
+                           )
+
+    println("$(timezone)", " ", "$(timezone_abb)")
+    println("$(ATTRIBUTION)")
+
+    return p_table
+
+end
+
+"""
+    plot_hourly_rain(city::String,
                      i_row::Int64 = 1;
                      days::Int64 = 6)
 
@@ -184,7 +287,7 @@ hour in millimeter [mm] for a given city.
 
 # Example
 ```julia-repl
-julia> plot_rain_hourly("London", 2, days = 5)
+julia> plot_hourly_rain("London", 2, days = 5)
 [ Info: More than one match found, showing report for location in row 2.
 [ Info: You can select another location by its row index.
 6×4 DataFrame
@@ -220,7 +323,7 @@ julia> plot_rain_hourly("London", 2, days = 5)
                ⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀Time [days]⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀  
 ```
 """
-function plot_rain_hourly(city::String,
+function plot_hourly_rain(city::String,
                           i_row::Int64 = 1;
                           days::Int64 = 6)
 
@@ -257,7 +360,7 @@ function plot_rain_hourly(city::String,
 end
 
 """
-    plot_snow_hourly(city::String,
+    plot_hourly_snow(city::String,
                      i_row::Int64 = 1;
                      days::Int64 = 6)
 
@@ -276,7 +379,7 @@ centimeter [cm] for a given city.
 
 # Example
 ```julia-repl
-julia> plot_snow_hourly("Tromso", days = 3)
+julia> plot_hourly_snow("Tromso", days = 3)
                      ⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀Tromso⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀ 
                      ⠀Timezone: Europe/Oslo⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀[Weather data by Open-Meteo.com]⠀ 
                      ┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓ 
@@ -300,7 +403,7 @@ julia> plot_snow_hourly("Tromso", days = 3)
                      ⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀Time [days]⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀ 
 ```
 """
-function plot_snow_hourly(city::String,
+function plot_hourly_snow(city::String,
                           i_row::Int64 = 1;
                           days::Int64 = 6)
 
@@ -337,7 +440,7 @@ function plot_snow_hourly(city::String,
 end
 
 """
-    plot_humidity_hourly(city::String,
+    plot_hourly_humidity(city::String,
                          i_row::Int64 = 1;
                          days::Int64 = 6)
 
@@ -356,7 +459,7 @@ for a given city.
 
 # Example
 ```julia-repl
-julia> plot_humidity_hourly("Veldhoven", days = 3)
+julia> plot_hourly_humidity("Veldhoven", days = 3)
                         ⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀Veldhoven⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀ 
                         ⠀Timezone: Europe/Amsterdam⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀[Weather data by Open-Meteo.com]⠀ 
                         ┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓ 
@@ -380,7 +483,7 @@ julia> plot_humidity_hourly("Veldhoven", days = 3)
                         ⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀Time [days]⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀ 
 ```
 """
-function plot_humidity_hourly(city::String,
+function plot_hourly_humidity(city::String,
                               i_row::Int64 = 1;
                               days::Int64 = 6)
 
@@ -417,7 +520,7 @@ function plot_humidity_hourly(city::String,
 end
 
 """
-    plot_windspeed_hourly(city::String,
+    plot_hourly_windspeed(city::String,
                           i_row::Int64 = 1;
                           days::Int64 = 6)
 
@@ -435,7 +538,7 @@ Shows the wind speed at 10 meter above ground for a given city.
 
 # Example
 ```julia-repl
-julia> plot_windspeed_hourly("Zurich", days = 3)
+julia> plot_hourly_windspeed("Zurich", days = 3)
                         ⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀Zurich⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀ 
                         ⠀Timezone: Europe/Zurich⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀[Weather data by Open-Meteo.com]⠀ 
                         ┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓ 
@@ -459,7 +562,7 @@ julia> plot_windspeed_hourly("Zurich", days = 3)
                         ⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀Time [days]⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀ 
 ```
 """
-function plot_windspeed_hourly(city::String,
+function plot_hourly_windspeed(city::String,
                                i_row::Int64 = 1;
                                days::Int64 = 6)
 
@@ -496,7 +599,7 @@ function plot_windspeed_hourly(city::String,
 end
 
 """
-    plot_solar_hourly(city::String,
+    plot_hourly_solar(city::String,
                       i_row::Int64 = 1;
                       days::Int64 = 6)
 
@@ -515,7 +618,7 @@ days, which is also the maximum.
 
 # Example
 ```julia-repl
-julia> plot_solar_hourly("Canberra", days = 3)
+julia> plot_hourly_solar("Canberra", days = 3)
                                      ⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀Canberra⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀ 
                                      ⠀Timezone: Australia/Sydney⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀[Weather data by Open-Meteo.com]⠀ 
                                      ┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓ 
@@ -539,7 +642,7 @@ julia> plot_solar_hourly("Canberra", days = 3)
                                      ⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀Time [days]⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀ 
 ```
 """
-function plot_solar_hourly(city::String,
+function plot_hourly_solar(city::String,
                            i_row::Int64 = 1;
                            days::Int64 = 6)
 

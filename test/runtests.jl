@@ -33,13 +33,13 @@ end
 if VERSION ≥ v"1.8.0"
     test_files = ["test_hourly.jl",
                   "test_visualization.jl",
-                  "test_current.jl",
+                  "test_daily.jl",
                   "test_helpers.jl",
                   "test_exceptions.jl"]
 else
     test_files = ["test_hourly.jl",
                   "test_visualization.jl",
-                  "test_current.jl",
+                  "test_daily.jl",
                   "test_helpers.jl"]
 end
 

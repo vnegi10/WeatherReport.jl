@@ -22,8 +22,10 @@ license.
 
 ## Example usage
 
+For current weather conditions:
+
 ```julia
-julia> show_current_weather("Vienna")
+julia> show_current("Vienna")
 ┌───────────────┬───────────┬────────────┬─────────────┬───────────────┬─────────┬─────────┐
 │      Timezone │ Elevation │ Wind speed │ Temperature │     Condition │      🌅 │      🌆 │
 │         [CET] │       [m] │     [km/h] │        [°C] │            [] │ [hh:mm] │ [hh:mm] │
@@ -32,8 +34,32 @@ julia> show_current_weather("Vienna")
 └───────────────┴───────────┴────────────┴─────────────┴───────────────┴─────────┴─────────┘
 ```
 
+A summary of daily weather forecast can be obtained for up to a week 
+as shown below:
+
 ```julia
-julia> plot_temp_hourly("Veldhoven")
+julia> show_daily("Sofia")
+┌────────────┬────────┬────────┬────────────┬────────────┬───────────┬────────────────┬─────────────┬───────────────────────┐
+│       Time │ Min. T │ Max. T │ App. min T │ App. max T │ Prec. sum │ Prec. duration │ Prec. prob. │             Condition │
+│     [date] │   [°C] │   [°C] │       [°C] │       [°C] │      [mm] │        [hours] │         [%] │                    [] │
+├────────────┼────────┼────────┼────────────┼────────────┼───────────┼────────────────┼─────────────┼───────────────────────┤
+│ 2023-02-26 │    9.9 │   17.4 │        7.5 │       12.8 │       0.2 │            1.0 │           0 │              Overcast │
+│ 2023-02-27 │    7.5 │   15.2 │        6.1 │       12.0 │       5.1 │           11.0 │          74 │ Moderate thunderstorm │
+│ 2023-02-28 │    5.4 │   13.6 │        3.0 │       10.3 │       1.5 │            6.0 │          71 │           Slight rain │
+│ 2023-03-01 │    4.7 │    7.5 │        0.6 │        2.9 │       4.0 │            9.0 │          77 │           Slight rain │
+│ 2023-03-02 │    3.0 │    7.0 │       -0.9 │        3.0 │       0.0 │            0.0 │          48 │              Overcast │
+│ 2023-03-03 │    2.3 │    6.6 │       -0.8 │        3.1 │       1.8 │            6.0 │          16 │           Slight rain │
+│ 2023-03-04 │    1.9 │    7.6 │       -0.3 │        5.0 │       2.7 │            9.0 │          29 │           Slight rain │
+└────────────┴────────┴────────┴────────────┴────────────┴───────────┴────────────────┴─────────────┴───────────────────────┘
+Europe/Sofia EET
+[Weather data by Open-Meteo.com]
+```
+
+Hourly forecast can be visualized in the REPL itself as shown in
+the following examples:
+
+```julia
+julia> plot_hourly_temp("Veldhoven")
                         ⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀Veldhoven: min -0.9 °C, max 12.7 °C⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀ 
                         ⠀Timezone: Europe/Amsterdam⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀[Weather data by Open-Meteo.com]⠀ 
                         ┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓ 
@@ -57,11 +83,11 @@ julia> plot_temp_hourly("Veldhoven")
                         ⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀Time [days]⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀ 
 ```
 
-Default forecast is for 7 days starting from 00:00 today. To reduce the forecast window, use the
-`days` keyword as show below:
+Default forecast is for 6 days starting from the current hour. To reduce the forecast window, 
+use the `days` keyword as shown below:
 
 ```julia
-jjulia> plot_temp_hourly("Veldhoven", days = 5)
+jjulia> plot_hourly_temp("Veldhoven", days = 5)
              ⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀Veldhoven: min -2.0 °C, max 6.3 °C (air temp)⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀                
              ⠀Timezone: Europe/Amsterdam⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀[Weather data by Open-Meteo.com]⠀                
              ┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓                
@@ -86,7 +112,7 @@ jjulia> plot_temp_hourly("Veldhoven", days = 5)
 ```
 
 ```julia
-julia> plot_rain_hourly("Dublin")
+julia> plot_hourly_rain("Dublin")
 [ Info: More than one match found, showing report for location in row 1.
 [ Info: You can select another location by its row index.
 9×4 DataFrame
@@ -126,11 +152,11 @@ julia> plot_rain_hourly("Dublin")
                ⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀Time [days]⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀ 
 ```
 
-When a DataFrame showing multiple matches is printed, another location/timezone can be 
+When a `DataFrame` showing multiple matches is printed, another location/timezone can be 
 selected by specifying its row index. For example:
 
 ```julia
-julia> plot_rain_hourly("Dublin", 2)
+julia> plot_hourly_rain("Dublin", 2)
 [ Info: More than one match found, showing report for location in row 2.
 [ Info: You can select another location by its row index.
 9×4 DataFrame
@@ -171,7 +197,7 @@ julia> plot_rain_hourly("Dublin", 2)
 ```
 
 ```julia
-julia> plot_rain_hourly("Dublin", 9, days = 5)
+julia> plot_hourly_rain("Dublin", 9, days = 5)
 [ Info: More than one match found, showing report for location in row 9.
 [ Info: You can select another location by its row index.
 9×4 DataFrame
@@ -211,7 +237,7 @@ julia> plot_rain_hourly("Dublin", 9, days = 5)
 ```
 
 ```julia
-julia> plot_snow_hourly("Tromso", days = 5)
+julia> plot_hourly_snow("Tromso", days = 5)
                      ⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀Tromso⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀ 
                      ⠀Timezone: Europe/Oslo⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀[Weather data by Open-Meteo.com]⠀ 
                      ┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓ 
@@ -236,7 +262,7 @@ julia> plot_snow_hourly("Tromso", days = 5)
 ```
 
 ```julia
-julia> plot_humidity_hourly("Ranikhet", days = 5)
+julia> plot_hourly_humidity("Ranikhet", days = 5)
                         ⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀Ranikhet⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀ 
                         ⠀Timezone: Asia/Kolkata⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀[Weather data by Open-Meteo.com]⠀ 
                         ┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓ 
@@ -261,7 +287,7 @@ julia> plot_humidity_hourly("Ranikhet", days = 5)
 ```
 
 ```julia
-julia> plot_windspeed_hourly("Rotterdam", days = 5)
+julia> plot_hourly_windspeed("Rotterdam", days = 5)
 [ Info: More than one match found, showing report for location in row 1.
 [ Info: You can select another location by its row index.
 2×4 DataFrame
@@ -294,7 +320,7 @@ julia> plot_windspeed_hourly("Rotterdam", days = 5)
 ```
 
 ```julia
-julia> plot_solar_hourly("Canberra", days = 5)
+julia> plot_hourly_solar("Canberra", days = 5)
                                      ⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀Canberra⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀ 
                                      ⠀Timezone: Australia/Sydney⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀[Weather data by Open-Meteo.com]⠀ 
                                      ┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓ 
