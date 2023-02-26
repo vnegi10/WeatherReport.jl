@@ -2,33 +2,33 @@
 
 @testset verbose = true "Plotting with default selection" begin
 
-    @testset "plot_temp_hourly" begin
-        plt = plot_temp_hourly("Veldhoven", days = 3)
+    @testset "plot_hourly_temp" begin
+        plt = plot_hourly_temp("Veldhoven", days = 3)
         @test sizeof(plt) > 0
     end
 
-    @testset "plot_rain_hourly" begin
-        plt = plot_rain_hourly("Osaka", days = 3)
+    @testset "plot_hourly_rain" begin
+        plt = plot_hourly_rain("Osaka", days = 3)
         @test sizeof(plt) > 0
     end
 
-    @testset "plot_snow_hourly" begin
-        plt = plot_snow_hourly("Helsinki", days = 3)
+    @testset "plot_hourly_snow" begin
+        plt = plot_hourly_snow("Helsinki", days = 3)
         @test sizeof(plt) > 0
     end
 
-    @testset "plot_humidity_hourly" begin
-        plt = plot_humidity_hourly("Singapore", days = 3)
+    @testset "plot_hourly_humidity" begin
+        plt = plot_hourly_humidity("Singapore", days = 3)
         @test sizeof(plt) > 0
     end
 
-    @testset "plot_windspeed_hourly" begin
-        plt = plot_windspeed_hourly("Zurich", days = 3)
+    @testset "plot_hourly_windspeed" begin
+        plt = plot_hourly_windspeed("Zurich", days = 3)
         @test sizeof(plt) > 0
     end
 
-    @testset "plot_solar_hourly" begin
-        plt = plot_solar_hourly("Canberra", days = 3)
+    @testset "plot_hourly_solar" begin
+        plt = plot_hourly_solar("Canberra", days = 3)
         @test sizeof(plt) > 0
     end
 
@@ -46,51 +46,51 @@ end
 
 @testset verbose = true "Plotting with multiple matches" begin
 
-    @testset "plot_temp_hourly" begin
-        plt = plot_temp_hourly("Madrid", 2, days = 3)
+    @testset "plot_hourly_temp" begin
+        plt = plot_hourly_temp("Madrid", 2, days = 3)
         @test sizeof(plt) > 0
 
-        plt = plot_temp_hourly("Madrid", 4, days = 3)
-        @test sizeof(plt) > 0
-    end
-
-    @testset "plot_rain_hourly" begin
-        plt = plot_rain_hourly("Madrid", 3, days = 3)
-        @test sizeof(plt) > 0
-
-        plt = plot_rain_hourly("Madrid", 6, days = 3)
+        plt = plot_hourly_temp("Madrid", 4, days = 3)
         @test sizeof(plt) > 0
     end
 
-    @testset "plot_snow_hourly" begin
-        plt = plot_snow_hourly("Madrid", 1, days = 3)
+    @testset "plot_hourly_rain" begin
+        plt = plot_hourly_rain("Madrid", 3, days = 3)
         @test sizeof(plt) > 0
 
-        plt = plot_snow_hourly("Madrid", 5, days = 3)
-        @test sizeof(plt) > 0
-    end
-
-    @testset "plot_humidity_hourly" begin
-        plt = plot_humidity_hourly("Dublin", 1, days = 3)
-        @test sizeof(plt) > 0
-
-        plt = plot_humidity_hourly("Dublin", 7, days = 3)
+        plt = plot_hourly_rain("Madrid", 6, days = 3)
         @test sizeof(plt) > 0
     end
 
-    @testset "plot_windspeed_hourly" begin
-        plt = plot_windspeed_hourly("Dublin", 1, days = 3)
+    @testset "plot_hourly_snow" begin
+        plt = plot_hourly_snow("Madrid", 1, days = 3)
         @test sizeof(plt) > 0
 
-        plt = plot_windspeed_hourly("Dublin", 5, days = 3)
+        plt = plot_hourly_snow("Madrid", 5, days = 3)
         @test sizeof(plt) > 0
     end
 
-    @testset "plot_solar_hourly" begin
-        plt = plot_solar_hourly("Madrid", 1, days = 5)
+    @testset "plot_hourly_humidity" begin
+        plt = plot_hourly_humidity("Dublin", 1, days = 3)
         @test sizeof(plt) > 0
 
-        plt = plot_solar_hourly("Madrid", 3, days = 5)
+        plt = plot_hourly_humidity("Dublin", 7, days = 3)
+        @test sizeof(plt) > 0
+    end
+
+    @testset "plot_hourly_windspeed" begin
+        plt = plot_hourly_windspeed("Dublin", 1, days = 3)
+        @test sizeof(plt) > 0
+
+        plt = plot_hourly_windspeed("Dublin", 5, days = 3)
+        @test sizeof(plt) > 0
+    end
+
+    @testset "plot_hourly_solar" begin
+        plt = plot_hourly_solar("Madrid", 1, days = 5)
+        @test sizeof(plt) > 0
+
+        plt = plot_hourly_solar("Madrid", 3, days = 5)
         @test sizeof(plt) > 0
     end
 

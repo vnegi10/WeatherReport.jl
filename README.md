@@ -33,7 +33,7 @@ julia> show_current("Vienna")
 ```
 
 ```julia
-julia> plot_temp_hourly("Veldhoven")
+julia> plot_hourly_temp("Veldhoven")
                         ⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀Veldhoven: min -0.9 °C, max 12.7 °C⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀ 
                         ⠀Timezone: Europe/Amsterdam⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀[Weather data by Open-Meteo.com]⠀ 
                         ┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓ 
@@ -61,7 +61,7 @@ Default forecast is for 7 days starting from 00:00 today. To reduce the forecast
 `days` keyword as show below:
 
 ```julia
-jjulia> plot_temp_hourly("Veldhoven", days = 5)
+jjulia> plot_hourly_temp("Veldhoven", days = 5)
              ⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀Veldhoven: min -2.0 °C, max 6.3 °C (air temp)⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀                
              ⠀Timezone: Europe/Amsterdam⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀[Weather data by Open-Meteo.com]⠀                
              ┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓                
@@ -86,7 +86,7 @@ jjulia> plot_temp_hourly("Veldhoven", days = 5)
 ```
 
 ```julia
-julia> plot_rain_hourly("Dublin")
+julia> plot_hourly_rain("Dublin")
 [ Info: More than one match found, showing report for location in row 1.
 [ Info: You can select another location by its row index.
 9×4 DataFrame
@@ -130,7 +130,7 @@ When a DataFrame showing multiple matches is printed, another location/timezone 
 selected by specifying its row index. For example:
 
 ```julia
-julia> plot_rain_hourly("Dublin", 2)
+julia> plot_hourly_rain("Dublin", 2)
 [ Info: More than one match found, showing report for location in row 2.
 [ Info: You can select another location by its row index.
 9×4 DataFrame
@@ -171,7 +171,7 @@ julia> plot_rain_hourly("Dublin", 2)
 ```
 
 ```julia
-julia> plot_rain_hourly("Dublin", 9, days = 5)
+julia> plot_hourly_rain("Dublin", 9, days = 5)
 [ Info: More than one match found, showing report for location in row 9.
 [ Info: You can select another location by its row index.
 9×4 DataFrame
@@ -211,7 +211,7 @@ julia> plot_rain_hourly("Dublin", 9, days = 5)
 ```
 
 ```julia
-julia> plot_snow_hourly("Tromso", days = 5)
+julia> plot_hourly_snow("Tromso", days = 5)
                      ⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀Tromso⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀ 
                      ⠀Timezone: Europe/Oslo⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀[Weather data by Open-Meteo.com]⠀ 
                      ┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓ 
@@ -236,7 +236,7 @@ julia> plot_snow_hourly("Tromso", days = 5)
 ```
 
 ```julia
-julia> plot_humidity_hourly("Ranikhet", days = 5)
+julia> plot_hourly_humidity("Ranikhet", days = 5)
                         ⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀Ranikhet⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀ 
                         ⠀Timezone: Asia/Kolkata⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀[Weather data by Open-Meteo.com]⠀ 
                         ┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓ 
@@ -261,7 +261,7 @@ julia> plot_humidity_hourly("Ranikhet", days = 5)
 ```
 
 ```julia
-julia> plot_windspeed_hourly("Rotterdam", days = 5)
+julia> plot_hourly_windspeed("Rotterdam", days = 5)
 [ Info: More than one match found, showing report for location in row 1.
 [ Info: You can select another location by its row index.
 2×4 DataFrame
@@ -294,7 +294,7 @@ julia> plot_windspeed_hourly("Rotterdam", days = 5)
 ```
 
 ```julia
-julia> plot_solar_hourly("Canberra", days = 5)
+julia> plot_hourly_solar("Canberra", days = 5)
                                      ⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀Canberra⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀ 
                                      ⠀Timezone: Australia/Sydney⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀[Weather data by Open-Meteo.com]⠀ 
                                      ┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓ 

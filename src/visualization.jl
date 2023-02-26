@@ -1,5 +1,5 @@
 """
-    plot_temp_hourly(city::String,
+    plot_hourly_temp(city::String,
                      i_row::Int64 = 1;
                      days::Int64 = 6)
 
@@ -18,7 +18,7 @@ ground and 'feels like' temperature for a given city.
 
 # Example
 ```julia-repl
-julia> plot_temp_hourly("Veldhoven", days = 2)
+julia> plot_hourly_temp("Veldhoven", days = 2)
              ⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀Veldhoven: min -1.5 °C, max 6.3 °C (air temp)⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀                
              ⠀Timezone: Europe/Amsterdam⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀[Weather data by Open-Meteo.com]⠀                
              ┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓                
@@ -42,7 +42,7 @@ julia> plot_temp_hourly("Veldhoven", days = 2)
              ⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀Time [days]⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀    
 ```
 """
-function plot_temp_hourly(city::String,
+function plot_hourly_temp(city::String,
                           i_row::Int64 = 1;
                           days::Int64 = 6)
 
@@ -266,7 +266,7 @@ function show_daily(city::String, i_row::Int64 = 1)
 end
 
 """
-    plot_rain_hourly(city::String,
+    plot_hourly_rain(city::String,
                      i_row::Int64 = 1;
                      days::Int64 = 6)
 
@@ -285,7 +285,7 @@ hour in millimeter [mm] for a given city.
 
 # Example
 ```julia-repl
-julia> plot_rain_hourly("London", 2, days = 5)
+julia> plot_hourly_rain("London", 2, days = 5)
 [ Info: More than one match found, showing report for location in row 2.
 [ Info: You can select another location by its row index.
 6×4 DataFrame
@@ -321,7 +321,7 @@ julia> plot_rain_hourly("London", 2, days = 5)
                ⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀Time [days]⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀  
 ```
 """
-function plot_rain_hourly(city::String,
+function plot_hourly_rain(city::String,
                           i_row::Int64 = 1;
                           days::Int64 = 6)
 
@@ -358,7 +358,7 @@ function plot_rain_hourly(city::String,
 end
 
 """
-    plot_snow_hourly(city::String,
+    plot_hourly_snow(city::String,
                      i_row::Int64 = 1;
                      days::Int64 = 6)
 
@@ -377,7 +377,7 @@ centimeter [cm] for a given city.
 
 # Example
 ```julia-repl
-julia> plot_snow_hourly("Tromso", days = 3)
+julia> plot_hourly_snow("Tromso", days = 3)
                      ⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀Tromso⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀ 
                      ⠀Timezone: Europe/Oslo⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀[Weather data by Open-Meteo.com]⠀ 
                      ┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓ 
@@ -401,7 +401,7 @@ julia> plot_snow_hourly("Tromso", days = 3)
                      ⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀Time [days]⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀ 
 ```
 """
-function plot_snow_hourly(city::String,
+function plot_hourly_snow(city::String,
                           i_row::Int64 = 1;
                           days::Int64 = 6)
 
@@ -438,7 +438,7 @@ function plot_snow_hourly(city::String,
 end
 
 """
-    plot_humidity_hourly(city::String,
+    plot_hourly_humidity(city::String,
                          i_row::Int64 = 1;
                          days::Int64 = 6)
 
@@ -457,7 +457,7 @@ for a given city.
 
 # Example
 ```julia-repl
-julia> plot_humidity_hourly("Veldhoven", days = 3)
+julia> plot_hourly_humidity("Veldhoven", days = 3)
                         ⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀Veldhoven⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀ 
                         ⠀Timezone: Europe/Amsterdam⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀[Weather data by Open-Meteo.com]⠀ 
                         ┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓ 
@@ -481,7 +481,7 @@ julia> plot_humidity_hourly("Veldhoven", days = 3)
                         ⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀Time [days]⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀ 
 ```
 """
-function plot_humidity_hourly(city::String,
+function plot_hourly_humidity(city::String,
                               i_row::Int64 = 1;
                               days::Int64 = 6)
 
@@ -518,7 +518,7 @@ function plot_humidity_hourly(city::String,
 end
 
 """
-    plot_windspeed_hourly(city::String,
+    plot_hourly_windspeed(city::String,
                           i_row::Int64 = 1;
                           days::Int64 = 6)
 
@@ -536,7 +536,7 @@ Shows the wind speed at 10 meter above ground for a given city.
 
 # Example
 ```julia-repl
-julia> plot_windspeed_hourly("Zurich", days = 3)
+julia> plot_hourly_windspeed("Zurich", days = 3)
                         ⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀Zurich⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀ 
                         ⠀Timezone: Europe/Zurich⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀[Weather data by Open-Meteo.com]⠀ 
                         ┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓ 
@@ -560,7 +560,7 @@ julia> plot_windspeed_hourly("Zurich", days = 3)
                         ⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀Time [days]⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀ 
 ```
 """
-function plot_windspeed_hourly(city::String,
+function plot_hourly_windspeed(city::String,
                                i_row::Int64 = 1;
                                days::Int64 = 6)
 
@@ -597,7 +597,7 @@ function plot_windspeed_hourly(city::String,
 end
 
 """
-    plot_solar_hourly(city::String,
+    plot_hourly_solar(city::String,
                       i_row::Int64 = 1;
                       days::Int64 = 6)
 
@@ -616,7 +616,7 @@ days, which is also the maximum.
 
 # Example
 ```julia-repl
-julia> plot_solar_hourly("Canberra", days = 3)
+julia> plot_hourly_solar("Canberra", days = 3)
                                      ⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀Canberra⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀ 
                                      ⠀Timezone: Australia/Sydney⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀[Weather data by Open-Meteo.com]⠀ 
                                      ┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓ 
@@ -640,7 +640,7 @@ julia> plot_solar_hourly("Canberra", days = 3)
                                      ⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀Time [days]⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀ 
 ```
 """
-function plot_solar_hourly(city::String,
+function plot_hourly_solar(city::String,
                            i_row::Int64 = 1;
                            days::Int64 = 6)
 
