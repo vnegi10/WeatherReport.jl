@@ -32,8 +32,8 @@
         @test sizeof(plt) > 0
     end
 
-    @testset "show_current_weather" begin
-        result = @capture_out show_current_weather("Oslo")
+    @testset "show_current" begin
+        result = @capture_out show_current("Oslo")
         @test length(result) > 0
     end
 
@@ -94,11 +94,11 @@ end
         @test sizeof(plt) > 0
     end
 
-    @testset "show_current_weather" begin
-        result = @capture_out show_current_weather("Madrid", 2)
+    @testset "show_current" begin
+        result = @capture_out show_current("Madrid", 2)
         @test length(result) > 0
 
-        result = @capture_out show_current_weather("Madrid", 4)
+        result = @capture_out show_current("Madrid", 4)
         @test length(result) > 0
     end
 

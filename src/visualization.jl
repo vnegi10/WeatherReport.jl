@@ -99,7 +99,7 @@ function plot_temp_hourly(city::String,
 end
 
 """
-    show_current_weather(city::String, i_row::Int64 = 1)
+    show_current(city::String, i_row::Int64 = 1)
 
 Shows the current weather conditions for a given city.
 
@@ -111,7 +111,7 @@ Shows the current weather conditions for a given city.
 
 # Example
 ```julia-repl
-julia> show_current_weather("Lisbon")
+julia> show_current("Lisbon")
 [ Info: More than one match found, showing report for location in row 1.
 [ Info: You can select another location by its row index.
 8×4 DataFrame
@@ -134,7 +134,7 @@ julia> show_current_weather("Lisbon")
 └───────────────┴───────────┴────────────┴─────────────┴───────────┴─────────┴─────────┘
 ```
 """
-function show_current_weather(city::String, i_row::Int64 = 1)
+function show_current(city::String, i_row::Int64 = 1)
 
     current_dict = get_current(city, i_row)
 
