@@ -22,6 +22,8 @@ license.
 
 ## Example usage
 
+For current weather conditions:
+
 ```julia
 julia> show_current("Vienna")
 ┌───────────────┬───────────┬────────────┬─────────────┬───────────────┬─────────┬─────────┐
@@ -31,6 +33,30 @@ julia> show_current("Vienna")
 │ Europe/Vienna │     196.0 │       10.1 │        11.6 │ Partly cloudy │    6:52 │   17:23 │
 └───────────────┴───────────┴────────────┴─────────────┴───────────────┴─────────┴─────────┘
 ```
+
+A summary of daily weather forecast can be obtained for up to a week 
+as shown below:
+
+```julia
+julia> show_daily("Sofia")
+┌────────────┬────────┬────────┬────────────┬────────────┬───────────┬────────────────┬─────────────┬───────────────────────┐
+│       Time │ Min. T │ Max. T │ App. min T │ App. max T │ Prec. sum │ Prec. duration │ Prec. prob. │             Condition │
+│     [date] │   [°C] │   [°C] │       [°C] │       [°C] │      [mm] │        [hours] │         [%] │                    [] │
+├────────────┼────────┼────────┼────────────┼────────────┼───────────┼────────────────┼─────────────┼───────────────────────┤
+│ 2023-02-26 │    9.9 │   17.4 │        7.5 │       12.8 │       0.2 │            1.0 │           0 │              Overcast │
+│ 2023-02-27 │    7.5 │   15.2 │        6.1 │       12.0 │       5.1 │           11.0 │          74 │ Moderate thunderstorm │
+│ 2023-02-28 │    5.4 │   13.6 │        3.0 │       10.3 │       1.5 │            6.0 │          71 │           Slight rain │
+│ 2023-03-01 │    4.7 │    7.5 │        0.6 │        2.9 │       4.0 │            9.0 │          77 │           Slight rain │
+│ 2023-03-02 │    3.0 │    7.0 │       -0.9 │        3.0 │       0.0 │            0.0 │          48 │              Overcast │
+│ 2023-03-03 │    2.3 │    6.6 │       -0.8 │        3.1 │       1.8 │            6.0 │          16 │           Slight rain │
+│ 2023-03-04 │    1.9 │    7.6 │       -0.3 │        5.0 │       2.7 │            9.0 │          29 │           Slight rain │
+└────────────┴────────┴────────┴────────────┴────────────┴───────────┴────────────────┴─────────────┴───────────────────────┘
+Europe/Sofia EET
+[Weather data by Open-Meteo.com]
+```
+
+Hourly forecast can be visualized in the REPL itself as shown in
+the following examples:
 
 ```julia
 julia> plot_hourly_temp("Veldhoven")
@@ -57,8 +83,8 @@ julia> plot_hourly_temp("Veldhoven")
                         ⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀Time [days]⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀ 
 ```
 
-Default forecast is for 7 days starting from 00:00 today. To reduce the forecast window, use the
-`days` keyword as show below:
+Default forecast is for 6 days starting from the current hour. To reduce the forecast window, 
+use the `days` keyword as shown below:
 
 ```julia
 jjulia> plot_hourly_temp("Veldhoven", days = 5)
@@ -126,7 +152,7 @@ julia> plot_hourly_rain("Dublin")
                ⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀Time [days]⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀ 
 ```
 
-When a DataFrame showing multiple matches is printed, another location/timezone can be 
+When a `DataFrame` showing multiple matches is printed, another location/timezone can be 
 selected by specifying its row index. For example:
 
 ```julia
