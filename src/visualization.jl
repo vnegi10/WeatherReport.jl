@@ -159,6 +159,8 @@ function show_current(city::String, i_row::Int64 = 1)
 
     p_table = pretty_table(data;
                            header = header)
+    
+    println("$(ATTRIBUTION)")
 
     return p_table
 
