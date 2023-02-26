@@ -6,7 +6,8 @@ export plot_temp_hourly,
        plot_humidity_hourly,
        plot_windspeed_hourly,
        plot_solar_hourly,
-       show_current_weather
+       show_current_weather,
+       show_weekly
 
 using HTTP,
       JSON,
@@ -23,7 +24,7 @@ include("helpers.jl")
 include("constants.jl")
 
 include("hourly.jl")
-include("current.jl")
+include("daily.jl")
 include("visualization.jl")
 
 end # module WeatherReport

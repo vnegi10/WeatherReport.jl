@@ -165,6 +165,107 @@ function show_current_weather(city::String, i_row::Int64 = 1)
 end
 
 """
+    show_weekly(city::String, i_row::Int64 = 1)
+
+Shows the weekly weather conditions for a given city.
+
+# Arguments
+- `city::String` : Valid city name, e.g. "Oslo", "Paris", "Amsterdam" etc.
+- `i_row::Int64` : In case of more than one match for a given location,
+                   select the desired timezone by providing the row index
+                   from the printed DataFrame. Default is set to 1.
+
+# Example
+```julia-repl
+julia> show_weekly("Veldhoven")
+┌────────────┬────────┬────────┬────────────┬────────────┬───────────┬────────────────┬─────────────┬─────────────────────┐
+│       Time │ Min. T │ Max. T │ App. min T │ App. max T │ Prec. sum │ Prec. duration │ Prec. prob. │           Condition │
+│     [date] │   [°C] │   [°C] │       [°C] │       [°C] │      [mm] │        [hours] │         [%] │                  [] │
+├────────────┼────────┼────────┼────────────┼────────────┼───────────┼────────────────┼─────────────┼─────────────────────┤
+│ 2023-02-26 │   -1.4 │    4.9 │       -5.7 │       -0.7 │       0.0 │            0.0 │           0 │       Partly cloudy │
+│ 2023-02-27 │   -1.6 │    6.2 │       -5.1 │        1.4 │       0.0 │            0.0 │           0 │            Overcast │
+│ 2023-02-28 │   -1.1 │    4.3 │       -5.0 │       -1.3 │       0.0 │            0.0 │           0 │       Partly cloudy │
+│ 2023-03-01 │   -2.0 │    5.3 │       -6.4 │       -0.2 │       0.0 │            0.0 │           0 │            Overcast │
+│ 2023-03-02 │   -1.2 │    6.7 │       -5.1 │        2.0 │       0.0 │            0.0 │           0 │       Partly cloudy │
+│ 2023-03-03 │   -1.1 │    3.3 │       -4.9 │       -0.3 │       0.0 │            0.0 │           0 │ Depositing rime fog │
+│ 2023-03-04 │   -0.8 │    7.5 │       -3.6 │        4.7 │       0.0 │            0.0 │           0 │                 Fog │
+└────────────┴────────┴────────┴────────────┴────────────┴───────────┴────────────────┴─────────────┴─────────────────────┘
+Europe/Amsterdam CET
+[Weather data by Open-Meteo.com]
+```
+"""
+function show_weekly(city::String, i_row::Int64 = 1)
+
+    weekly_dict  = get_daily(city, i_row)
+
+    timezone     = weekly_dict["timezone"]
+    timezone_abb = weekly_dict["timezone_abbreviation"]
+    
+    # Days
+    time         = weekly_dict["daily"]["time"]
+
+    # Temperature
+    T_min        = weekly_dict["daily"]["temperature_2m_min"]
+    T_max        = weekly_dict["daily"]["temperature_2m_max"]
+    T_app_min    = weekly_dict["daily"]["apparent_temperature_min"]
+    T_app_max    = weekly_dict["daily"]["apparent_temperature_max"]
+
+    # Precipitation
+    prep_sum     = weekly_dict["daily"]["precipitation_sum"]
+    prep_hours   = weekly_dict["daily"]["precipitation_hours"]
+    prep_prob    = weekly_dict["daily"]["precipitation_probability_mean"]
+
+    # Weather code
+    codes        = weekly_dict["daily"]["weathercode"]
+    condition    = [WEATHER_CODES[code] for code in codes]
+
+    data = [time T_min T_max T_app_min T_app_max prep_sum prep_hours prep_prob condition]
+    header = (
+               ["Time",
+               "Min. T",
+               "Max. T",
+               "App. min T",
+               "App. max T",
+               "Prec. sum",
+               "Prec. duration",
+               "Prec. prob.",
+               "Condition"],
+
+              ["[date]",
+               "[°C]",
+               "[°C]",
+               "[°C]",
+               "[°C]",
+               "[mm]",
+               "[hours]",
+               "[%]",
+               "[]"]
+               )
+
+    h_min(column) = Highlighter((data, i, j) -> j == column &&
+                                 data[i, j] == minimum(data[2:end, column]),
+                                 bold       = true,
+                                 foreground = :blue)
+
+    h_max(column) = Highlighter((data, i, j) -> j == column &&
+                                 data[i, j] == maximum(data[2:end, column]),
+                                 bold       = true,
+                                 foreground = :red)
+
+    p_table = pretty_table(data;
+                           header = header,
+                           header_crayon = crayon"yellow bold",
+                           highlighters = (h_min(2), h_min(4), h_max(3), h_max(5))
+                           )
+
+    println("$(timezone)", " ", "$(timezone_abb)")
+    println("$(ATTRIBUTION)")
+
+    return p_table
+
+end
+
+"""
     plot_rain_hourly(city::String,
                      i_row::Int64 = 1;
                      days::Int64 = 6)
