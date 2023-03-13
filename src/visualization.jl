@@ -1,6 +1,8 @@
 """
-    plot_hourly_temp(city::String,
+    plot_hourly_temp(city::String = "",
                      i_row::Int64 = 1;
+                     lat::Float64 = 0.0,
+                     long::Float64 = 0.0,
                      days::Int64 = 6)
 
 Shows the hourly air temperature [°C] at 2 meter above
@@ -13,6 +15,8 @@ ground and 'feels like' temperature for a given city.
                    from the printed DataFrame. Default is set to 1.
 
 # Optional keywords
+- `lat::Float64` : Geographical WGS84 coordinate of the location (°S < 0, °N > 0)
+- `long::Float64` : Geographical WGS84 coordinate of the location (°W < 0, °E > 0)
 - `days::Int64` : Number of days for which data are returned. Default is 6
                   days, which is also the maximum.
 
@@ -60,7 +64,7 @@ function plot_hourly_temp(city::String = "",
     else
         results = get_hourly_forecast("temperature_2m", lat, long)
         df_temp, time_zone = results[1], results[2]
-        
+
         df_app_temp = get_hourly_forecast("apparent_temperature", lat, long)[1]
     end
 
@@ -284,8 +288,10 @@ function show_daily(city::String, i_row::Int64 = 1)
 end
 
 """
-    plot_hourly_rain(city::String,
+    plot_hourly_rain(city::String = "",
                      i_row::Int64 = 1;
+                     lat::Float64 = 0.0,
+                     long::Float64 = 0.0,
                      days::Int64 = 6)
 
 Shows the hourly rain from large scale weather systems of the preceding
@@ -298,6 +304,8 @@ hour in millimeter [mm] for a given city.
                    from the printed DataFrame. Default is set to 1.
 
 # Optional keywords
+- `lat::Float64` : Geographical WGS84 coordinate of the location (°S < 0, °N > 0)
+- `long::Float64` : Geographical WGS84 coordinate of the location (°W < 0, °E > 0)
 - `days::Int64` : Number of days for which data are returned. Default is 6
                   days, which is also the maximum.
 
@@ -390,8 +398,10 @@ function plot_hourly_rain(city::String = "",
 end
 
 """
-    plot_hourly_snow(city::String,
+    plot_hourly_snow(city::String = "",
                      i_row::Int64 = 1;
+                     lat::Float64 = 0.0,
+                     long::Float64 = 0.0,
                      days::Int64 = 6)
 
 Shows the snowfall amount for the preceding hour in 
@@ -404,6 +414,8 @@ centimeter [cm] for a given city.
                    from the printed DataFrame. Default is set to 1.
 
 # Optional keywords
+- `lat::Float64` : Geographical WGS84 coordinate of the location (°S < 0, °N > 0)
+- `long::Float64` : Geographical WGS84 coordinate of the location (°W < 0, °E > 0)
 - `days::Int64` : Number of days for which data are returned. Default is 6
                   days, which is also the maximum.
 
@@ -484,8 +496,10 @@ function plot_hourly_snow(city::String = "",
 end
 
 """
-    plot_hourly_humidity(city::String,
+    plot_hourly_humidity(city::String = "",
                          i_row::Int64 = 1;
+                         lat::Float64 = 0.0,
+                         long::Float64 = 0.0,
                          days::Int64 = 6)
 
 Shows the relative humidity at 2 meter above ground
@@ -498,6 +512,8 @@ for a given city.
                    from the printed DataFrame. Default is set to 1.
 
 # Optional keywords
+- `lat::Float64` : Geographical WGS84 coordinate of the location (°S < 0, °N > 0)
+- `long::Float64` : Geographical WGS84 coordinate of the location (°W < 0, °E > 0)
 - `days::Int64` : Number of days for which data are returned. Default is 6
                   days, which is also the maximum.
 
@@ -578,8 +594,10 @@ function plot_hourly_humidity(city::String = "",
 end
 
 """
-    plot_hourly_windspeed(city::String,
+    plot_hourly_windspeed(city::String = "",
                           i_row::Int64 = 1;
+                          lat::Float64 = 0.0,
+                          long::Float64 = 0.0,
                           days::Int64 = 6)
 
 Shows the wind speed at 10 meter above ground for a given city.
@@ -591,6 +609,8 @@ Shows the wind speed at 10 meter above ground for a given city.
                    from the printed DataFrame. Default is set to 1.
 
 # Optional keywords
+- `lat::Float64` : Geographical WGS84 coordinate of the location (°S < 0, °N > 0)
+- `long::Float64` : Geographical WGS84 coordinate of the location (°W < 0, °E > 0)
 - `days::Int64` : Number of days for which data are returned. Default is 6
                   days, which is also the maximum.
 
@@ -671,8 +691,10 @@ function plot_hourly_windspeed(city::String = "",
 end
 
 """
-    plot_hourly_solar(city::String,
+    plot_hourly_solar(city::String = "",
                       i_row::Int64 = 1;
+                      lat::Float64 = 0.0,
+                      long::Float64 = 0.0,
                       days::Int64 = 6)
 
 Shows the shortwave solar radiation as average of the preceding hour. 
@@ -685,6 +707,8 @@ select the desired timezone by providing the row index
 from the printed DataFrame. Default is set to 1.
 
 # Optional keywords
+- `lat::Float64` : Geographical WGS84 coordinate of the location (°S < 0, °N > 0)
+- `long::Float64` : Geographical WGS84 coordinate of the location (°W < 0, °E > 0)
 - `days::Int64` : Number of days for which data are returned. Default is 6
 days, which is also the maximum.
 
