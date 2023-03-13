@@ -42,15 +42,35 @@ julia> plot_hourly_temp("Veldhoven", days = 2)
              ⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀Time [days]⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀    
 ```
 """
-function plot_hourly_temp(city::String,
+function plot_hourly_temp(city::String = "",
                           i_row::Int64 = 1;
+                          lat::Float64 = 0.0,
+                          long::Float64 = 0.0,
                           days::Int64 = 6)
 
-    results = get_hourly_forecast(city, "temperature_2m", i_row)
-    df_temp, location = results[1], results[2]
-    time_zone = location.timezone
+    df_temp, df_app_temp = [DataFrame() for i = 1:2]
+    time_zone = ""
 
-    df_app_temp = get_hourly_forecast(city, "apparent_temperature", i_row)[1]
+    if ~isempty(city)
+
+        results = get_hourly_forecast(city, "temperature_2m", i_row)
+        df_temp, location = results[1], results[2]
+        time_zone = location.timezone
+
+        df_app_temp = get_hourly_forecast(city, "apparent_temperature", i_row)[1]
+
+    else
+
+        results = get_hourly_forecast("temperature_2m",
+                                      lat,
+                                      long)
+        df_temp, time_zone = results[1], results[2]
+
+        df_app_temp = get_hourly_forecast("apparent_temperature",
+                                          lat,
+                                          long)[1]
+
+    end
 
     try
         insertcols!(df_temp,
@@ -73,6 +93,10 @@ function plot_hourly_temp(city::String,
 
     # Get min, max air temp to show on the plot
     T_min, T_max = minimum(df_temp[!, :FORECAST]), maximum(df_temp[!, :FORECAST])
+
+    if isempty(city)
+        city = ["lat:", "$(lat)", ", ", "long:", "$(long)"] |> join
+    end
 
     plt = lineplot(
         df_temp[!, :TIME],
