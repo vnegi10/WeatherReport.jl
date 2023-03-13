@@ -365,33 +365,15 @@ function plot_hourly_rain(city::String = "",
         df_rain, time_zone = results[1], results[2]
     end
 
-    # Filter DataFrame to start from current hour
-    df_rain = from_current_time(df_rain)
-
-    @assert days*24 ≤ nrow(df_rain) "Not enough data, try again with less days!"
-    df_rain = df_rain[1:days*24, :]
-
-    if isempty(city)
-        city = ["lat:", "$(lat)", ", ", "long:", "$(long)"] |> join
-    end
-
-    plt = lineplot(
-        df_rain[!, :TIME],
-        df_rain[!, :FORECAST],
-        title  = "$(city)",
-        xlabel = "Time [days]",
-        ylabel = "Rain [mm]",
-        xticks = true,
-        yticks = true,
-        border = :bold,
-        color = :red,
-        canvas = BrailleCanvas,
-        width = 75,
-        height = 15,
-    )
-
-    label!(plt, :tl, "Timezone: $(time_zone)")
-    label!(plt, :tr, ATTRIBUTION)
+    plt = df_to_plot(city,
+                     df_rain,
+                     days = days,
+                     lat = lat,
+                     long = long,
+                     xlabel = "Time [days]",
+                     ylabel = "Rain [mm]",
+                     color = :red,
+                     time_zone = time_zone)
 
     return plt
 

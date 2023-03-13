@@ -64,6 +64,48 @@ function from_current_time(df_hourly::DataFrame)
 
 end
 
+function df_to_plot(city::String,
+                    df_data::DataFrame;
+                    days::Int64,
+                    lat::Float64,
+                    long::Float64,
+                    xlabel::String,
+                    ylabel::String,
+                    color::Symbol,
+                    time_zone::String)
+
+    # Filter DataFrame to start from current hour
+    df_data = from_current_time(df_data)
+
+    @assert days*24 ≤ nrow(df_data) "Not enough data, try again with less days!"
+    df_data = df_data[1:days*24, :]
+
+    if isempty(city)
+        city = ["lat:", "$(lat)", ", ", "long:", "$(long)"] |> join
+    end
+
+    plt = lineplot(
+        df_data[!, :TIME],
+        df_data[!, :FORECAST],
+        title  = "$(city)",
+        xlabel = xlabel,
+        ylabel = ylabel,
+        xticks = true,
+        yticks = true,
+        border = :bold,
+        color = color,
+        canvas = BrailleCanvas,
+        width = 75,
+        height = 15,
+    )
+
+    label!(plt, :tl, "Timezone: $(time_zone)")
+    label!(plt, :tr, ATTRIBUTION)
+
+    return plt
+
+end
+
 #=function get_cities_lat_long(file::String)
 
 	all_lines  = readlines(file)
