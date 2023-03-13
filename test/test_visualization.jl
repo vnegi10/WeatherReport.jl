@@ -111,3 +111,43 @@ end
     end
 
 end
+
+@testset verbose = true "Plotting with lat/long input" begin
+
+    @testset "plot_hourly_temp" begin
+        # Denver
+        plt = plot_hourly_temp(lat = 39.7392, long = -104.985, days = 3) 
+        @test sizeof(plt) > 0
+    end
+
+    @testset "plot_hourly_rain" begin
+        # Delhi
+        plt = plot_hourly_rain(lat = 28.6519, long = 77.2315, days = 4)
+        @test sizeof(plt) > 0
+    end
+
+    @testset "plot_hourly_snow" begin
+        # Oslo
+        plt = plot_hourly_snow(lat = 59.9127, long = 10.7461, days = 5)
+        @test sizeof(plt) > 0
+    end
+
+    @testset "plot_hourly_humidity" begin
+        # Sydney
+        plt = plot_hourly_humidity(lat = -33.8678, long = 151.207, days = 5)
+        @test sizeof(plt) > 0
+    end
+
+    @testset "plot_hourly_windspeed" begin
+        # Copenhagen
+        plt = plot_hourly_windspeed(lat = 55.6759, long = 12.5655, days = 3)
+        @test sizeof(plt) > 0
+    end
+
+    @testset "plot_hourly_solar" begin
+        # Chennai
+        plt = plot_hourly_solar(lat = 13.0878, long = 80.2785, days = 1)
+        @test sizeof(plt) > 0
+    end
+
+end

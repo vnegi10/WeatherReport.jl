@@ -27,21 +27,11 @@ end
 
 ################# All test groups #################
 
-# Using @test_throws in "test_exceptions.jl" with string
-# message as exception requires at least Julia v1.8 or later
-
-if VERSION ≥ v"1.8.0"
-    test_files = ["test_hourly.jl",
-                  "test_visualization.jl",
-                  "test_daily.jl",
-                  "test_helpers.jl",
-                  "test_exceptions.jl"]
-else
-    test_files = ["test_hourly.jl",
-                  "test_visualization.jl",
-                  "test_daily.jl",
-                  "test_helpers.jl"]
-end
+test_files = ["test_hourly.jl",
+              "test_visualization.jl",
+              "test_daily.jl",
+              "test_helpers.jl",
+              "test_exceptions.jl"]
 
 ###################################################
 

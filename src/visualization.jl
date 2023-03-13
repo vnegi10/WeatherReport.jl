@@ -1,6 +1,8 @@
 """
-    plot_hourly_temp(city::String,
+    plot_hourly_temp(city::String = "",
                      i_row::Int64 = 1;
+                     lat::Float64 = 0.0,
+                     long::Float64 = 0.0,
                      days::Int64 = 6)
 
 Shows the hourly air temperature [°C] at 2 meter above
@@ -13,6 +15,8 @@ ground and 'feels like' temperature for a given city.
                    from the printed DataFrame. Default is set to 1.
 
 # Optional keywords
+- `lat::Float64` : Geographical WGS84 coordinate of the location (°S < 0, °N > 0)
+- `long::Float64` : Geographical WGS84 coordinate of the location (°W < 0, °E > 0)
 - `days::Int64` : Number of days for which data are returned. Default is 6
                   days, which is also the maximum.
 
@@ -42,15 +46,27 @@ julia> plot_hourly_temp("Veldhoven", days = 2)
              ⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀Time [days]⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀    
 ```
 """
-function plot_hourly_temp(city::String,
+function plot_hourly_temp(city::String = "",
                           i_row::Int64 = 1;
+                          lat::Float64 = 0.0,
+                          long::Float64 = 0.0,
                           days::Int64 = 6)
 
-    results = get_hourly_forecast(city, "temperature_2m", i_row)
-    df_temp, location = results[1], results[2]
-    time_zone = location.timezone
+    df_temp, df_app_temp = [DataFrame() for i = 1:2]
+    time_zone = ""
 
-    df_app_temp = get_hourly_forecast(city, "apparent_temperature", i_row)[1]
+    if ~isempty(city)
+        results = get_hourly_forecast(city, "temperature_2m", i_row)
+        df_temp, location = results[1], results[2]
+        time_zone = location.timezone
+
+        df_app_temp = get_hourly_forecast(city, "apparent_temperature", i_row)[1]
+    else
+        results = get_hourly_forecast("temperature_2m", lat, long)
+        df_temp, time_zone = results[1], results[2]
+
+        df_app_temp = get_hourly_forecast("apparent_temperature", lat, long)[1]
+    end
 
     try
         insertcols!(df_temp,
@@ -73,6 +89,10 @@ function plot_hourly_temp(city::String,
 
     # Get min, max air temp to show on the plot
     T_min, T_max = minimum(df_temp[!, :FORECAST]), maximum(df_temp[!, :FORECAST])
+
+    if isempty(city)
+        city = ["lat:", "$(lat)", ", ", "long:", "$(long)"] |> join
+    end
 
     plt = lineplot(
         df_temp[!, :TIME],
@@ -268,8 +288,10 @@ function show_daily(city::String, i_row::Int64 = 1)
 end
 
 """
-    plot_hourly_rain(city::String,
+    plot_hourly_rain(city::String = "",
                      i_row::Int64 = 1;
+                     lat::Float64 = 0.0,
+                     long::Float64 = 0.0,
                      days::Int64 = 6)
 
 Shows the hourly rain from large scale weather systems of the preceding
@@ -282,6 +304,8 @@ hour in millimeter [mm] for a given city.
                    from the printed DataFrame. Default is set to 1.
 
 # Optional keywords
+- `lat::Float64` : Geographical WGS84 coordinate of the location (°S < 0, °N > 0)
+- `long::Float64` : Geographical WGS84 coordinate of the location (°W < 0, °E > 0)
 - `days::Int64` : Number of days for which data are returned. Default is 6
                   days, which is also the maximum.
 
@@ -323,19 +347,33 @@ julia> plot_hourly_rain("London", 2, days = 5)
                ⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀Time [days]⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀  
 ```
 """
-function plot_hourly_rain(city::String,
+function plot_hourly_rain(city::String = "",
                           i_row::Int64 = 1;
+                          lat::Float64 = 0.0,
+                          long::Float64 = 0.0,
                           days::Int64 = 6)
 
-    results = get_hourly_forecast(city, "rain", i_row)
-    df_rain, location = results[1], results[2]
-    time_zone = location.timezone
+    df_rain = DataFrame()
+    time_zone = ""
+
+    if ~isempty(city)
+        results = get_hourly_forecast(city, "rain", i_row)
+        df_rain, location = results[1], results[2]
+        time_zone = location.timezone
+    else
+        results = get_hourly_forecast("rain", lat, long)
+        df_rain, time_zone = results[1], results[2]
+    end
 
     # Filter DataFrame to start from current hour
     df_rain = from_current_time(df_rain)
 
     @assert days*24 ≤ nrow(df_rain) "Not enough data, try again with less days!"
     df_rain = df_rain[1:days*24, :]
+
+    if isempty(city)
+        city = ["lat:", "$(lat)", ", ", "long:", "$(long)"] |> join
+    end
 
     plt = lineplot(
         df_rain[!, :TIME],
@@ -360,8 +398,10 @@ function plot_hourly_rain(city::String,
 end
 
 """
-    plot_hourly_snow(city::String,
+    plot_hourly_snow(city::String = "",
                      i_row::Int64 = 1;
+                     lat::Float64 = 0.0,
+                     long::Float64 = 0.0,
                      days::Int64 = 6)
 
 Shows the snowfall amount for the preceding hour in 
@@ -374,6 +414,8 @@ centimeter [cm] for a given city.
                    from the printed DataFrame. Default is set to 1.
 
 # Optional keywords
+- `lat::Float64` : Geographical WGS84 coordinate of the location (°S < 0, °N > 0)
+- `long::Float64` : Geographical WGS84 coordinate of the location (°W < 0, °E > 0)
 - `days::Int64` : Number of days for which data are returned. Default is 6
                   days, which is also the maximum.
 
@@ -403,19 +445,33 @@ julia> plot_hourly_snow("Tromso", days = 3)
                      ⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀Time [days]⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀ 
 ```
 """
-function plot_hourly_snow(city::String,
+function plot_hourly_snow(city::String = "",
                           i_row::Int64 = 1;
+                          lat::Float64 = 0.0,
+                          long::Float64 = 0.0,
                           days::Int64 = 6)
 
-    results = get_hourly_forecast(city, "snowfall", i_row)
-    df_snow, location = results[1], results[2]
-    time_zone = location.timezone
+    df_snow = DataFrame()
+    time_zone = ""
+
+    if ~isempty(city)
+        results = get_hourly_forecast(city, "snowfall", i_row)
+        df_snow, location = results[1], results[2]
+        time_zone = location.timezone
+    else
+        results = get_hourly_forecast("snowfall", lat, long)
+        df_snow, time_zone = results[1], results[2]
+    end
 
     # Filter DataFrame to start from current hour
     df_snow = from_current_time(df_snow)
 
     @assert days*24 ≤ nrow(df_snow) "Not enough data, try again with less days!"
     df_snow = df_snow[1:days*24, :]
+
+    if isempty(city)
+        city = ["lat:", "$(lat)", ", ", "long:", "$(long)"] |> join
+    end
 
     plt = lineplot(
         df_snow[!, :TIME],
@@ -440,8 +496,10 @@ function plot_hourly_snow(city::String,
 end
 
 """
-    plot_hourly_humidity(city::String,
+    plot_hourly_humidity(city::String = "",
                          i_row::Int64 = 1;
+                         lat::Float64 = 0.0,
+                         long::Float64 = 0.0,
                          days::Int64 = 6)
 
 Shows the relative humidity at 2 meter above ground
@@ -454,6 +512,8 @@ for a given city.
                    from the printed DataFrame. Default is set to 1.
 
 # Optional keywords
+- `lat::Float64` : Geographical WGS84 coordinate of the location (°S < 0, °N > 0)
+- `long::Float64` : Geographical WGS84 coordinate of the location (°W < 0, °E > 0)
 - `days::Int64` : Number of days for which data are returned. Default is 6
                   days, which is also the maximum.
 
@@ -483,19 +543,33 @@ julia> plot_hourly_humidity("Veldhoven", days = 3)
                         ⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀Time [days]⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀ 
 ```
 """
-function plot_hourly_humidity(city::String,
+function plot_hourly_humidity(city::String = "",
                               i_row::Int64 = 1;
+                              lat::Float64 = 0.0,
+                              long::Float64 = 0.0,
                               days::Int64 = 6)
 
-    results = get_hourly_forecast(city, "relativehumidity_2m", i_row)
-    df_hum, location = results[1], results[2]
-    time_zone = location.timezone
+    df_hum = DataFrame()
+    time_zone = ""
+
+    if ~isempty(city)
+        results = get_hourly_forecast(city, "relativehumidity_2m", i_row)
+        df_hum, location = results[1], results[2]
+        time_zone = location.timezone
+    else
+        results = get_hourly_forecast("relativehumidity_2m", lat, long)
+        df_hum, time_zone = results[1], results[2]
+    end
 
     # Filter DataFrame to start from current hour
     df_hum = from_current_time(df_hum)
 
     @assert days*24 ≤ nrow(df_hum) "Not enough data, try again with less days!"
     df_hum = df_hum[1:days*24, :]
+
+    if isempty(city)
+        city = ["lat:", "$(lat)", ", ", "long:", "$(long)"] |> join
+    end
 
     plt = lineplot(
         df_hum[!, :TIME],
@@ -520,8 +594,10 @@ function plot_hourly_humidity(city::String,
 end
 
 """
-    plot_hourly_windspeed(city::String,
+    plot_hourly_windspeed(city::String = "",
                           i_row::Int64 = 1;
+                          lat::Float64 = 0.0,
+                          long::Float64 = 0.0,
                           days::Int64 = 6)
 
 Shows the wind speed at 10 meter above ground for a given city.
@@ -533,6 +609,8 @@ Shows the wind speed at 10 meter above ground for a given city.
                    from the printed DataFrame. Default is set to 1.
 
 # Optional keywords
+- `lat::Float64` : Geographical WGS84 coordinate of the location (°S < 0, °N > 0)
+- `long::Float64` : Geographical WGS84 coordinate of the location (°W < 0, °E > 0)
 - `days::Int64` : Number of days for which data are returned. Default is 6
                   days, which is also the maximum.
 
@@ -562,19 +640,33 @@ julia> plot_hourly_windspeed("Zurich", days = 3)
                         ⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀Time [days]⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀ 
 ```
 """
-function plot_hourly_windspeed(city::String,
+function plot_hourly_windspeed(city::String = "",
                                i_row::Int64 = 1;
+                               lat::Float64 = 0.0,
+                               long::Float64 = 0.0,
                                days::Int64 = 6)
 
-    results = get_hourly_forecast(city, "windspeed_10m", i_row)
-    df_wind, location = results[1], results[2]
-    time_zone = location.timezone
+    df_wind = DataFrame()
+    time_zone = ""
+
+    if ~isempty(city)
+        results = get_hourly_forecast(city, "windspeed_10m", i_row)
+        df_wind, location = results[1], results[2]
+        time_zone = location.timezone
+    else
+        results = get_hourly_forecast("windspeed_10m", lat, long)
+        df_wind, time_zone = results[1], results[2]
+    end
 
     # Filter DataFrame to start from current hour
     df_wind = from_current_time(df_wind)
 
     @assert days*24 ≤ nrow(df_wind) "Not enough data, try again with less days!"
     df_wind = df_wind[1:days*24, :]
+
+    if isempty(city)
+        city = ["lat:", "$(lat)", ", ", "long:", "$(long)"] |> join
+    end
 
     plt = lineplot(
         df_wind[!, :TIME],
@@ -599,8 +691,10 @@ function plot_hourly_windspeed(city::String,
 end
 
 """
-    plot_hourly_solar(city::String,
+    plot_hourly_solar(city::String = "",
                       i_row::Int64 = 1;
+                      lat::Float64 = 0.0,
+                      long::Float64 = 0.0,
                       days::Int64 = 6)
 
 Shows the shortwave solar radiation as average of the preceding hour. 
@@ -613,6 +707,8 @@ select the desired timezone by providing the row index
 from the printed DataFrame. Default is set to 1.
 
 # Optional keywords
+- `lat::Float64` : Geographical WGS84 coordinate of the location (°S < 0, °N > 0)
+- `long::Float64` : Geographical WGS84 coordinate of the location (°W < 0, °E > 0)
 - `days::Int64` : Number of days for which data are returned. Default is 6
 days, which is also the maximum.
 
@@ -642,19 +738,33 @@ julia> plot_hourly_solar("Canberra", days = 3)
                                      ⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀Time [days]⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀ 
 ```
 """
-function plot_hourly_solar(city::String,
+function plot_hourly_solar(city::String = "",
                            i_row::Int64 = 1;
+                           lat::Float64 = 0.0,
+                           long::Float64 = 0.0,
                            days::Int64 = 6)
 
-    results = get_hourly_forecast(city, "shortwave_radiation", i_row)
-    df_solar, location = results[1], results[2]
-    time_zone = location.timezone
+    df_solar = DataFrame()
+    time_zone = ""
+
+    if ~isempty(city)
+        results = get_hourly_forecast(city, "shortwave_radiation", i_row)
+        df_solar, location = results[1], results[2]
+        time_zone = location.timezone
+    else
+        results = get_hourly_forecast("shortwave_radiation", lat, long)
+        df_solar, time_zone = results[1], results[2]
+    end
 
     # Filter DataFrame to start from current hour
     df_solar = from_current_time(df_solar)
 
     @assert days*24 ≤ nrow(df_solar) "Not enough data, try again with less days!"
     df_solar = df_solar[1:days*24, :]
+
+    if isempty(city)
+        city = ["lat:", "$(lat)", ", ", "long:", "$(long)"] |> join
+    end
 
     plt = lineplot(
         df_solar[!, :TIME],
