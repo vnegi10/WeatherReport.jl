@@ -347,19 +347,35 @@ julia> plot_hourly_rain("London", 2, days = 5)
                ⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀Time [days]⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀  
 ```
 """
-function plot_hourly_rain(city::String,
+function plot_hourly_rain(city::String = "",
                           i_row::Int64 = 1;
+                          lat::Float64 = 0.0,
+                          long::Float64 = 0.0,
                           days::Int64 = 6)
 
-    results = get_hourly_forecast(city, "rain", i_row)
-    df_rain, location = results[1], results[2]
-    time_zone = location.timezone
+    df_rain = DataFrame()
+    time_zone = ""
+
+    if ~isempty(city)
+
+        results = get_hourly_forecast(city, "rain", i_row)
+        df_rain, location = results[1], results[2]
+        time_zone = location.timezone
+
+    else
+        results = get_hourly_forecast("rain", lat, long)
+        df_rain, time_zone = results[1], results[2]
+    end
 
     # Filter DataFrame to start from current hour
     df_rain = from_current_time(df_rain)
 
     @assert days*24 ≤ nrow(df_rain) "Not enough data, try again with less days!"
     df_rain = df_rain[1:days*24, :]
+
+    if isempty(city)
+        city = ["lat:", "$(lat)", ", ", "long:", "$(long)"] |> join
+    end
 
     plt = lineplot(
         df_rain[!, :TIME],
