@@ -630,19 +630,33 @@ julia> plot_hourly_windspeed("Zurich", days = 3)
                         ⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀Time [days]⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀ 
 ```
 """
-function plot_hourly_windspeed(city::String,
+function plot_hourly_windspeed(city::String = "",
                                i_row::Int64 = 1;
+                               lat::Float64 = 0.0,
+                               long::Float64 = 0.0,
                                days::Int64 = 6)
 
-    results = get_hourly_forecast(city, "windspeed_10m", i_row)
-    df_wind, location = results[1], results[2]
-    time_zone = location.timezone
+    df_wind = DataFrame()
+    time_zone = ""
+
+    if ~isempty(city)
+        results = get_hourly_forecast(city, "windspeed_10m", i_row)
+        df_wind, location = results[1], results[2]
+        time_zone = location.timezone
+    else
+        results = get_hourly_forecast("windspeed_10m", lat, long)
+        df_wind, time_zone = results[1], results[2]
+    end
 
     # Filter DataFrame to start from current hour
     df_wind = from_current_time(df_wind)
 
     @assert days*24 ≤ nrow(df_wind) "Not enough data, try again with less days!"
     df_wind = df_wind[1:days*24, :]
+
+    if isempty(city)
+        city = ["lat:", "$(lat)", ", ", "long:", "$(long)"] |> join
+    end
 
     plt = lineplot(
         df_wind[!, :TIME],
