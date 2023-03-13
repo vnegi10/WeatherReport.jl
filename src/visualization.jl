@@ -365,33 +365,15 @@ function plot_hourly_rain(city::String = "",
         df_rain, time_zone = results[1], results[2]
     end
 
-    # Filter DataFrame to start from current hour
-    df_rain = from_current_time(df_rain)
-
-    @assert days*24 ≤ nrow(df_rain) "Not enough data, try again with less days!"
-    df_rain = df_rain[1:days*24, :]
-
-    if isempty(city)
-        city = ["lat:", "$(lat)", ", ", "long:", "$(long)"] |> join
-    end
-
-    plt = lineplot(
-        df_rain[!, :TIME],
-        df_rain[!, :FORECAST],
-        title  = "$(city)",
-        xlabel = "Time [days]",
-        ylabel = "Rain [mm]",
-        xticks = true,
-        yticks = true,
-        border = :bold,
-        color = :red,
-        canvas = BrailleCanvas,
-        width = 75,
-        height = 15,
-    )
-
-    label!(plt, :tl, "Timezone: $(time_zone)")
-    label!(plt, :tr, ATTRIBUTION)
+    plt = df_to_plot(city,
+                     df_rain,
+                     days = days,
+                     lat = lat,
+                     long = long,
+                     xlabel = "Time [days]",
+                     ylabel = "Rain [mm]",
+                     color = :red,
+                     time_zone = time_zone)
 
     return plt
 
@@ -463,33 +445,15 @@ function plot_hourly_snow(city::String = "",
         df_snow, time_zone = results[1], results[2]
     end
 
-    # Filter DataFrame to start from current hour
-    df_snow = from_current_time(df_snow)
-
-    @assert days*24 ≤ nrow(df_snow) "Not enough data, try again with less days!"
-    df_snow = df_snow[1:days*24, :]
-
-    if isempty(city)
-        city = ["lat:", "$(lat)", ", ", "long:", "$(long)"] |> join
-    end
-
-    plt = lineplot(
-        df_snow[!, :TIME],
-        df_snow[!, :FORECAST],
-        title  = "$(city)",
-        xlabel = "Time [days]",
-        ylabel = "Snowfall [cm]",
-        xticks = true,
-        yticks = true,
-        border = :bold,
-        color = :white,
-        canvas = BrailleCanvas,
-        width = 75,
-        height = 15,
-    )
-
-    label!(plt, :tl, "Timezone: $(time_zone)")
-    label!(plt, :tr, ATTRIBUTION)
+    plt = df_to_plot(city,
+                     df_snow,
+                     days = days,
+                     lat = lat,
+                     long = long,
+                     xlabel = "Time [days]",
+                     ylabel = "Snowfall [cm]",
+                     color = :white,
+                     time_zone = time_zone)
 
     return plt
 
@@ -561,33 +525,15 @@ function plot_hourly_humidity(city::String = "",
         df_hum, time_zone = results[1], results[2]
     end
 
-    # Filter DataFrame to start from current hour
-    df_hum = from_current_time(df_hum)
-
-    @assert days*24 ≤ nrow(df_hum) "Not enough data, try again with less days!"
-    df_hum = df_hum[1:days*24, :]
-
-    if isempty(city)
-        city = ["lat:", "$(lat)", ", ", "long:", "$(long)"] |> join
-    end
-
-    plt = lineplot(
-        df_hum[!, :TIME],
-        df_hum[!, :FORECAST],
-        title  = "$(city)",
-        xlabel = "Time [days]",
-        ylabel = "Rel. humidity [%]",
-        xticks = true,
-        yticks = true,
-        border = :bold,
-        color = :green,
-        canvas = BrailleCanvas,
-        width = 75,
-        height = 15,
-    )
-
-    label!(plt, :tl, "Timezone: $(time_zone)")
-    label!(plt, :tr, ATTRIBUTION)
+    plt = df_to_plot(city,
+                     df_hum,
+                     days = days,
+                     lat = lat,
+                     long = long,
+                     xlabel = "Time [days]",
+                     ylabel = "Rel. humidity [%]",
+                     color = :green,
+                     time_zone = time_zone)
 
     return plt
 
@@ -658,33 +604,15 @@ function plot_hourly_windspeed(city::String = "",
         df_wind, time_zone = results[1], results[2]
     end
 
-    # Filter DataFrame to start from current hour
-    df_wind = from_current_time(df_wind)
-
-    @assert days*24 ≤ nrow(df_wind) "Not enough data, try again with less days!"
-    df_wind = df_wind[1:days*24, :]
-
-    if isempty(city)
-        city = ["lat:", "$(lat)", ", ", "long:", "$(long)"] |> join
-    end
-
-    plt = lineplot(
-        df_wind[!, :TIME],
-        df_wind[!, :FORECAST],
-        title  = "$(city)",
-        xlabel = "Time [days]",
-        ylabel = "Wind speed [km/h]",
-        xticks = true,
-        yticks = true,
-        border = :bold,
-        color = :blue,
-        canvas = BrailleCanvas,
-        width = 75,
-        height = 15,
-    )
-
-    label!(plt, :tl, "Timezone: $(time_zone)")
-    label!(plt, :tr, ATTRIBUTION)
+    plt = df_to_plot(city,
+                     df_wind,
+                     days = days,
+                     lat = lat,
+                     long = long,
+                     xlabel = "Time [days]",
+                     ylabel = "Wind speed [km/h]",
+                     color = :blue,
+                     time_zone = time_zone)
 
     return plt
 
@@ -756,33 +684,15 @@ function plot_hourly_solar(city::String = "",
         df_solar, time_zone = results[1], results[2]
     end
 
-    # Filter DataFrame to start from current hour
-    df_solar = from_current_time(df_solar)
-
-    @assert days*24 ≤ nrow(df_solar) "Not enough data, try again with less days!"
-    df_solar = df_solar[1:days*24, :]
-
-    if isempty(city)
-        city = ["lat:", "$(lat)", ", ", "long:", "$(long)"] |> join
-    end
-
-    plt = lineplot(
-        df_solar[!, :TIME],
-        df_solar[!, :FORECAST],
-        title  = "$(city)",
-        xlabel = "Time [days]",
-        ylabel = "Shortwave radiation [W/m^2]",
-        xticks = true,
-        yticks = true,
-        border = :bold,
-        color = :magenta,
-        canvas = BrailleCanvas,
-        width = 75,
-        height = 15,
-    )
-
-    label!(plt, :tl, "Timezone: $(time_zone)")
-    label!(plt, :tr, ATTRIBUTION)
+    plt = df_to_plot(city,
+                     df_solar,
+                     days = days,
+                     lat = lat,
+                     long = long,
+                     xlabel = "Time [days]",
+                     ylabel = "Shortwave radiation [W/m^2]",
+                     color = :magenta,
+                     time_zone = time_zone)
 
     return plt
 
