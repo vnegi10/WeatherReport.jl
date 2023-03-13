@@ -52,24 +52,16 @@ function plot_hourly_temp(city::String = "",
     time_zone = ""
 
     if ~isempty(city)
-
         results = get_hourly_forecast(city, "temperature_2m", i_row)
         df_temp, location = results[1], results[2]
         time_zone = location.timezone
 
         df_app_temp = get_hourly_forecast(city, "apparent_temperature", i_row)[1]
-
     else
-
-        results = get_hourly_forecast("temperature_2m",
-                                      lat,
-                                      long)
+        results = get_hourly_forecast("temperature_2m", lat, long)
         df_temp, time_zone = results[1], results[2]
-
-        df_app_temp = get_hourly_forecast("apparent_temperature",
-                                          lat,
-                                          long)[1]
-
+        
+        df_app_temp = get_hourly_forecast("apparent_temperature", lat, long)[1]
     end
 
     try
@@ -357,11 +349,9 @@ function plot_hourly_rain(city::String = "",
     time_zone = ""
 
     if ~isempty(city)
-
         results = get_hourly_forecast(city, "rain", i_row)
         df_rain, location = results[1], results[2]
         time_zone = location.timezone
-
     else
         results = get_hourly_forecast("rain", lat, long)
         df_rain, time_zone = results[1], results[2]
