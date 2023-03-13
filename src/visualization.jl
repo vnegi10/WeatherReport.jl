@@ -443,19 +443,33 @@ julia> plot_hourly_snow("Tromso", days = 3)
                      ⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀Time [days]⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀ 
 ```
 """
-function plot_hourly_snow(city::String,
+function plot_hourly_snow(city::String = "",
                           i_row::Int64 = 1;
+                          lat::Float64 = 0.0,
+                          long::Float64 = 0.0,
                           days::Int64 = 6)
 
-    results = get_hourly_forecast(city, "snowfall", i_row)
-    df_snow, location = results[1], results[2]
-    time_zone = location.timezone
+    df_snow = DataFrame()
+    time_zone = ""
+
+    if ~isempty(city)
+        results = get_hourly_forecast(city, "snowfall", i_row)
+        df_snow, location = results[1], results[2]
+        time_zone = location.timezone
+    else
+        results = get_hourly_forecast("snowfall", lat, long)
+        df_snow, time_zone = results[1], results[2]
+    end
 
     # Filter DataFrame to start from current hour
     df_snow = from_current_time(df_snow)
 
     @assert days*24 ≤ nrow(df_snow) "Not enough data, try again with less days!"
     df_snow = df_snow[1:days*24, :]
+
+    if isempty(city)
+        city = ["lat:", "$(lat)", ", ", "long:", "$(long)"] |> join
+    end
 
     plt = lineplot(
         df_snow[!, :TIME],
