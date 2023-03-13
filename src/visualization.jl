@@ -445,33 +445,15 @@ function plot_hourly_snow(city::String = "",
         df_snow, time_zone = results[1], results[2]
     end
 
-    # Filter DataFrame to start from current hour
-    df_snow = from_current_time(df_snow)
-
-    @assert days*24 ≤ nrow(df_snow) "Not enough data, try again with less days!"
-    df_snow = df_snow[1:days*24, :]
-
-    if isempty(city)
-        city = ["lat:", "$(lat)", ", ", "long:", "$(long)"] |> join
-    end
-
-    plt = lineplot(
-        df_snow[!, :TIME],
-        df_snow[!, :FORECAST],
-        title  = "$(city)",
-        xlabel = "Time [days]",
-        ylabel = "Snowfall [cm]",
-        xticks = true,
-        yticks = true,
-        border = :bold,
-        color = :white,
-        canvas = BrailleCanvas,
-        width = 75,
-        height = 15,
-    )
-
-    label!(plt, :tl, "Timezone: $(time_zone)")
-    label!(plt, :tr, ATTRIBUTION)
+    plt = df_to_plot(city,
+                     df_snow,
+                     days = days,
+                     lat = lat,
+                     long = long,
+                     xlabel = "Time [days]",
+                     ylabel = "Snowfall [cm]",
+                     color = :white,
+                     time_zone = time_zone)
 
     return plt
 
