@@ -55,6 +55,17 @@ Europe/Sofia EET
 [Weather data by Open-Meteo.com]
 ```
 
+To check information about your approximate location:
+
+```julia
+julia> where_am_i()
+┌──────────┬───────────┬──────────────────┬──────────────┬───────────────┬─────────────┐
+│ Latitude │ Longitude │         Timezone │         City │        Region │     Country │
+├──────────┼───────────┼──────────────────┼──────────────┼───────────────┼─────────────┤
+│  51.3523 │    5.4305 │ Europe/Amsterdam │ Valkenswaard │ North Brabant │ Netherlands │
+└──────────┴───────────┴──────────────────┴──────────────┴───────────────┴─────────────┘
+```
+
 Hourly forecast can be visualized in the REPL itself as shown in
 the following examples:
 
