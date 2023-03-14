@@ -151,3 +151,12 @@ end
     end
 
 end
+
+@testset verbose = true "Self location" begin
+
+    @testset "where_am_i" begin
+        result = @capture_out where_am_i()
+        @test length(result) > 0
+    end
+
+end
