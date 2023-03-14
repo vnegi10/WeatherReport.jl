@@ -697,3 +697,41 @@ function plot_hourly_solar(city::String = "",
     return plt
 
 end
+
+"""
+    where_am_i()
+
+Shows information about your current location.
+
+# Example
+```julia-repl
+julia> where_am_i()
+┌──────────┬───────────┬──────────────────┬──────────────┬───────────────┬─────────────┐
+│ Latitude │ Longitude │         Timezone │         City │        Region │     Country │
+├──────────┼───────────┼──────────────────┼──────────────┼───────────────┼─────────────┤
+│  51.3523 │    5.4305 │ Europe/Amsterdam │ Valkenswaard │ North Brabant │ Netherlands │
+└──────────┴───────────┴──────────────────┴──────────────┴───────────────┴─────────────┘
+```
+"""
+function where_am_i()
+
+    url_self_location = "http://ip-api.com/json"
+    results_dict = get_api_response("", url_self_location)
+
+    lat      = results_dict["lat"]
+    long     = results_dict["lon"]
+    timezone = results_dict["timezone"]
+
+    city     = results_dict["city"]
+    region   = results_dict["regionName"]
+    country  = results_dict["country"]
+
+    data   = [lat long timezone city region country]
+    header = ["Latitude", "Longitude", "Timezone", "City", "Region", "Country"]
+
+    p_table = pretty_table(data;
+                           header = header)
+
+    return p_table
+
+end
