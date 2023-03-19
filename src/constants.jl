@@ -2,6 +2,18 @@ const URL_FORECAST = "https://api.open-meteo.com/v1/forecast"
 
 const URL_AIR = "https://air-quality-api.open-meteo.com/v1/air-quality"
 
+const HOURLY_FORECAST = ["temperature_2m",
+                        "apparent_temperature",
+                        "rain",
+                        "snowfall",
+                        "relativehumidity_2m",
+                        "windspeed_10m",
+                        "shortwave_radiation"
+                        ]
+
+const HOURLY_AIR_QUALITY = ["pm10",
+                            "pm2_5"]
+
 const DF_CITIES = url_to_df("https://raw.githubusercontent.com/vnegi10/GeoNames_analysis/master/cities500_lat_long.csv")
 
 const ATTRIBUTION = "[Weather data by Open-Meteo.com]"
