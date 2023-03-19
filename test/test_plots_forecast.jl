@@ -1,4 +1,4 @@
-# Run tests on functions for visualization
+# Run tests on plotting functions for weather forecast API
 
 @testset verbose = true "Plotting with default selection" begin
 

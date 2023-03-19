@@ -7,7 +7,7 @@ function get_current(city::String, i_row::Int64)
 
     params_1 = "?latitude=$(lat)&longitude=$(long)&current_weather=true"
     params_2 = "&daily=sunrise,sunset&timezone=$(timezone)"
-    current_dict = get_api_response(params_1 * params_2)
+    current_dict = get_api_response(params_1 * params_2, URL_FORECAST)
 
     return current_dict
 
@@ -27,7 +27,7 @@ function get_daily(city::String, i_row::Int64)
               "precipitation_probability_mean,weathercode",
               "&timezone=$(timezone)"]
 
-    current_dict = join(params) |> get_api_response
+    current_dict = get_api_response(join(params), URL_FORECAST)
 
     return current_dict
 

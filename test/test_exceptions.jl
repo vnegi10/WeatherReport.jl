@@ -12,3 +12,12 @@ end
     @test_throws ErrorException("Unable to load cities database, check if $(url) is accessible!") WeatherReport.url_to_df(url)
 
 end
+
+@testset "Check if expected error appears when unknown forecast type is used" begin
+
+    # Not supported
+    forecast_type = "tempest"
+
+    @test_throws ErrorException("Forecast type is currently not supported!") WeatherReport.get_url(forecast_type)
+
+end

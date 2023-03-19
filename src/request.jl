@@ -1,4 +1,4 @@
-function get_api_response(params::String, url::String = URL)
+function get_api_response(params::String, url::String)
 	
     OM_request = HTTP.request("GET",
                                url * params;

@@ -106,6 +106,21 @@ function df_to_plot(city::String,
 
 end
 
+function get_url(forecast_type::String)
+
+    url = ""
+
+    if forecast_type in HOURLY_FORECAST
+        url = URL_FORECAST
+    elseif forecast_type in HOURLY_AIR_QUALITY
+        url = URL_AIR
+    else
+        error("Forecast type is currently not supported!")
+    end
+
+    return url
+end
+
 #=function get_cities_lat_long(file::String)
 
 	all_lines  = readlines(file)

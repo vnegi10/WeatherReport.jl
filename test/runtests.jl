@@ -28,7 +28,8 @@ end
 ################# All test groups #################
 
 test_files = ["test_hourly.jl",
-              "test_visualization.jl",
+              "test_plots_forecast.jl",
+              "test_plots_air_quality.jl",
               "test_daily.jl",
               "test_helpers.jl",
               "test_exceptions.jl"]
