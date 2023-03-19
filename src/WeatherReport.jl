@@ -21,6 +21,7 @@ include("constants.jl")
 
 include("hourly.jl")
 include("daily.jl")
-include("visualization.jl")
+include("plots_forecast.jl")
+include("plots_air_quality.jl")
 
 end # module WeatherReport
