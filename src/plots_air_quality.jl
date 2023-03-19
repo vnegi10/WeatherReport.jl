@@ -114,3 +114,37 @@ function plot_hourly_pm(city::String = "",
     return plt
 
 end
+
+"""
+"""
+function plot_hourly_dust(city::String = "",
+                          i_row::Int64 = 1;
+                          lat::Float64 = 0.0,
+                          long::Float64 = 0.0,
+                          days::Int64 = 6)
+
+    df_dust = DataFrame()
+    time_zone = ""
+
+    if ~isempty(city)
+        results = get_hourly_forecast(city, "dust", i_row)
+        df_dust, location = results[1], results[2]
+        time_zone = location.timezone
+    else
+        results = get_hourly_forecast("dust", lat, long)
+        df_dust, time_zone = results[1], results[2]
+    end
+
+    plt = df_to_plot(city,
+                     df_dust,
+                     days = days,
+                     lat = lat,
+                     long = long,
+                     xlabel = "Time [days]",
+                     ylabel = "dust [μg/m^3]",
+                     color = :red,
+                     time_zone = time_zone)
+
+    return plt
+
+end
