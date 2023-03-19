@@ -1,4 +1,6 @@
-const URL = "https://api.open-meteo.com/v1/forecast"
+const URL_FORECAST = "https://api.open-meteo.com/v1/forecast"
+
+const URL_AIR = "https://air-quality-api.open-meteo.com/v1/air-quality"
 
 const DF_CITIES = url_to_df("https://raw.githubusercontent.com/vnegi10/GeoNames_analysis/master/cities500_lat_long.csv")
 

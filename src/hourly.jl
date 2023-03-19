@@ -7,7 +7,7 @@ function get_hourly_forecast(city::String,
     long     = location.longitude
 	
     params        = "?latitude=$(lat)&longitude=$(long)&hourly=$(forecast_type)"
-    response_dict = get_api_response(params)
+    response_dict = get_api_response(params, URL_FORECAST)
 
     TIME     = map(x -> parse(DateTime, x),
                    response_dict["hourly"]["time"])
@@ -26,7 +26,7 @@ function get_hourly_forecast(forecast_type::String,
                              long::Float64)
 
     params        = "?latitude=$(lat)&longitude=$(long)&hourly=$(forecast_type)"
-    response_dict = get_api_response(params)
+    response_dict = get_api_response(params, URL_FORECAST)
 
     time_zone = response_dict["timezone"]
 
