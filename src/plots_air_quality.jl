@@ -186,7 +186,7 @@ function plot_hourly_dust(city::String = "",
                      lat = lat,
                      long = long,
                      xlabel = "Time [days]",
-                     ylabel = "dust [μg/m^3]",
+                     ylabel = "Dust [μg/m^3]",
                      color = :red,
                      time_zone = time_zone)
 
