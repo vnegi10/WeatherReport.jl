@@ -4,6 +4,8 @@
 [![Build status (Github Actions)](https://github.com/vnegi10/WeatherReport.jl/workflows/CI/badge.svg)](https://github.com/vnegi10/WeatherReport.jl/actions)
 [![Coverage Status](https://codecov.io/gh/vnegi10/WeatherReport.jl/branch/main/graphs/badge.svg?branch=main)](https://app.codecov.io/gh/vnegi10/WeatherReport.jl)
 
+[![](https://img.shields.io/badge/docs-stable-blue.svg)](https://vnegi10.github.io/WeatherReport.jl/stable)
+
 This package provides basic weather information right within the
 terminal. Your location is not tracked, therefore, you need to specify
 a city/town/village or latitude/longitude yourself. Most major locations

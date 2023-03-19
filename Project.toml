@@ -1,7 +1,7 @@
 name = "WeatherReport"
 uuid = "3c954167-71e4-4212-9688-830d6b8fcbc2"
 authors = ["Vikas Negi <vikas.negi10@gmail.com>"]
-version = "0.6.0"
+version = "0.6.1"
 
 [deps]
 CSV = "336ed68f-0bac-5ca0-87d4-7b16caf5d00b"
