@@ -106,15 +106,15 @@ function df_to_plot(city::String,
 
 end
 
-function get_url(forecast_type::String)
+function get_url(forecast_type::String, hist::Bool = false)
 
     url = ""
 
     if forecast_type in HOURLY_FORECAST
-        url = URL_FORECAST
+        hist ? url = URL_HIST : url = URL_FORECAST
     elseif forecast_type in HOURLY_AIR_QUALITY
         url = URL_AIR
-    else
+    else 
         error("Forecast type is currently not supported!")
     end
 
