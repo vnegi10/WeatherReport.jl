@@ -1,4 +1,52 @@
 """
+    plot_hist_temp(city::String = "",
+                   i_row::Int64 = 1;
+                   lat::Float64 = 0.0,
+                   long::Float64 = 0.0,
+                   start_date::String = "2023-01-01",
+                   end_date::String = "2023-01-10")
+
+Shows the hourly air temperature [°C] at 2 meter above
+ground and 'feels like' temperature for a given city between
+start_date and end_date.
+
+# Arguments
+- `city::String` : Valid city name, e.g. "Oslo", "Paris", "Amsterdam" etc.
+- `i_row::Int64` : In case of more than one match for a given location,
+                   select the desired timezone by providing the row index
+                   from the printed DataFrame. Default is set to 1.
+- `start_date::String` : Starting day in ISO8601 date format, e.g. "2023-02-01"
+- `end_date::String` : Ending day in ISO8601 date format, e.g. "2023-02-25"
+
+# Optional keywords
+- `lat::Float64` : Geographical WGS84 coordinate of the location (°S < 0, °N > 0)
+- `long::Float64` : Geographical WGS84 coordinate of the location (°W < 0, °E > 0)
+
+# Example
+```julia
+julia> plot_hist_temp("Veldhoven", start_date = "2022-01-01", end_date = "2022-12-31")
+             ⠀⠀⠀⠀⠀⠀Veldhoven: min -5.9 °C, max 36.4 °C from 2022-01-01 to 2022-12-31)⠀⠀⠀⠀⠀                
+             ⠀Timezone: Europe/Amsterdam⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀[Weather data by Open-Meteo.com]⠀                
+             ┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓                
+        36.4 ┃⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢸⡇⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀┃ Air temperature
+             ┃⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢰⢠⠀⠀⠀⠀⢸⡇⡀⠀⡄⢠⡄⠀⣾⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀┃ Feels like     
+             ┃⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⡀⠀⠀⠀⠀⠀⣼⢸⠀⠀⠀⢰⢸⡇⡇⢠⡇⢸⣇⠀⣿⠀⢸⡀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀┃                
+             ┃⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢰⡇⠀⠀⢀⠀⠀⣿⣼⢰⡀⠀⣸⢸⣿⣇⣾⡇⣿⣿⣴⣿⢀⣿⡇⣠⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀┃                
+             ┃⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢀⣿⣼⣇⡇⠀⢸⢠⣤⣿⣿⣾⣷⣠⣿⣼⣿⣿⣿⣿⣿⣿⣿⣿⣼⣿⣇⣿⠀⠀⠀⠀⡀⠀⠀⠀⢠⡀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀┃                
+             ┃⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢀⠀⠀⠀⢸⠀⡀⠀⠀⢸⣿⣿⣿⣷⢠⣾⣾⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⠀⣀⠀⢀⡇⡀⣀⣤⣼⡇⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀┃                
+             ┃⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⣠⠀⣾⣶⠀⠀⢸⣷⣷⣇⣼⣿⣿⣿⣿⣿⣾⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⢻⢿⣿⢻⡿⠛⣿⢻⣿⣿⣿⣿⣠⣿⣀⣾⣷⣇⣿⣿⣿⣧⠀⡄⠀⠀⠀⠀⠀⠀⠀⠀⠀⢠┃                
+   [°C]      ┃⡆⠀⠀⠀⠀⠀⠀⠀⠀⢠⠀⠀⠀⢠⣿⣧⣿⣿⡆⣄⢸⣿⣿⣿⣿⣿⣿⣿⢹⣿⣿⣿⣿⣿⣿⡏⢻⣿⣿⡟⣿⠘⢸⠇⢸⡇⠀⢸⠀⡟⠃⠸⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣆⠀⠀⠀⠀⠀⠀⠀⠀⢸┃                
+             ┃⣷⠀⠀⠀⠀⢰⣀⣸⣦⣾⣴⣇⣴⣸⣿⣿⣿⣿⡇⣿⣾⣿⣿⣿⣿⣿⡿⣿⢸⣿⣿⡿⠛⣿⠛⡇⠘⠻⡟⠃⢻⠀⠈⠀⢸⠀⠀⠈⠀⠃⠀⠀⠈⣿⣿⣿⣿⣿⣿⢿⡏⠋⣿⣿⣿⣿⣄⣷⡆⠀⠀⠀⣰⣷⣿┃                
+             ┃⣿⣠⠀⣇⣆⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣇⣿⣿⣿⣿⣿⣿⡿⡇⠇⠈⠿⣿⡇⠀⠸⠀⠃⠀⠀⠀⠀⠈⠀⠀⠀⠈⠀⠀⠀⠀⠀⠀⠀⠀⢻⡟⣿⢻⢻⡟⢸⠁⠀⠹⣿⢿⣿⣿⣿⣷⢀⠀⠀⣿⣿⣿┃                
+             ┃⢻⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⡿⢿⣿⠃⠁⠀⠀⠀⠁⠃⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠁⢻⠀⢸⡇⠈⠀⠀⠀⡟⢸⡟⣿⣿⢻⣸⡆⠀⡿⢻⣿┃                
+             ┃⣸⣿⣿⣿⣿⣿⣇⣿⣿⣟⣿⣿⣿⣿⣇⣿⣿⣿⣿⣿⣿⣹⣃⣘⣙⣀⣀⣀⣀⣀⣀⣀⣀⣀⣀⣀⣀⣀⣀⣀⣀⣀⣀⣀⣀⣀⣀⣀⣀⣀⣀⣀⣀⣀⣀⣈⣀⣘⣇⣀⣀⣀⣀⣃⣀⣇⣿⣸⣸⣿⣿⣴⣇⣸⣿┃                
+             ┃⢸⣿⣿⡟⣿⡏⠇⠻⢻⠀⢿⣿⢿⣿⠇⢸⠟⠀⣿⡇⠃⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠇⠀⠸⡟⣿⣿⡇⠈⠁┃                
+             ┃⠀⠹⠃⠀⠸⠀⠀⠀⠸⠀⠀⢸⠸⣿⠀⠀⠀⠀⢹⠁⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠁⢸⣿⡇⠀⠀┃                
+        -9.8 ┃⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠈⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠘⣿⡇⠀⠀┃                
+             ┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛                
+             ⠀2022-01-01T00:00:00⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀2022-12-31T23:00:00⠀                
+             ⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀Time [days]⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀                
+```
 """
 function plot_hist_temp(city::String = "",
                         i_row::Int64 = 1;
@@ -6,6 +54,12 @@ function plot_hist_temp(city::String = "",
                         long::Float64 = 0.0,
                         start_date::String = "2023-01-01",
                         end_date::String = "2023-01-10")
+
+    fmt = "yyyy-mm-dd"
+    t1 = DateTime(start_date, fmt)
+    t2 = DateTime(end_date, fmt)
+
+    @assert t1 < t2 "Ending date cannot be before starting date!"
 
     df_temp, df_app_temp = [DataFrame() for i = 1:2]
     time_zone = ""
