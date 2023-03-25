@@ -59,7 +59,7 @@ function plot_hist_temp(city::String = "",
     t1 = DateTime(start_date, fmt)
     t2 = DateTime(end_date, fmt)
 
-    @assert t1 < t2 "Ending date cannot be before starting date!"
+    @assert t1 < t2 "End date cannot be before start date!"
 
     df_temp, df_app_temp = [DataFrame() for i = 1:2]
     time_zone = ""
