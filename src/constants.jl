@@ -2,6 +2,8 @@ const URL_FORECAST = "https://api.open-meteo.com/v1/forecast"
 
 const URL_AIR = "https://air-quality-api.open-meteo.com/v1/air-quality"
 
+const URL_HIST = "https://archive-api.open-meteo.com/v1/archive"
+
 const HOURLY_FORECAST = ["temperature_2m",
                         "apparent_temperature",
                         "rain",

@@ -21,3 +21,9 @@ end
     @test_throws ErrorException("Forecast type is currently not supported!") WeatherReport.get_url(forecast_type)
 
 end
+
+@testset "Check if expected error appears when end date is before start date" begin
+
+    @test_throws AssertionError("End date cannot be before start date!") plot_hist_temp("Veldhoven", start_date = "2000-03-01", end_date = "2000-01-01")
+
+end
