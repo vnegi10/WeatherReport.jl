@@ -28,3 +28,16 @@ end
     end
 
 end
+
+@testset verbose = true "Plotting with lat/long input" begin
+
+    @testset "plot_hist_temp" begin
+        # Denver
+        plt = plot_hist_temp(lat = 39.7392,
+                             long = -104.985,
+                             start_date = "2022-01-01",
+                             end_date = "2022-12-21")                             
+        @test sizeof(plt) > 0
+    end
+
+end
