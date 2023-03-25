@@ -18,6 +18,7 @@ Order   = [:function]
 
 - [Weather Forecast](https://open-meteo.com/en/docs)
 - [Air Quality](https://open-meteo.com/en/docs/air-quality-api)
+- [Historical Weather](https://open-meteo.com/en/docs/historical-weather-api)
 
 ## Exported names
 ```@autodocs

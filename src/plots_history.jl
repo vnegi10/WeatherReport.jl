@@ -23,7 +23,7 @@ start_date and end_date.
 - `long::Float64` : Geographical WGS84 coordinate of the location (°W < 0, °E > 0)
 
 # Example
-```julia
+```julia-repl
 julia> plot_hist_temp("Veldhoven", start_date = "2022-01-01", end_date = "2022-12-31")
              ⠀⠀⠀⠀⠀⠀Veldhoven: min -5.9 °C, max 36.4 °C from 2022-01-01 to 2022-12-31)⠀⠀⠀⠀⠀                
              ⠀Timezone: Europe/Amsterdam⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀[Weather data by Open-Meteo.com]⠀                
