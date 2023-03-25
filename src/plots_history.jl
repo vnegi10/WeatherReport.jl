@@ -26,10 +26,19 @@ function plot_hist_temp(city::String = "",
                                           start_date,
                                           end_date)[1]
     else
-        results = get_hourly_forecast("temperature_2m", lat, long)
+        results = get_hourly_forecast("temperature_2m",
+                                       lat,
+                                       long,
+                                       start_date,
+                                       end_date)
+
         df_temp, time_zone = results[1], results[2]
 
-        df_app_temp = get_hourly_forecast("apparent_temperature", lat, long)[1]
+        df_app_temp = get_hourly_forecast("apparent_temperature",
+                                           lat,
+                                           long,
+                                           start_date,
+                                           end_date)[1]
     end
 
     try
