@@ -56,16 +56,20 @@ function plot_hourly_pm(city::String = "",
     time_zone = ""
 
     if ~isempty(city)
-        results = get_hourly_forecast(city, "pm10", i_row)
+        input = CityInput(city, "pm10", i_row)
+        results = get_hourly_forecast(input)
         df_pm1, location = results[1], results[2]
         time_zone = location.timezone
 
-        df_pm2 = get_hourly_forecast(city, "pm2_5", i_row)[1]
+        input.forecast_type = "pm2_5"
+        df_pm2 = get_hourly_forecast(input)[1]
     else
-        results = get_hourly_forecast("pm10", lat, long)
+        input = LocationInput("pm10", lat, long)
+        results = get_hourly_forecast(input)
         df_pm1, time_zone = results[1], results[2]
 
-        df_pm2 = get_hourly_forecast("pm2_5", lat, long)[1]
+        input.forecast_type = "pm2_5"
+        df_pm2 = get_hourly_forecast(input)[1]
     end
 
     try
@@ -172,11 +176,13 @@ function plot_hourly_dust(city::String = "",
     time_zone = ""
 
     if ~isempty(city)
-        results = get_hourly_forecast(city, "dust", i_row)
+        input = CityInput(city, "dust", i_row)
+        results = get_hourly_forecast(input)
         df_dust, location = results[1], results[2]
         time_zone = location.timezone
     else
-        results = get_hourly_forecast("dust", lat, long)
+        input = LocationInput("dust", lat, long)
+        results = get_hourly_forecast(input)
         df_dust, time_zone = results[1], results[2]
     end
 

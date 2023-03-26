@@ -65,34 +65,30 @@ function plot_hist_temp(city::String = "",
     time_zone = ""
 
     if ~isempty(city)
-        results = get_hourly_forecast(city,
-                                      "temperature_2m",
-                                      i_row,
-                                      start_date,
-                                      end_date)
+        input = CityHistInput(city,
+                              "temperature_2m",
+                              i_row,
+                              start_date,
+                              end_date)
+        results = get_hourly_forecast(input)
 
         df_temp, location = results[1], results[2]
         time_zone = location.timezone
 
-        df_app_temp = get_hourly_forecast(city,
-                                          "apparent_temperature",
-                                          i_row,
-                                          start_date,
-                                          end_date)[1]
+        input.forecast_type = "apparent_temperature"
+        df_app_temp = get_hourly_forecast(input)[1]
     else
-        results = get_hourly_forecast("temperature_2m",
-                                       lat,
-                                       long,
-                                       start_date,
-                                       end_date)
+        input = LocationHistInput("temperature_2m",
+                                  lat,
+                                  long,
+                                  start_date,
+                                  end_date)
+        results = get_hourly_forecast(input)
 
         df_temp, time_zone = results[1], results[2]
 
-        df_app_temp = get_hourly_forecast("apparent_temperature",
-                                           lat,
-                                           long,
-                                           start_date,
-                                           end_date)[1]
+        input.forecast_type = "apparent_temperature"
+        df_app_temp = get_hourly_forecast(input)[1]
     end
 
     try

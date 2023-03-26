@@ -2,9 +2,10 @@
 
     for city in ["Eindhoven", "Veldhoven", "Groningen"]
 
-        results = WeatherReport.get_hourly_forecast(city, "temperature_2m", 1)
-        df_temp = results[1]
+        input = WeatherReport.CityInput(city, "temperature_2m", 1)
+        results = WeatherReport.get_hourly_forecast(input)
 
+        df_temp = results[1]
         rows, cols = size(df_temp)
 
         @test rows == 24*7
@@ -16,9 +17,10 @@
 
     for city in ["Haldwani", "Delhi", "Mumbai"]
 
-        results = WeatherReport.get_hourly_forecast(city, "temperature_2m", 1)
-        df_temp = results[1]
+        input = WeatherReport.CityInput(city, "temperature_2m", 1)
+        results = WeatherReport.get_hourly_forecast(input)
 
+        df_temp = results[1]
         rows, cols = size(df_temp)
 
         @test rows == 24*7
@@ -34,9 +36,10 @@ end
 
     for city in ["Eindhoven", "Veldhoven", "Groningen"]
 
-        results = WeatherReport.get_hourly_forecast(city, "rain", 1)
-        df_rain = results[1]
+        input = WeatherReport.CityInput(city, "rain", 1)
+        results = WeatherReport.get_hourly_forecast(input)
 
+        df_rain = results[1]
         rows, cols = size(df_rain)
 
         @test rows == 24*7
@@ -48,9 +51,10 @@ end
 
     for city in ["Haldwani", "Delhi", "Mumbai"]
 
-        results = WeatherReport.get_hourly_forecast(city, "rain", 1)
-        df_rain = results[1]
+        input = WeatherReport.CityInput(city, "rain", 1)
+        results = WeatherReport.get_hourly_forecast(input)
 
+        df_rain = results[1]
         rows, cols = size(df_rain)
 
         @test rows == 24*7
@@ -66,9 +70,10 @@ end
 
     for city in ["Oslo", "Tromso", "Trondheim"]
 
-        results = WeatherReport.get_hourly_forecast(city, "snowfall", 1)
-        df_snow = results[1]
+        input = WeatherReport.CityInput(city, "snowfall", 1)
+        results = WeatherReport.get_hourly_forecast(input)
 
+        df_snow = results[1]
         rows, cols = size(df_snow)
 
         @test rows == 24*7
@@ -80,9 +85,10 @@ end
 
     for city in ["Tokyo", "Osaka", "Nagasaki"]
 
-        results = WeatherReport.get_hourly_forecast(city, "snowfall", 1)
-        df_snow = results[1]
+        input = WeatherReport.CityInput(city, "snowfall", 1)
+        results = WeatherReport.get_hourly_forecast(input)
 
+        df_snow = results[1]
         rows, cols = size(df_snow)
 
         @test rows == 24*7

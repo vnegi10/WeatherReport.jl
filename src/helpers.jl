@@ -119,6 +119,21 @@ function get_url(forecast_type::String, hist::Bool = false)
     end
 
     return url
+
+end
+
+function dict_to_df(response_dict::Dict, forecast_type::String)
+
+    TIME     = map(x -> parse(DateTime, x),
+                   response_dict["hourly"]["time"])
+    FORECAST = map(x -> convert(Float64, x),
+                   response_dict["hourly"][forecast_type])
+
+    df_hourly = DataFrame(TIME = TIME,
+                          FORECAST = FORECAST)
+
+    return df_hourly
+
 end
 
 #=function get_cities_lat_long(file::String)
