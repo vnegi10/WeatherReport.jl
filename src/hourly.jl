@@ -44,20 +44,17 @@ function get_hourly_forecast(input::LocationInput)
 	
 end
 
-function get_hourly_forecast(city::String,
-                             forecast_type::String,
-                             i_row::Int64,
-                             start_date::String,
-                             end_date::String)
+function get_hourly_forecast(input::CityHistInput)
 
-    location = fetch_lat_long(city, i_row)
+    location = fetch_lat_long(input.city, input.i_row)
     lat      = location.latitude
     long     = location.longitude
+    forecast_type = input.forecast_type
 
     url = get_url(forecast_type, true)
     
     params = ["?latitude=$(lat)&longitude=$(long)",
-              "&start_date=$(start_date)&end_date=$(end_date)",
+              "&start_date=$(input.start_date)&end_date=$(input.end_date)",
               "&hourly=$(forecast_type)"]
 
     response_dict = get_api_response(join(params), url)
@@ -74,16 +71,13 @@ function get_hourly_forecast(city::String,
     
 end
 
-function get_hourly_forecast(forecast_type::String,
-                             lat::Float64,
-                             long::Float64,
-                             start_date::String,
-                             end_date::String)
+function get_hourly_forecast(input::LocationHistInput)
 
+    forecast_type = input.forecast_type
     url = get_url(forecast_type, true)
     
-    params = ["?latitude=$(lat)&longitude=$(long)",
-              "&start_date=$(start_date)&end_date=$(end_date)",
+    params = ["?latitude=$(input.lat)&longitude=$(input.long)",
+              "&start_date=$(input.start_date)&end_date=$(input.end_date)",
               "&hourly=$(forecast_type)"]
 
     response_dict = get_api_response(join(params), url)
