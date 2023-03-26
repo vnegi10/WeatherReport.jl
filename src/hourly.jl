@@ -1,14 +1,13 @@
-function get_hourly_forecast(city::String,
-                             forecast_type::String,
-                             i_row::Int64)
+function get_hourly_forecast(input::CityInput)
 
-    location = fetch_lat_long(city, i_row)
+    location = fetch_lat_long(input.city, input.i_row)
     lat      = location.latitude
     long     = location.longitude
+    forecast_type = input.forecast_type
 
     url = get_url(forecast_type)
     
-    params        = "?latitude=$(lat)&longitude=$(long)&hourly=$(forecast_type)"
+    params = "?latitude=$(lat)&longitude=$(long)&hourly=$(forecast_type)"
     response_dict = get_api_response(params, url)
 
     TIME     = map(x -> parse(DateTime, x),
@@ -23,13 +22,12 @@ function get_hourly_forecast(city::String,
     
 end
 
-function get_hourly_forecast(forecast_type::String,
-                             lat::Float64,
-                             long::Float64)
+function get_hourly_forecast(input::LocationInput)
 
+    forecast_type = input.forecast_type
     url = get_url(forecast_type)
 
-    params        = "?latitude=$(lat)&longitude=$(long)&hourly=$(forecast_type)"
+    params = "?latitude=$(input.lat)&longitude=$(input.long)&hourly=$(forecast_type)"
     response_dict = get_api_response(params, url)
 
     time_zone = response_dict["timezone"]
