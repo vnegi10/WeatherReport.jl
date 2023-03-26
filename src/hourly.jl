@@ -6,17 +6,10 @@ function get_hourly_forecast(input::CityInput)
     forecast_type = input.forecast_type
 
     url = get_url(forecast_type)
-    
     params = "?latitude=$(lat)&longitude=$(long)&hourly=$(forecast_type)"
     response_dict = get_api_response(params, url)
 
-    TIME     = map(x -> parse(DateTime, x),
-                   response_dict["hourly"]["time"])
-    FORECAST = map(x -> convert(Float64, x),
-                   response_dict["hourly"][forecast_type])
-
-    df_hourly = DataFrame(TIME = TIME,
-                          FORECAST = FORECAST)
+    df_hourly = dict_to_df(response_dict, forecast_type)
 
     return df_hourly, location
     
@@ -26,19 +19,11 @@ function get_hourly_forecast(input::LocationInput)
 
     forecast_type = input.forecast_type
     url = get_url(forecast_type)
-
     params = "?latitude=$(input.lat)&longitude=$(input.long)&hourly=$(forecast_type)"
     response_dict = get_api_response(params, url)
 
     time_zone = response_dict["timezone"]
-
-    TIME     = map(x -> parse(DateTime, x),
-                   response_dict["hourly"]["time"])
-    FORECAST = map(x -> convert(Float64, x),
-                   response_dict["hourly"][forecast_type])
-
-    df_hourly = DataFrame(TIME = TIME,
-                          FORECAST = FORECAST)
+    df_hourly = dict_to_df(response_dict, forecast_type)
 
     return df_hourly, time_zone
 	
@@ -52,20 +37,13 @@ function get_hourly_forecast(input::CityHistInput)
     forecast_type = input.forecast_type
 
     url = get_url(forecast_type, true)
-    
+
     params = ["?latitude=$(lat)&longitude=$(long)",
               "&start_date=$(input.start_date)&end_date=$(input.end_date)",
               "&hourly=$(forecast_type)"]
 
     response_dict = get_api_response(join(params), url)
-
-    TIME     = map(x -> parse(DateTime, x),
-                   response_dict["hourly"]["time"])
-    FORECAST = map(x -> convert(Float64, x),
-                   response_dict["hourly"][forecast_type])
-
-    df_hourly = DataFrame(TIME = TIME,
-                          FORECAST = FORECAST)
+    df_hourly = dict_to_df(response_dict, forecast_type)
 
     return df_hourly, location
     
@@ -81,16 +59,8 @@ function get_hourly_forecast(input::LocationHistInput)
               "&hourly=$(forecast_type)"]
 
     response_dict = get_api_response(join(params), url)
-
     time_zone = response_dict["timezone"]
-
-    TIME     = map(x -> parse(DateTime, x),
-                   response_dict["hourly"]["time"])
-    FORECAST = map(x -> convert(Float64, x),
-                   response_dict["hourly"][forecast_type])
-
-    df_hourly = DataFrame(TIME = TIME,
-                          FORECAST = FORECAST)
+    df_hourly = dict_to_df(response_dict, forecast_type)
 
     return df_hourly, time_zone
     
