@@ -363,11 +363,13 @@ function plot_hourly_rain(city::String = "",
     time_zone = ""
 
     if ~isempty(city)
-        results = get_hourly_forecast(city, "rain", i_row)
+        input = CityInput(city, "rain", i_row)
+        results = get_hourly_forecast(input)
         df_rain, location = results[1], results[2]
         time_zone = location.timezone
     else
-        results = get_hourly_forecast("rain", lat, long)
+        input = LocationInput("rain", lat, long)
+        results = get_hourly_forecast(input)
         df_rain, time_zone = results[1], results[2]
     end
 
@@ -443,11 +445,13 @@ function plot_hourly_snow(city::String = "",
     time_zone = ""
 
     if ~isempty(city)
-        results = get_hourly_forecast(city, "snowfall", i_row)
+        input = CityInput(city, "snowfall", i_row)
+        results = get_hourly_forecast(input)
         df_snow, location = results[1], results[2]
         time_zone = location.timezone
     else
-        results = get_hourly_forecast("snowfall", lat, long)
+        input = LocationInput("snowfall", lat, long)
+        results = get_hourly_forecast(input)
         df_snow, time_zone = results[1], results[2]
     end
 
@@ -523,11 +527,13 @@ function plot_hourly_humidity(city::String = "",
     time_zone = ""
 
     if ~isempty(city)
-        results = get_hourly_forecast(city, "relativehumidity_2m", i_row)
+        input = CityInput(city, "relativehumidity_2m", i_row)
+        results = get_hourly_forecast(input)
         df_hum, location = results[1], results[2]
         time_zone = location.timezone
     else
-        results = get_hourly_forecast("relativehumidity_2m", lat, long)
+        input = LocationInput("relativehumidity_2m", lat, long)
+        results = get_hourly_forecast(input)
         df_hum, time_zone = results[1], results[2]
     end
 
@@ -602,11 +608,13 @@ function plot_hourly_windspeed(city::String = "",
     time_zone = ""
 
     if ~isempty(city)
-        results = get_hourly_forecast(city, "windspeed_10m", i_row)
+        input = CityInput(city, "windspeed_10m", i_row)
+        results = get_hourly_forecast(input)
         df_wind, location = results[1], results[2]
         time_zone = location.timezone
     else
-        results = get_hourly_forecast("windspeed_10m", lat, long)
+        input = LocationInput("windspeed_10m", lat, long)
+        results = get_hourly_forecast(input)
         df_wind, time_zone = results[1], results[2]
     end
 
@@ -682,11 +690,13 @@ function plot_hourly_solar(city::String = "",
     time_zone = ""
 
     if ~isempty(city)
-        results = get_hourly_forecast(city, "shortwave_radiation", i_row)
+        input = CityInput(city, "shortwave_radiation", i_row)
+        results = get_hourly_forecast(input)
         df_solar, location = results[1], results[2]
         time_zone = location.timezone
     else
-        results = get_hourly_forecast("shortwave_radiation", lat, long)
+        input = LocationInput("shortwave_radiation", lat, long)
+        results = get_hourly_forecast(input)
         df_solar, time_zone = results[1], results[2]
     end
 
