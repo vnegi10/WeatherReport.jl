@@ -106,6 +106,43 @@ function df_to_plot(city::String,
 
 end
 
+function df_to_plot(city::String,
+                    df_data::DataFrame,
+                    start_date::String,
+                    end_date::String;
+                    lat::Float64,
+                    long::Float64,
+                    xlabel::String,
+                    ylabel::String,
+                    color::Symbol,
+                    time_zone::String)
+
+    if isempty(city)
+        city = ["lat:", "$(lat)", ", ", "long:", "$(long)"] |> join
+    end
+
+    plt = lineplot(
+        df_data[!, :TIME],
+        df_data[!, :FORECAST],
+        title  = "$(city) from $(start_date) to $(end_date)",
+        xlabel = xlabel,
+        ylabel = ylabel,
+        xticks = true,
+        yticks = true,
+        border = :bold,
+        color = color,
+        canvas = BrailleCanvas,
+        width = 75,
+        height = 15,
+    )
+
+    label!(plt, :tl, "Timezone: $(time_zone)")
+    label!(plt, :tr, ATTRIBUTION)
+
+    return plt
+
+end
+
 function get_url(forecast_type::String, hist::Bool = false)
 
     url = ""
