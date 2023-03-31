@@ -132,3 +132,55 @@ function plot_hist_temp(city::String = "",
     return plt
 
 end
+
+"""
+"""
+function plot_hist_rain(city::String = "",
+                        i_row::Int64 = 1;
+                        lat::Float64 = 0.0,
+                        long::Float64 = 0.0,
+                        start_date::String = "2023-01-01",
+                        end_date::String = "2023-01-10")
+
+    fmt = "yyyy-mm-dd"
+    t1 = DateTime(start_date, fmt)
+    t2 = DateTime(end_date, fmt)
+
+    @assert t1 < t2 "End date cannot be before start date!"
+
+    df_rain = DataFrame()
+    time_zone = ""
+
+    if ~isempty(city)
+        input = CityHistInput(city,
+                              "rain",
+                               i_row,
+                               start_date,
+                               end_date)
+        results = get_hourly_forecast(input)
+        df_rain, location = results[1], results[2]
+        time_zone = location.timezone
+    else
+        input = LocationHistInput("rain",
+                                   lat,
+                                   long,
+                                   start_date,
+                                   end_date)
+        results = get_hourly_forecast(input)
+        df_rain, time_zone = results[1], results[2]
+    end
+
+    plt = df_to_plot(city,
+                     df_rain,
+                     start_date = start_date,
+                     end_date = end_date,
+                     lat = lat,
+                     long = long,
+                     xlabel = "Time [days]",
+                     ylabel = "Rain [mm]",
+                     color = :red,
+                     time_zone = time_zone)
+
+    return plt
+
+end
