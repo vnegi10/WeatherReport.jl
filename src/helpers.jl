@@ -107,9 +107,9 @@ function df_to_plot(city::String,
 end
 
 function df_to_plot(city::String,
-                    df_data::DataFrame;
+                    df_data::DataFrame,
                     start_date::String,
-                    end_date::String,
+                    end_date::String;
                     lat::Float64,
                     long::Float64,
                     xlabel::String,
