@@ -16,6 +16,13 @@
         @test sizeof(plt) > 0
     end
 
+    @testset "plot_hist_snow" begin
+        plt = plot_hist_snow("Tromso",
+                              start_date = "2016-01-01",
+                              end_date = "2016-12-21")
+        @test sizeof(plt) > 0
+    end
+
 end
 
 @testset verbose = true "Plotting with multiple matches" begin
@@ -48,6 +55,20 @@ end
         @test sizeof(plt) > 0
     end
 
+    @testset "plot_hist_snow" begin
+        plt = plot_hist_snow("Madrid",
+                              2,
+                              start_date = "2020-01-01",
+                              end_date = "2020-12-21")
+        @test sizeof(plt) > 0
+
+        plt = plot_hist_snow("Madrid",
+                              3,
+                              start_date = "2018-01-01",
+                              end_date = "2018-12-21")
+        @test sizeof(plt) > 0
+    end
+
 end
 
 @testset verbose = true "Plotting with lat/long input" begin
@@ -65,6 +86,15 @@ end
         # Delhi
         plt = plot_hist_rain(lat = 28.6519,
                              long = 77.2315,
+                             start_date = "2019-01-01",
+                             end_date = "2019-12-21")
+        @test sizeof(plt) > 0
+    end
+
+    @testset "plot_hist_snow" begin
+        # Oslo
+        plt = plot_hist_snow(lat = 59.9127,
+                             long = 10.7461,
                              start_date = "2019-01-01",
                              end_date = "2019-12-21")
         @test sizeof(plt) > 0
