@@ -173,6 +173,18 @@ function dict_to_df(response_dict::Dict, forecast_type::String)
 
 end
 
+function check_dates(start_date::String, end_date::String)
+
+    fmt = "yyyy-mm-dd"
+    t1 = DateTime(start_date, fmt)
+    t2 = DateTime(end_date, fmt)
+
+    @assert t1 < t2 "End date cannot be before start date!"
+
+    return nothing
+
+end
+
 #=function get_cities_lat_long(file::String)
 
 	all_lines  = readlines(file)

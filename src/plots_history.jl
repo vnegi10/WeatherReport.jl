@@ -55,11 +55,7 @@ function plot_hist_temp(city::String = "",
                         start_date::String = "2023-01-01",
                         end_date::String = "2023-01-10")
 
-    fmt = "yyyy-mm-dd"
-    t1 = DateTime(start_date, fmt)
-    t2 = DateTime(end_date, fmt)
-
-    @assert t1 < t2 "End date cannot be before start date!"
+    check_dates(start_date, end_date)
 
     df_temp, df_app_temp = [DataFrame() for i = 1:2]
     time_zone = ""
@@ -190,11 +186,7 @@ function plot_hist_rain(city::String = "",
                         start_date::String = "2023-01-01",
                         end_date::String = "2023-01-10")
 
-    fmt = "yyyy-mm-dd"
-    t1 = DateTime(start_date, fmt)
-    t2 = DateTime(end_date, fmt)
-
-    @assert t1 < t2 "End date cannot be before start date!"
+    check_dates(start_date, end_date)
 
     df_rain = DataFrame()
     time_zone = ""
@@ -289,11 +281,7 @@ function plot_hist_snow(city::String = "",
                         start_date::String = "2023-01-01",
                         end_date::String = "2023-01-10")
 
-    fmt = "yyyy-mm-dd"
-    t1 = DateTime(start_date, fmt)
-    t2 = DateTime(end_date, fmt)
-
-    @assert t1 < t2 "End date cannot be before start date!"
+    check_dates(start_date, end_date)
 
     df_snow = DataFrame()
     time_zone = ""
