@@ -55,11 +55,7 @@ function plot_hist_temp(city::String = "",
                         start_date::String = "2023-01-01",
                         end_date::String = "2023-01-10")
 
-    fmt = "yyyy-mm-dd"
-    t1 = DateTime(start_date, fmt)
-    t2 = DateTime(end_date, fmt)
-
-    @assert t1 < t2 "End date cannot be before start date!"
+    check_dates(start_date, end_date)
 
     df_temp, df_app_temp = [DataFrame() for i = 1:2]
     time_zone = ""
@@ -190,11 +186,7 @@ function plot_hist_rain(city::String = "",
                         start_date::String = "2023-01-01",
                         end_date::String = "2023-01-10")
 
-    fmt = "yyyy-mm-dd"
-    t1 = DateTime(start_date, fmt)
-    t2 = DateTime(end_date, fmt)
-
-    @assert t1 < t2 "End date cannot be before start date!"
+    check_dates(start_date, end_date)
 
     df_rain = DataFrame()
     time_zone = ""
@@ -289,11 +281,7 @@ function plot_hist_snow(city::String = "",
                         start_date::String = "2023-01-01",
                         end_date::String = "2023-01-10")
 
-    fmt = "yyyy-mm-dd"
-    t1 = DateTime(start_date, fmt)
-    t2 = DateTime(end_date, fmt)
-
-    @assert t1 < t2 "End date cannot be before start date!"
+    check_dates(start_date, end_date)
 
     df_snow = DataFrame()
     time_zone = ""
@@ -326,6 +314,292 @@ function plot_hist_snow(city::String = "",
                      xlabel = "Time [days]",
                      ylabel = "Snowfall [cm]",
                      color = :white,
+                     time_zone = time_zone)
+
+    return plt
+
+end
+
+"""
+    plot_hist_humidity(city::String = "",
+                       i_row::Int64 = 1;
+                       lat::Float64 = 0.0,
+                       long::Float64 = 0.0,
+                       start_date::String = "2023-01-01",
+                       end_date::String = "2023-01-10")
+
+Shows the relative humidity at 2 meter above ground
+for a given city between start_date and end_date.
+
+# Arguments
+- `city::String` : Valid city name, e.g. "Oslo", "Paris", "Amsterdam" etc.
+- `i_row::Int64` : In case of more than one match for a given location,
+                   select the desired timezone by providing the row index
+                   from the printed DataFrame. Default is set to 1.
+- `start_date::String` : Starting day in ISO8601 date format, e.g. "2023-02-01"
+- `end_date::String` : Ending day in ISO8601 date format, e.g. "2023-02-25"
+
+# Optional keywords
+- `lat::Float64` : Geographical WGS84 coordinate of the location (°S < 0, °N > 0)
+- `long::Float64` : Geographical WGS84 coordinate of the location (°W < 0, °E > 0)
+
+# Example
+```julia-repl
+julia> plot_hist_humidity("Chennai", start_date = "2022-01-01", end_date = "2022-12-31")
+                         ⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀Chennai from 2022-01-01 to 2022-12-31⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀ 
+                         ⠀Timezone: Asia/Kolkata⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀[Weather data by Open-Meteo.com]⠀ 
+                         ┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓ 
+                     100 ┃⠀⠀⣄⠀⣠⠀⠀⡀⠀⠀⢠⠀⡄⢰⣧⣷⡄⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢠⠀⡀⠀⠀⠀⠀⣠⡀⠀⠀⠀⠀⣀⠀⣠⣠⣴⠀⠀⠀⡀⢀⢀⠀⣦⡀⡀⠀⠀⠀⠀⣿┃ 
+                         ┃⡇⣦⣿⣶⣿⡇⣿⡇⠀⠀⣿⢰⣿⢸⣿⣿⣿⣷⣶⣾⣰⠀⡀⣶⣆⣷⡆⣾⡆⠀⠀⠀⠀⠀⡄⣆⢠⡆⡀⠀⠀⣷⣿⣶⡇⠀⢰⠀⣦⣿⣷⣶⠀⠀⡄⣿⠀⣿⣿⣿⡇⣼⣿⣷⣼⣿⢰⣿⣿⣧⣾⣿⡄⢸⣿┃ 
+                         ┃⣧⣿⣿⣿⣿⣷⣿⡇⠀⡀⣿⣼⣿⢸⣿⣿⣿⣿⣿⣿⣿⣼⣷⣿⣿⣿⣇⣿⣷⡀⠀⠀⡀⢀⣿⣿⣸⣧⣇⠀⣰⣿⣿⣿⣇⠀⢸⣶⣿⣿⣿⣿⣰⡇⡇⣿⣄⣿⣿⣿⣿⣿⣿⣿⣿⣿⣼⣿⣿⣿⣿⣿⣿⣾⣿┃ 
+                         ┃⣿⣿⣿⣿⣿⣿⣿⣿⣶⣿⣿⣿⣿⢸⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣷⡀⠀⡇⢸⣿⣿⣿⣿⣿⠀⣿⣿⣿⣿⣿⠀⣼⣿⣿⣿⣿⣿⣿⣷⣿⣿⣿⣿⣿⣿⣿⣿⡿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿┃ 
+                         ┃⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣧⢰⣧⣼⣿⣿⣿⣿⣿⠀⣿⣿⣿⣿⣿⠀⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⡇⣿⡇⣿⣿⣿⣿⣿⢿⣿⣿⡿⣿┃ 
+                         ┃⣿⣿⣿⢿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣼⣿⣿⣿⣿⣿⣿⣿⡇⣿⣿⣿⣿⣿⠀⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⡇⣿⡇⣿⡿⣿⣿⣿⢸⣿⣿⡇⣿┃ 
+                         ┃⣿⣿⡏⢸⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⡇⣿⣿⣿⣿⢿⣷⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⢿⣿⣿⢿⣿⡇⣿⠁⢻⡇⠉⡿⢻⠀⢹⣿⡇⣿┃ 
+   Rel. humidity [%]     ┃⣿⢿⡇⢸⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣇⣿⣿⣿⣿⠸⣿⣿⣿⣿⡏⣿⢿⣿⣿⣿⡟⣿⠘⠋⠹⢸⣿⡇⢸⠀⢸⡇⠀⡇⠘⠀⠸⡟⡇⢿┃ 
+                         ┃⠻⢸⠁⢸⣿⢻⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⡿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⡿⣿⠀⣿⣿⣿⣿⠃⠋⠸⣿⣿⣿⡇⣿⠀⠀⠀⢸⡇⡇⠘⠀⠈⡇⠀⠃⠀⠀⠀⠇⠀⠸┃ 
+                         ┃⠀⠈⠀⢸⣿⠀⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⡇⣿⣿⣿⣿⣿⣿⡏⢿⣿⣿⣿⣿⣿⡟⢿⣿⣿⠉⣿⣿⠘⠇⢸⠀⣿⣿⣿⣿⠀⠀⠀⣿⣿⣿⡇⢸⠀⠀⠀⢸⡇⠇⠀⠀⠀⠇⠀⠀⠀⠀⠀⠀⠀⠀┃ 
+                         ┃⠀⠀⠀⠘⠈⠀⢸⢻⡿⢿⣿⣿⡏⣿⣿⣿⡿⢻⣿⡿⠇⣿⣿⣿⣿⢿⣿⠃⢸⣿⣿⣿⣿⣿⠁⠀⣿⣿⠀⢻⡿⠀⠀⠈⠀⣿⣿⣿⠇⠀⠀⠀⠀⣿⣿⠀⠈⠀⠀⠀⢸⡇⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀┃ 
+                         ┃⠀⠀⠀⠀⠀⠀⠀⠸⠁⠀⢸⣿⡇⢿⣿⣿⡇⠈⡇⠀⠀⢻⠈⣿⣿⢸⣿⠀⢸⡏⣿⣿⢻⣿⠀⠀⠃⠀⠀⢸⡇⠀⠀⠀⠀⢻⠇⠈⠀⠀⠀⠀⠀⢸⣿⠀⠀⠀⠀⠀⢸⡇⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀┃ 
+                         ┃⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⡇⠘⡿⡟⠀⠀⠁⠀⠀⠀⠀⠁⢻⠀⠁⠀⠘⠀⣿⠉⢸⡏⠀⠀⠀⠀⠀⢸⠃⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠸⣿⠀⠀⠀⠀⠀⢸⡇⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀┃ 
+                         ┃⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠇⠀⠀⡇⠀⠀⠀⠀⠀⠀⠀⠀⠘⠀⠀⠀⠀⠀⠋⠀⠈⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢿⠀⠀⠀⠀⠀⠸⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀┃ 
+                      30 ┃⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠁⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀┃ 
+                         ┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛ 
+                         ⠀2022-01-01T00:00:00⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀2022-12-31T23:00:00⠀ 
+                         ⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀Time [days]⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀ 
+```
+"""
+function plot_hist_humidity(city::String = "",
+                            i_row::Int64 = 1;
+                            lat::Float64 = 0.0,
+                            long::Float64 = 0.0,
+                            start_date::String = "2023-01-01",
+                            end_date::String = "2023-01-10")
+
+    check_dates(start_date, end_date)
+
+    df_hum = DataFrame()
+    time_zone = ""
+
+    if ~isempty(city)
+        input = CityHistInput(city,
+                              "relativehumidity_2m",
+                              i_row,
+                              start_date,
+                              end_date)
+        results = get_hourly_forecast(input)
+        df_hum, location = results[1], results[2]
+        time_zone = location.timezone
+    else
+        input = LocationHistInput("relativehumidity_2m",
+                                   lat,
+                                   long,
+                                   start_date,
+                                   end_date)
+        results = get_hourly_forecast(input)
+        df_hum, time_zone = results[1], results[2]
+    end
+
+    plt = df_to_plot(city,
+                     df_hum,
+                     start_date,
+                     end_date,
+                     lat = lat,
+                     long = long,
+                     xlabel = "Time [days]",
+                     ylabel = "Rel. humidity [%]",
+                     color = :green,
+                     time_zone = time_zone)
+
+    return plt
+
+end
+
+"""
+    plot_hist_windspeed(city::String = "",
+                        i_row::Int64 = 1;
+                        lat::Float64 = 0.0,
+                        long::Float64 = 0.0,
+                        start_date::String = "2023-01-01",
+                        end_date::String = "2023-01-10")
+
+Shows the wind speed at 10 meter above ground for a given city
+between start_date and end_date.
+
+# Arguments
+- `city::String` : Valid city name, e.g. "Oslo", "Paris", "Amsterdam" etc.
+- `i_row::Int64` : In case of more than one match for a given location,
+                   select the desired timezone by providing the row index
+                   from the printed DataFrame. Default is set to 1.
+- `start_date::String` : Starting day in ISO8601 date format, e.g. "2023-02-01"
+- `end_date::String` : Ending day in ISO8601 date format, e.g. "2023-02-25"
+
+# Optional keywords
+- `lat::Float64` : Geographical WGS84 coordinate of the location (°S < 0, °N > 0)
+- `long::Float64` : Geographical WGS84 coordinate of the location (°W < 0, °E > 0)
+
+# Example
+```julia-repl
+julia> plot_hist_windspeed("Veldhoven", start_date = "2022-01-01", end_date = "2022-12-31")
+                        ⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀Veldhoven from 2022-01-01 to 2022-12-31⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀ 
+                        ⠀Timezone: Europe/Amsterdam⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀[Weather data by Open-Meteo.com]⠀ 
+                        ┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓ 
+                     60 ┃⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀┃ 
+                        ┃⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀┃ 
+                        ┃⠀⠀⠀⠀⠀⠀⠀⠀⠀⢀⡇⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀┃ 
+                        ┃⠀⠀⠀⠀⠀⠀⠀⠀⠀⢸⡇⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀┃ 
+                        ┃⠀⠀⠀⠀⠀⠀⠀⠀⠀⢸⡇⠀⠀⠀⠀⠀⠀⠀⠀⢠⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀┃ 
+                        ┃⠀⠀⠀⠀⠀⠀⡇⠀⠀⢸⣿⠀⠀⠀⠀⠀⠀⠀⠀⢸⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢀┃ 
+                        ┃⡄⠀⠀⠀⠀⠀⡇⣶⠀⢸⣿⡆⠀⠀⠀⠀⠀⠀⠀⢸⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⡀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⣸┃ 
+   Wind speed [km/h]    ┃⡇⢀⠀⠀⠀⢠⡇⣿⠀⣾⣿⡇⠀⠀⠀⠀⠀⠀⢸⣿⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⡇⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⡄⠀⠀⠀⢠⠀⢀⡄⠀⢠⠀⠀⠀⠀⠀⠀⠀⡀⣿┃ 
+                        ┃⣿⢸⠀⠀⠀⢸⣷⣿⢠⣿⣿⡇⠀⠀⠀⠀⠀⠀⢸⣿⡀⠀⠀⠀⠀⠀⢸⠀⠀⣰⠀⠀⡇⠀⢀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⡆⠀⡄⡇⡇⠀⠀⢸⠀⢸⣧⡇⢸⠀⠀⠀⠀⠀⠀⣄⣧⣿┃ 
+                        ┃⣿⣿⠀⠀⡄⣿⣿⣿⣾⣿⣿⡇⠀⠀⡇⣸⡄⠀⣾⣿⡇⠀⢸⡇⠀⠀⢸⡀⣠⣿⡇⢀⡇⠀⢸⠀⠀⡄⣷⡀⠀⡇⡇⣷⢰⠀⠀⠀⠀⠀⠀⢸⠀⡇⠀⡇⡇⡇⠀⠀⢸⡀⣿⣿⡇⢸⢰⡆⢠⠀⠀⠀⣿⣿⣿┃ 
+                        ┃⣿⣿⠀⣷⡇⣿⣿⣿⣿⣿⣿⣿⠀⣸⣿⣿⡇⠀⣿⣿⣧⠀⢸⣧⠀⠀⢸⣿⣿⣿⣧⢸⣷⣰⢸⢀⡆⣿⣿⣷⡀⡇⡇⣿⣼⠀⢀⠀⢰⣸⡀⣿⢠⣿⠀⡇⣿⣧⠀⣧⣿⣇⣿⣿⣿⣾⣸⣧⣸⡄⠀⠀⣿⣿⣿┃ 
+                        ┃⣿⣿⢰⣿⡇⣿⣿⠈⣿⡿⢸⣿⣸⣿⣿⣿⡇⣆⣿⣿⣿⣼⣿⣿⣇⡇⣿⣿⣿⣿⣿⣿⣿⣿⣾⣿⣿⣿⣿⣿⡇⣇⣿⣿⣿⣿⣾⣿⣼⣿⡇⣿⢸⣿⢠⣷⣿⣿⣶⣿⣿⣿⡇⡏⢹⣿⣿⢿⣿⣇⡆⡄⣿⣿⠋┃ 
+                        ┃⣿⣿⣿⣿⢧⣿⣿⠀⣿⠃⠘⣿⣿⣿⣿⣿⣿⣿⣿⡇⣿⣿⡿⣿⣿⣧⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣷⣿⣿⣿⣿⣿⣿⣿⣿⡇⣿⣿⣼⢹⣸⣿⣿⣿⣿⣿⣿⣿⡇⡇⢸⡟⣿⠘⣿⢿⣷⣷⣿⣿⠀┃ 
+                        ┃⢹⠹⡿⣿⢸⡇⢹⠀⠿⠀⠀⢹⡟⡿⢸⣿⣿⢿⢿⠃⣿⡇⠇⢿⢸⣿⡟⣿⣿⡏⠹⣿⠟⢿⢿⢿⣿⢿⣿⣿⣿⣿⠻⡿⣿⠁⣿⣿⣿⡇⢹⣿⣿⠘⣿⢿⢻⠻⣿⣿⠛⢹⡇⡇⢸⠃⡟⠀⡟⢸⣿⣿⢿⢹⠀┃ 
+                      0 ┃⠀⠀⠃⠸⠸⡇⠀⠀⠀⠀⠀⠸⠁⠀⠀⠁⠟⠸⠀⠀⠟⠃⠀⠀⠸⢹⠇⠁⠀⠁⠀⠻⠀⠈⠘⠸⡏⠘⠏⠸⠘⠹⠀⠇⠁⠀⠻⠛⠏⠀⠸⠃⣿⠀⠋⠸⠈⠀⠃⠘⠀⠘⠃⠁⠈⠀⠃⠀⠁⠈⠏⠹⠀⠈⠀┃ 
+                        ┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛ 
+                        ⠀2022-01-01T00:00:00⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀2022-12-31T23:00:00⠀ 
+                        ⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀Time [days]⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
+```
+"""
+function plot_hist_windspeed(city::String = "",
+                             i_row::Int64 = 1;
+                             lat::Float64 = 0.0,
+                             long::Float64 = 0.0,
+                             start_date::String = "2023-01-01",
+                             end_date::String = "2023-01-10")
+
+    check_dates(start_date, end_date)
+
+    df_wind = DataFrame()
+    time_zone = ""
+
+    if ~isempty(city)
+        input = CityHistInput(city,
+                              "windspeed_10m",
+                              i_row,
+                              start_date,
+                              end_date)
+        results = get_hourly_forecast(input)
+        df_wind, location = results[1], results[2]
+        time_zone = location.timezone
+    else
+        input = LocationHistInput("windspeed_10m",
+                                   lat,
+                                   long,
+                                   start_date,
+                                   end_date)
+        results = get_hourly_forecast(input)
+        df_wind, time_zone = results[1], results[2]
+    end
+
+    plt = df_to_plot(city,
+                     df_wind,
+                     start_date,
+                     end_date,
+                     lat = lat,
+                     long = long,
+                     xlabel = "Time [days]",
+                     ylabel = "Wind speed [km/h]",
+                     color = :green,
+                     time_zone = time_zone)
+
+    return plt
+
+end
+
+"""
+    plot_hist_solar(city::String = "",
+                    i_row::Int64 = 1;
+                    lat::Float64 = 0.0,
+                    long::Float64 = 0.0,
+                    start_date::String = "2023-01-01",
+                    end_date::String = "2023-01-10")
+
+Shows the shortwave solar radiation as average of the preceding hour
+for a given location (city or lat/long) between start_date and end_date.
+This is equal to the total global horizontal irradiation.
+
+# Arguments
+- `city::String` : Valid city name, e.g. "Oslo", "Paris", "Amsterdam" etc.
+- `i_row::Int64` : In case of more than one match for a given location,
+                   select the desired timezone by providing the row index
+                   from the printed DataFrame. Default is set to 1.
+- `start_date::String` : Starting day in ISO8601 date format, e.g. "2023-02-01"
+- `end_date::String` : Ending day in ISO8601 date format, e.g. "2023-02-25"
+
+# Optional keywords
+- `lat::Float64` : Geographical WGS84 coordinate of the location (°S < 0, °N > 0)
+- `long::Float64` : Geographical WGS84 coordinate of the location (°W < 0, °E > 0)
+
+# Example
+```julia-repl
+julia> plot_hist_solar("Veldhoven", start_date = "2022-01-01", end_date = "2022-12-31")
+                                   ⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀Veldhoven from 2022-01-01 to 2022-12-31⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀ 
+                                   ⠀Timezone: Europe/Amsterdam⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀[Weather data by Open-Meteo.com]⠀ 
+                                   ┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓ 
+                               900 ┃⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢀⠀⠀⠀⠀⠀⢠⡆⡀⢀⠀⠀⠀⢀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀┃ 
+                                   ┃⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢀⢀⡀⡆⣸⣿⢸⠀⡆⡄⢸⠀⣼⡇⣇⢸⠀⠀⢠⣾⣷⣆⡀⠀⣀⡀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀┃ 
+                                   ┃⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢸⣿⣇⡇⣿⣿⣼⡇⡇⣷⣾⠀⣿⡇⣿⢸⣄⠀⢸⣿⣿⣿⣇⣶⣿⡇⠀⢀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀┃ 
+                                   ┃⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⣰⢸⣿⣿⣿⣿⣿⣿⡇⡇⣿⣿⣆⣿⣷⣿⢸⣿⡆⢸⣿⣿⣿⣿⣿⣿⡇⠀⢸⠀⡇⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀┃ 
+                                   ┃⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢀⣼⣿⢀⣸⣿⣼⣿⣿⣿⣿⣿⣿⡇⣇⣿⣿⣿⣿⣿⣿⢸⣿⣿⣿⣿⣿⣿⣿⣿⣿⣇⣴⣾⣦⣷⡄⡆⠀⡀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀┃ 
+                                   ┃⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⣠⣄⢸⣿⣿⢸⣿⣿⣿⣿⣿⣿⣿⣿⣿⣇⣿⣿⣿⣿⣿⣿⣿⣼⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⡇⡇⡀⡇⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀┃ 
+                                   ┃⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢠⣾⣿⣿⢸⣿⣿⣾⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⡇⡇⡇⣿⢸⢸⣤⡀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀┃ 
+   Shortwave radiation [W/m^2]     ┃⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢸⣾⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣧⣇⣷⣿⢸⣾⣿⡇⣴⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀┃ 
+                                   ┃⠀⠀⠀⠀⠀⠀⠀⠀⢸⣤⣸⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⡇⣿⠀⠀⢀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀┃ 
+                                   ┃⠀⠀⠀⠀⠀⠀⠀⢀⢸⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⡇⣿⠀⣀⣼⡄⣄⡀⠀⠀⠀⠀⠀⠀⠀⠀⠀┃ 
+                                   ┃⠀⠀⠀⠀⢸⢠⡇⣼⢸⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⡇⣿⣸⣿⣿⡇⣿⣷⢠⡄⠀⠀⠀⠀⠀⠀⠀┃ 
+                                   ┃⠀⣶⣿⢀⣾⢸⡇⣿⣸⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⡇⣿⣿⣿⣿⣇⣿⣿⣸⣷⠀⡀⢰⣿⠀⠀⡄┃ 
+                                   ┃⣧⣿⣿⣼⣿⣸⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⢠⣿⣸⣿⣇⣄⣧┃ 
+                                   ┃⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿┃ 
+                                 0 ┃⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿┃ 
+                                   ┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛ 
+                                   ⠀2022-01-01T00:00:00⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀2022-12-31T23:00:00⠀ 
+                                   ⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀Time [days]⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀ 
+```
+"""
+function plot_hist_solar(city::String = "",
+                         i_row::Int64 = 1;
+                         lat::Float64 = 0.0,
+                         long::Float64 = 0.0,
+                         start_date::String = "2023-01-01",
+                         end_date::String = "2023-01-10")
+
+    check_dates(start_date, end_date)
+
+    df_solar = DataFrame()
+    time_zone = ""
+
+    if ~isempty(city)
+        input = CityHistInput(city,
+                              "shortwave_radiation",
+                              i_row,
+                              start_date,
+                              end_date)
+        results = get_hourly_forecast(input)
+        df_solar, location = results[1], results[2]
+        time_zone = location.timezone
+    else
+        input = LocationHistInput("shortwave_radiation",
+                                   lat,
+                                   long,
+                                   start_date,
+                                   end_date)
+        results = get_hourly_forecast(input)
+        df_solar, time_zone = results[1], results[2]
+    end
+
+    plt = df_to_plot(city,
+                     df_solar,
+                     start_date,
+                     end_date,
+                     lat = lat,
+                     long = long,
+                     xlabel = "Time [days]",
+                     ylabel = "Shortwave radiation [W/m^2]",
+                     color = :green,
                      time_zone = time_zone)
 
     return plt
