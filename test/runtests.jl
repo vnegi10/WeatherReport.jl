@@ -31,6 +31,7 @@ test_files = ["test_hourly.jl",
               "test_plots_forecast.jl",
               "test_plots_air_quality.jl",
               "test_plots_history.jl",
+              "test_plots_history_distribution.jl",
               "test_daily.jl",
               "test_helpers.jl",
               "test_exceptions.jl"]
