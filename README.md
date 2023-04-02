@@ -36,7 +36,7 @@ julia> show_current("Vienna")
 └───────────────┴───────────┴────────────┴─────────────┴───────────────┴─────────┴─────────┘
 ```
 
-A summary of daily weather forecast can be obtained for up to a week 
+A summary of daily weather forecast can be obtained for up to a week
 as shown below:
 
 ```julia
@@ -179,6 +179,27 @@ julia> plot_hourly_temp(lat = -33.4489, long = -70.6693, days = 3)
              ┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛                
              ⠀2023-03-13T18:00:00⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀2023-03-16T17:00:00⠀                
              ⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀Time [days]⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀               
+```
+
+To see a boxplot distribution of historical monthly data for a given year, use the
+`plot_box_temp` function as shown below:
+
+```julia
+julia> plot_box_temp("Haldwani", year = "2023")
+                              Haldwani: Air temp. monthly distribution for 2023                  
+            ┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓ 
+            ┃      ╷         ┌─────┬────────┐              ╷                            ┃ 
+    January ┃      ├─────────┤     │        ├──────────────┤                            ┃ 
+            ┃      ╵         └─────┴────────┘              ╵                            ┃ 
+            ┃           ╷           ┌───────┬────────┐              ╷                   ┃ 
+   February ┃           ├───────────┤       │        ├──────────────┤                   ┃ 
+            ┃           ╵           └───────┴────────┘              ╵                   ┃ 
+            ┃                     ╷        ┌───────┬──────────┐       ╷                 ┃ 
+      March ┃                     ├────────┤       │          ├───────┤                 ┃ 
+            ┃                     ╵        └───────┴──────────┘       ╵                 ┃ 
+            ┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛ 
+             0                                   20                                   40  
+                                                 [°C]                     
 ```
 
 ```julia

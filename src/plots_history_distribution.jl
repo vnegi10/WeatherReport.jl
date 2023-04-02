@@ -22,7 +22,7 @@ at 2 meter above ground for a given location (city or lat/long).
 # Example
 ```julia-repl
 julia> plot_box_temp("Eindhoven", year = "2023")
-                             Eindhoven: Air temp. distribution for 2023)                  
+                             Eindhoven: Air temp. monthly distribution for 2023                  
             ┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓ 
             ┃               ╷           ┌─────────┬─────────┐                ╷          ┃ 
     January ┃               ├───────────┤         │         ├────────────────┤          ┃ 
@@ -79,7 +79,7 @@ function plot_box_temp(city::String = "",
     plt = boxplot(
         all_months,
         monthly_temp,
-        title = "$(city): Air temp. distribution for $(year))",
+        title = "$(city): Air temp. monthly distribution for $(year)",
         xlabel = "[°C]",
         border = :bold,
         canvas = BrailleCanvas,
