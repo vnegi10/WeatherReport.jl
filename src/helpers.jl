@@ -185,6 +185,46 @@ function check_dates(start_date::String, end_date::String)
 
 end
 
+function get_monthly_data(df_data::DataFrame)
+
+    monthly_data = Vector{Vector{Float64}}()
+    all_months = map(x -> Dates.monthname(x), df_data[!, :TIME]) |> unique
+
+    for month in all_months
+        df_filter = filter(row -> Dates.monthname(row.TIME) == month, df_data)
+        push!(monthly_data, df_filter[!, :FORECAST])
+    end
+
+    return all_months, monthly_data
+
+end
+
+function convert_dates(year::String)
+
+    time = now()
+    curr_year = Dates.year(time)
+    
+    start_date = "$(year)-01-01"
+    if year == "$(curr_year)"
+        # Historical data has a delay of up to a week
+        end_time = Dates.Date(time) - Dates.Day(7)
+
+        # Ensure format is YYYY-MM-DD
+        end_month = Dates.month(end_time)
+        end_month = lpad("$(end_month)", 2, "0")
+
+        end_day = Dates.day(end_time)
+        end_day = lpad("$(end_day)", 2, "0")
+
+        end_date = "$(year)-$(end_month)-$(end_day)"
+    else
+        end_date = "$(year)-12-31"
+    end
+
+    return start_date, end_date
+
+end
+
 #=function get_cities_lat_long(file::String)
 
 	all_lines  = readlines(file)

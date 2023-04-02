@@ -130,6 +130,62 @@ function plot_hist_temp(city::String = "",
 end
 
 """
+"""
+function plot_box_temp(city::String = "",
+                       i_row::Int64 = 1;
+                       lat::Float64 = 0.0,
+                       long::Float64 = 0.0,
+                       year::String = "2022")
+
+    start_date, end_date = convert_dates(year)
+
+    df_temp = DataFrame()
+    time_zone = ""
+
+    if ~isempty(city)
+        input = CityHistInput(city,
+                              "temperature_2m",
+                              i_row,
+                              start_date,
+                              end_date)
+        results = get_hourly_forecast(input)
+
+        df_temp, location = results[1], results[2]
+        time_zone = location.timezone
+    else
+        input = LocationHistInput("temperature_2m",
+                                  lat,
+                                  long,
+                                  start_date,
+                                  end_date)
+        results = get_hourly_forecast(input)
+
+        df_temp, time_zone = results[1], results[2]
+    end
+
+    all_months, monthly_temp = get_monthly_data(df_temp)
+
+    if isempty(city)
+        city = ["lat:", "$(lat)", ", ", "long:", "$(long)"] |> join
+    end
+
+    plt = boxplot(
+        all_months,
+        monthly_temp,
+        title = "$(city): Air temp. distribution for $(year))",
+        xlabel = "[°C]",
+        border = :bold,
+        canvas = BrailleCanvas,
+        width = 75,
+        height = 15,
+        grid = true
+    )
+
+    return plt
+
+end
+
+"""
     plot_hist_rain(city::String = "",
                    i_row::Int64 = 1;
                    lat::Float64 = 0.0,

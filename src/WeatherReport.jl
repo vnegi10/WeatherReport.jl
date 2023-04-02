@@ -7,6 +7,7 @@ export where_am_i
 export plot_hourly_pm, plot_hourly_dust
 export plot_hist_temp, plot_hist_rain, plot_hist_snow
 export plot_hist_humidity, plot_hist_windspeed, plot_hist_solar
+export plot_box_monthly
 
 using CSV
 using DataFrames
