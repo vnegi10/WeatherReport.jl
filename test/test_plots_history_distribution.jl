@@ -4,7 +4,7 @@
 
     @testset "plot_box_temp" begin
         plt = plot_box_temp("Veldhoven",
-                             year = "2020")
+                             year = "2023")
         @test sizeof(plt) > 0
     end
 
