@@ -22,7 +22,8 @@ at 2 meter above ground for a given location (city or lat/long).
 # Example
 ```julia-repl
 julia> plot_box_temp("Eindhoven", year = "2023")
-                             Eindhoven: Air temp. monthly distribution for 2023                  
+                          Eindhoven: Air temp. monthly distribution for 2023              
+             Timezone: Europe/Amsterdam                 [Weather data by Open-Meteo.com]  
             ┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓ 
             ┃               ╷           ┌─────────┬─────────┐                ╷          ┃ 
     January ┃               ├───────────┤         │         ├────────────────┤          ┃ 
@@ -87,6 +88,9 @@ function plot_box_temp(city::String = "",
         height = 15,
         grid = true
     )
+
+    label!(plt, :tl, "Timezone: $(time_zone)")
+    label!(plt, :tr, ATTRIBUTION)
 
     return plt
 
