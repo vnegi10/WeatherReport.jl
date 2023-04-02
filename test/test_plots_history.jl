@@ -30,6 +30,13 @@
         @test sizeof(plt) > 0
     end
 
+    @testset "plot_hist_windspeed" begin
+        plt = plot_hist_windspeed("Amsterdam",
+                                   start_date = "2020-01-01",
+                                   end_date = "2020-05-30")
+        @test sizeof(plt) > 0
+    end
+
 end
 
 @testset verbose = true "Plotting with multiple matches" begin
@@ -90,6 +97,20 @@ end
         @test sizeof(plt) > 0
     end
 
+    @testset "plot_hist_windspeed" begin
+        plt = plot_hist_windspeed("Madrid",
+                                  2,
+                                  start_date = "2020-01-01",
+                                  end_date = "2020-05-21")
+        @test sizeof(plt) > 0
+
+        plt = plot_hist_windspeed("Madrid",
+                                  3,
+                                  start_date = "2018-01-01",
+                                  end_date = "2018-05-21")
+        @test sizeof(plt) > 0
+    end
+
 end
 
 @testset verbose = true "Plotting with lat/long input" begin
@@ -127,6 +148,15 @@ end
                                  long = 151.207,
                                  start_date = "2019-01-01",
                                  end_date = "2019-12-21")
+        @test sizeof(plt) > 0
+    end
+
+    @testset "plot_hist_windspeed" begin
+        # Copenhagen
+        plt = plot_hist_windspeed(lat = 55.6759,
+                                  long = 12.5655,
+                                  start_date = "2010-01-01",
+                                  end_date = "2010-12-21")
         @test sizeof(plt) > 0
     end
 
