@@ -23,6 +23,13 @@
         @test sizeof(plt) > 0
     end
 
+    @testset "plot_hist_humidity" begin
+        plt = plot_hist_humidity("Chennai",
+                                  start_date = "2016-01-01",
+                                  end_date = "2016-12-21")
+        @test sizeof(plt) > 0
+    end
+
 end
 
 @testset verbose = true "Plotting with multiple matches" begin
@@ -69,6 +76,20 @@ end
         @test sizeof(plt) > 0
     end
 
+    @testset "plot_hist_humidity" begin
+        plt = plot_hist_humidity("Madrid",
+                              2,
+                              start_date = "2020-01-01",
+                              end_date = "2020-12-21")
+        @test sizeof(plt) > 0
+
+        plt = plot_hist_humidity("Madrid",
+                              3,
+                              start_date = "2018-01-01",
+                              end_date = "2018-12-21")
+        @test sizeof(plt) > 0
+    end
+
 end
 
 @testset verbose = true "Plotting with lat/long input" begin
@@ -97,6 +118,15 @@ end
                              long = 10.7461,
                              start_date = "2019-01-01",
                              end_date = "2019-12-21")
+        @test sizeof(plt) > 0
+    end
+
+    @testset "plot_hist_humidity" begin
+        # Sydney
+        plt = plot_hist_humidity(lat = -33.8678,
+                                 long = 151.207,
+                                 start_date = "2019-01-01",
+                                 end_date = "2019-12-21")
         @test sizeof(plt) > 0
     end
 
