@@ -91,3 +91,60 @@ function plot_box_temp(city::String = "",
     return plt
 
 end
+
+"""
+"""
+function compare_box_temp(city::String = "",
+                          i_row::Int64 = 1;
+                          lat::Float64 = 0.0,
+                          long::Float64 = 0.0,
+                          month::String = "Jan",
+                          num_years::Int64 = 5)
+
+    start_date, end_date = get_time_range(num_years)
+
+    df_temp = DataFrame()
+    time_zone = ""
+
+    if ~isempty(city)
+        input = CityHistInput(city,
+                              "temperature_2m",
+                              i_row,
+                              start_date,
+                              end_date)
+        results = get_hourly_forecast(input)
+
+        df_temp, location = results[1], results[2]
+        time_zone = location.timezone
+    else
+        input = LocationHistInput("temperature_2m",
+                                  lat,
+                                  long,
+                                  start_date,
+                                  end_date)
+        results = get_hourly_forecast(input)
+
+        df_temp, time_zone = results[1], results[2]
+    end
+
+    all_years, yearly_temp = compare_yearly_data(df_temp, month)
+
+    if isempty(city)
+        city = ["lat:", "$(lat)", ", ", "long:", "$(long)"] |> join
+    end
+
+    plt = boxplot(
+        all_years,
+        yearly_temp,
+        title = "$(city): Air temp. comparison for $(month) over last $(num_years) years",
+        xlabel = "[°C]",
+        border = :bold,
+        canvas = BrailleCanvas,
+        width = 75,
+        height = 15,
+        grid = true
+    )
+
+    return plt
+
+end

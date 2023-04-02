@@ -225,6 +225,37 @@ function convert_dates(year::String)
 
 end
 
+function get_time_range(num_years::Int64)
+
+    time = now()
+    curr_year = Dates.year(time)
+
+    start_year = curr_year - num_years
+    start_date = "$(start_year)-01-01"
+    end_date = "$(Dates.Date(time) - Dates.Day(7))"
+
+    return start_date, end_date
+
+end
+
+function compare_yearly_data(df_data::DataFrame, month::String)
+
+    df_month = filter(row -> occursin(month, Dates.monthname(row.TIME)), df_data)
+    years = map(x -> Dates.year(x), df_month[!, :TIME]) |> unique
+
+    all_years = String[]
+    yearly_data = Vector{Vector{Float64}}()
+
+    for year in years
+        push!(all_years, "$(year)")
+        df_filter = filter(row -> Dates.year(row.TIME) == year, df_month)
+        push!(yearly_data, df_filter[!, :FORECAST])
+    end
+
+    return all_years, yearly_data
+
+end
+
 #=function get_cities_lat_long(file::String)
 
 	all_lines  = readlines(file)
