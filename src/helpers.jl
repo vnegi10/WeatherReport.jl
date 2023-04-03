@@ -1,6 +1,6 @@
 function fetch_lat_long(city::String, i_row::Int64)
 
-	city = fix_city_name(city)
+	city = fix_input_name(city)
 	
     df_city = filter(row -> ~ismissing(row.CITY) &&
                              row.CITY == city, DF_CITIES)
@@ -42,9 +42,9 @@ function url_to_df(url::String)
 	
 end
 
-function fix_city_name(city::String)
+function fix_input_name(input::String)
 
-	return [uppercase(city[1]), lowercase(city[2:end])] |> join
+	return [uppercase(input[1]), lowercase(input[2:end])] |> join
 
 end
 
@@ -239,6 +239,9 @@ function get_time_range(num_years::Int64)
 end
 
 function compare_yearly_data(df_data::DataFrame, month::String)
+
+    # Fix names with improper case, e.g. "jan", "JAn" -> "Jan"
+    month = fix_input_name(month)
 
     df_month = filter(row -> occursin(month, Dates.monthname(row.TIME)), df_data)
     years = map(x -> Dates.year(x), df_month[!, :TIME]) |> unique
