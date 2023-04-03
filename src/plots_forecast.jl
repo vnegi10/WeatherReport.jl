@@ -176,8 +176,11 @@ function show_current(city::String, i_row::Int64 = 1)
     dt_sunrise = parse(DateTime, current_dict["daily"]["sunrise"][1])
     dt_sunset  = parse(DateTime, current_dict["daily"]["sunset"][1])
 
-    t_sunrise  = "$(dt_sunrise |> hour):$(dt_sunrise |> minute)"
-    t_sunset   = "$(dt_sunset |> hour):$(dt_sunset |> minute)"
+    # Convert to hh:mm format
+    tt(x) = lpad("$(x)", 2, "0")
+
+    t_sunrise  = "$(dt_sunrise |> hour |> tt):$(dt_sunrise |> minute |> tt)"
+    t_sunset   = "$(dt_sunset |> hour |> tt):$(dt_sunset |> minute |> tt)"
 
     data = [timezone elevation wind_speed temp condition t_sunrise t_sunset]
     header = (["Timezone", "Elevation", "Wind speed", "Temperature", "Condition", "🌅", "🌆"],
