@@ -180,3 +180,37 @@ function compare_box_temp(city::String = "",
     return plt
 
 end
+
+"""
+"""
+function plot_box_rain(city::String = "",
+                       i_row::Int64 = 1;
+                       lat::Float64 = 0.0,
+                       long::Float64 = 0.0,
+                       year::String = "2022")
+
+    all_months, monthly_rain, city, time_zone = get_plotting_data("rain",
+                                                                  city,
+                                                                  i_row,
+                                                                  lat,
+                                                                  long,
+                                                                  year)
+
+    plt = boxplot(
+        all_months,
+        monthly_rain,
+        title = "$(city): Rain monthly distribution for $(year)",
+        xlabel = "[mm]",
+        border = :bold,
+        canvas = BrailleCanvas,
+        width = 75,
+        height = 15,
+        grid = true
+    )
+
+    label!(plt, :tl, "Timezone: $(time_zone)")
+    label!(plt, :tr, ATTRIBUTION)
+
+    return plt
+
+end
