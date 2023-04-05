@@ -206,8 +206,8 @@ function convert_dates(year::String)
     
     start_date = "$(year)-01-01"
     if year == "$(curr_year)"
-        # Historical data has a delay of up to a week
-        end_time = Dates.Date(time) - Dates.Day(7)
+        # Historical data has a delay of up to two weeks
+        end_time = Dates.Date(time) - Dates.Day(14)
 
         # Ensure format is YYYY-MM-DD
         end_month = Dates.month(end_time)
@@ -232,7 +232,9 @@ function get_time_range(num_years::Int64)
 
     start_year = curr_year - num_years
     start_date = "$(start_year)-01-01"
-    end_date = "$(Dates.Date(time) - Dates.Day(7))"
+
+    # Historical data has a delay of up to two weeks
+    end_date = "$(Dates.Date(time) - Dates.Day(14))"
 
     return start_date, end_date
 
