@@ -259,6 +259,44 @@ function compare_yearly_data(df_data::DataFrame, month::String)
 
 end
 
+function get_plotting_data(variable, city, i_row, lat, long, year)
+
+    start_date, end_date = convert_dates(year)
+
+    df_data = DataFrame()
+    time_zone = ""
+
+    if ~isempty(city)
+        input = CityHistInput(city,
+                              variable,
+                              i_row,
+                              start_date,
+                              end_date)
+        results = get_hourly_forecast(input)
+
+        df_data, location = results[1], results[2]
+        time_zone = location.timezone
+    else
+        input = LocationHistInput(variable,
+                                  lat,
+                                  long,
+                                  start_date,
+                                  end_date)
+        results = get_hourly_forecast(input)
+
+        df_data, time_zone = results[1], results[2]
+    end
+
+    all_months, monthly_data = get_monthly_data(df_data)
+
+    if isempty(city)
+        city = ["lat:", "$(lat)", ", ", "long:", "$(long)"] |> join
+    end
+
+    return all_months, monthly_data, city, time_zone
+
+end
+
 #=function get_cities_lat_long(file::String)
 
 	all_lines  = readlines(file)
