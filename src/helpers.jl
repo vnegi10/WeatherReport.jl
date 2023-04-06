@@ -299,6 +299,26 @@ function get_plotting_data(variable, city, i_row, lat, long, year)
 
 end
 
+function get_hourly_data(variable, city, i_row, lat, long)
+
+    df_data = DataFrame()
+    time_zone = ""
+
+    if ~isempty(city)
+        input = CityInput(city, variable, i_row)
+        results = get_hourly_forecast(input)
+        df_data, location = results[1], results[2]
+        time_zone = location.timezone
+    else
+        input = LocationInput(variable, lat, long)
+        results = get_hourly_forecast(input)
+        df_data, time_zone = results[1], results[2]
+    end
+
+    return df_data, time_zone
+
+end
+
 #=function get_cities_lat_long(file::String)
 
 	all_lines  = readlines(file)

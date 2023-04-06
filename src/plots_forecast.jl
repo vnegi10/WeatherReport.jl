@@ -362,19 +362,11 @@ function plot_hourly_rain(city::String = "",
                           long::Float64 = 0.0,
                           days::Int64 = 6)
 
-    df_rain = DataFrame()
-    time_zone = ""
-
-    if ~isempty(city)
-        input = CityInput(city, "rain", i_row)
-        results = get_hourly_forecast(input)
-        df_rain, location = results[1], results[2]
-        time_zone = location.timezone
-    else
-        input = LocationInput("rain", lat, long)
-        results = get_hourly_forecast(input)
-        df_rain, time_zone = results[1], results[2]
-    end
+    df_rain, time_zone = get_hourly_data("rain",
+                                          city,
+                                          i_row,
+                                          lat,
+                                          long)
 
     plt = df_to_plot(city,
                      df_rain,
