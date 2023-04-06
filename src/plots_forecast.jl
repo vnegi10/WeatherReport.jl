@@ -362,19 +362,11 @@ function plot_hourly_rain(city::String = "",
                           long::Float64 = 0.0,
                           days::Int64 = 6)
 
-    df_rain = DataFrame()
-    time_zone = ""
-
-    if ~isempty(city)
-        input = CityInput(city, "rain", i_row)
-        results = get_hourly_forecast(input)
-        df_rain, location = results[1], results[2]
-        time_zone = location.timezone
-    else
-        input = LocationInput("rain", lat, long)
-        results = get_hourly_forecast(input)
-        df_rain, time_zone = results[1], results[2]
-    end
+    df_rain, time_zone = get_hourly_data("rain",
+                                          city,
+                                          i_row,
+                                          lat,
+                                          long)
 
     plt = df_to_plot(city,
                      df_rain,
@@ -444,19 +436,11 @@ function plot_hourly_snow(city::String = "",
                           long::Float64 = 0.0,
                           days::Int64 = 6)
 
-    df_snow = DataFrame()
-    time_zone = ""
-
-    if ~isempty(city)
-        input = CityInput(city, "snowfall", i_row)
-        results = get_hourly_forecast(input)
-        df_snow, location = results[1], results[2]
-        time_zone = location.timezone
-    else
-        input = LocationInput("snowfall", lat, long)
-        results = get_hourly_forecast(input)
-        df_snow, time_zone = results[1], results[2]
-    end
+    df_snow, time_zone = get_hourly_data("snowfall",
+                                          city,
+                                          i_row,
+                                          lat,
+                                          long)
 
     plt = df_to_plot(city,
                      df_snow,
@@ -526,19 +510,11 @@ function plot_hourly_humidity(city::String = "",
                               long::Float64 = 0.0,
                               days::Int64 = 6)
 
-    df_hum = DataFrame()
-    time_zone = ""
-
-    if ~isempty(city)
-        input = CityInput(city, "relativehumidity_2m", i_row)
-        results = get_hourly_forecast(input)
-        df_hum, location = results[1], results[2]
-        time_zone = location.timezone
-    else
-        input = LocationInput("relativehumidity_2m", lat, long)
-        results = get_hourly_forecast(input)
-        df_hum, time_zone = results[1], results[2]
-    end
+    df_hum, time_zone = get_hourly_data("relativehumidity_2m",
+                                         city,
+                                         i_row,
+                                         lat,
+                                         long)
 
     plt = df_to_plot(city,
                      df_hum,
@@ -607,19 +583,11 @@ function plot_hourly_windspeed(city::String = "",
                                long::Float64 = 0.0,
                                days::Int64 = 6)
 
-    df_wind = DataFrame()
-    time_zone = ""
-
-    if ~isempty(city)
-        input = CityInput(city, "windspeed_10m", i_row)
-        results = get_hourly_forecast(input)
-        df_wind, location = results[1], results[2]
-        time_zone = location.timezone
-    else
-        input = LocationInput("windspeed_10m", lat, long)
-        results = get_hourly_forecast(input)
-        df_wind, time_zone = results[1], results[2]
-    end
+    df_wind, time_zone = get_hourly_data("windspeed_10m",
+                                          city,
+                                          i_row,
+                                          lat,
+                                          long)
 
     plt = df_to_plot(city,
                      df_wind,
@@ -689,19 +657,11 @@ function plot_hourly_solar(city::String = "",
                            long::Float64 = 0.0,
                            days::Int64 = 6)
 
-    df_solar = DataFrame()
-    time_zone = ""
-
-    if ~isempty(city)
-        input = CityInput(city, "shortwave_radiation", i_row)
-        results = get_hourly_forecast(input)
-        df_solar, location = results[1], results[2]
-        time_zone = location.timezone
-    else
-        input = LocationInput("shortwave_radiation", lat, long)
-        results = get_hourly_forecast(input)
-        df_solar, time_zone = results[1], results[2]
-    end
+    df_solar, time_zone = get_hourly_data("shortwave_radiation",
+                                           city,
+                                           i_row,
+                                           lat,
+                                           long)
 
     plt = df_to_plot(city,
                      df_solar,
