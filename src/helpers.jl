@@ -319,6 +319,36 @@ function get_hourly_data(variable, city, i_row, lat, long)
 
 end
 
+function get_hist_data(variable, city, i_row, lat, long, start_date, end_date)
+
+    check_dates(start_date, end_date)
+
+    df_hist = DataFrame()
+    time_zone = ""
+
+    if ~isempty(city)
+        input = CityHistInput(city,
+                              variable,
+                              i_row,
+                              start_date,
+                              end_date)
+        results = get_hourly_forecast(input)
+        df_hist, location = results[1], results[2]
+        time_zone = location.timezone
+    else
+        input = LocationHistInput(variable,
+                                  lat,
+                                  long,
+                                  start_date,
+                                  end_date)
+        results = get_hourly_forecast(input)
+        df_hist, time_zone = results[1], results[2]
+    end
+
+    return df_hist, time_zone
+
+end
+
 #=function get_cities_lat_long(file::String)
 
 	all_lines  = readlines(file)

@@ -186,29 +186,13 @@ function plot_hist_rain(city::String = "",
                         start_date::String = "2023-01-01",
                         end_date::String = "2023-01-10")
 
-    check_dates(start_date, end_date)
-
-    df_rain = DataFrame()
-    time_zone = ""
-
-    if ~isempty(city)
-        input = CityHistInput(city,
-                              "rain",
-                               i_row,
-                               start_date,
-                               end_date)
-        results = get_hourly_forecast(input)
-        df_rain, location = results[1], results[2]
-        time_zone = location.timezone
-    else
-        input = LocationHistInput("rain",
-                                   lat,
-                                   long,
-                                   start_date,
-                                   end_date)
-        results = get_hourly_forecast(input)
-        df_rain, time_zone = results[1], results[2]
-    end
+    df_rain, time_zone = get_hist_data("rain",
+                                       city,
+                                       i_row,
+                                       lat,
+                                       long,
+                                       start_date,
+                                       end_date)
 
     plt = df_to_plot(city,
                      df_rain,
@@ -281,29 +265,13 @@ function plot_hist_snow(city::String = "",
                         start_date::String = "2023-01-01",
                         end_date::String = "2023-01-10")
 
-    check_dates(start_date, end_date)
-
-    df_snow = DataFrame()
-    time_zone = ""
-
-    if ~isempty(city)
-        input = CityHistInput(city,
-                              "snowfall",
-                              i_row,
-                              start_date,
-                              end_date)
-        results = get_hourly_forecast(input)
-        df_snow, location = results[1], results[2]
-        time_zone = location.timezone
-    else
-        input = LocationHistInput("snowfall",
-                                   lat,
-                                   long,
-                                   start_date,
-                                   end_date)
-        results = get_hourly_forecast(input)
-        df_snow, time_zone = results[1], results[2]
-    end
+    df_snow, time_zone = get_hist_data("snowfall",
+                                       city,
+                                       i_row,
+                                       lat,
+                                       long,
+                                       start_date,
+                                       end_date)
 
     plt = df_to_plot(city,
                      df_snow,
@@ -376,29 +344,13 @@ function plot_hist_humidity(city::String = "",
                             start_date::String = "2023-01-01",
                             end_date::String = "2023-01-10")
 
-    check_dates(start_date, end_date)
-
-    df_hum = DataFrame()
-    time_zone = ""
-
-    if ~isempty(city)
-        input = CityHistInput(city,
-                              "relativehumidity_2m",
-                              i_row,
-                              start_date,
-                              end_date)
-        results = get_hourly_forecast(input)
-        df_hum, location = results[1], results[2]
-        time_zone = location.timezone
-    else
-        input = LocationHistInput("relativehumidity_2m",
-                                   lat,
-                                   long,
-                                   start_date,
-                                   end_date)
-        results = get_hourly_forecast(input)
-        df_hum, time_zone = results[1], results[2]
-    end
+    df_hum, time_zone = get_hist_data("relativehumidity_2m",
+                                       city,
+                                       i_row,
+                                       lat,
+                                       long,
+                                       start_date,
+                                       end_date)
 
     plt = df_to_plot(city,
                      df_hum,
@@ -471,29 +423,13 @@ function plot_hist_windspeed(city::String = "",
                              start_date::String = "2023-01-01",
                              end_date::String = "2023-01-10")
 
-    check_dates(start_date, end_date)
-
-    df_wind = DataFrame()
-    time_zone = ""
-
-    if ~isempty(city)
-        input = CityHistInput(city,
-                              "windspeed_10m",
-                              i_row,
-                              start_date,
-                              end_date)
-        results = get_hourly_forecast(input)
-        df_wind, location = results[1], results[2]
-        time_zone = location.timezone
-    else
-        input = LocationHistInput("windspeed_10m",
-                                   lat,
-                                   long,
-                                   start_date,
-                                   end_date)
-        results = get_hourly_forecast(input)
-        df_wind, time_zone = results[1], results[2]
-    end
+    df_wind, time_zone = get_hist_data("windspeed_10m",
+                                       city,
+                                       i_row,
+                                       lat,
+                                       long,
+                                       start_date,
+                                       end_date)
 
     plt = df_to_plot(city,
                      df_wind,
@@ -567,30 +503,14 @@ function plot_hist_solar(city::String = "",
                          start_date::String = "2023-01-01",
                          end_date::String = "2023-01-10")
 
-    check_dates(start_date, end_date)
-
-    df_solar = DataFrame()
-    time_zone = ""
-
-    if ~isempty(city)
-        input = CityHistInput(city,
-                              "shortwave_radiation",
-                              i_row,
-                              start_date,
-                              end_date)
-        results = get_hourly_forecast(input)
-        df_solar, location = results[1], results[2]
-        time_zone = location.timezone
-    else
-        input = LocationHistInput("shortwave_radiation",
-                                   lat,
-                                   long,
-                                   start_date,
-                                   end_date)
-        results = get_hourly_forecast(input)
-        df_solar, time_zone = results[1], results[2]
-    end
-
+    df_solar, time_zone = get_hist_data("shortwave_radiation",
+                                        city,
+                                        i_row,
+                                        lat,
+                                        long,
+                                        start_date,
+                                        end_date)
+    
     plt = df_to_plot(city,
                      df_solar,
                      start_date,
