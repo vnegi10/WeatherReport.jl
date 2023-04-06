@@ -206,8 +206,8 @@ function convert_dates(year::String)
     
     start_date = "$(year)-01-01"
     if year == "$(curr_year)"
-        # Historical data has a delay of up to a week
-        end_time = Dates.Date(time) - Dates.Day(7)
+        # Historical data has a delay of up to two weeks
+        end_time = Dates.Date(time) - Dates.Day(14)
 
         # Ensure format is YYYY-MM-DD
         end_month = Dates.month(end_time)
@@ -232,7 +232,9 @@ function get_time_range(num_years::Int64)
 
     start_year = curr_year - num_years
     start_date = "$(start_year)-01-01"
-    end_date = "$(Dates.Date(time) - Dates.Day(7))"
+
+    # Historical data has a delay of up to two weeks
+    end_date = "$(Dates.Date(time) - Dates.Day(14))"
 
     return start_date, end_date
 
@@ -256,6 +258,44 @@ function compare_yearly_data(df_data::DataFrame, month::String)
     end
 
     return all_years, yearly_data
+
+end
+
+function get_plotting_data(variable, city, i_row, lat, long, year)
+
+    start_date, end_date = convert_dates(year)
+
+    df_data = DataFrame()
+    time_zone = ""
+
+    if ~isempty(city)
+        input = CityHistInput(city,
+                              variable,
+                              i_row,
+                              start_date,
+                              end_date)
+        results = get_hourly_forecast(input)
+
+        df_data, location = results[1], results[2]
+        time_zone = location.timezone
+    else
+        input = LocationHistInput(variable,
+                                  lat,
+                                  long,
+                                  start_date,
+                                  end_date)
+        results = get_hourly_forecast(input)
+
+        df_data, time_zone = results[1], results[2]
+    end
+
+    all_months, monthly_data = get_monthly_data(df_data)
+
+    if isempty(city)
+        city = ["lat:", "$(lat)", ", ", "long:", "$(long)"] |> join
+    end
+
+    return all_months, monthly_data, city, time_zone
 
 end
 
