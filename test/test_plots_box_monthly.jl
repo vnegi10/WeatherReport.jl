@@ -32,6 +32,12 @@
         @test sizeof(plt) > 0
     end
 
+    @testset "plot_box_solar" begin
+        plt = plot_box_solar("Canberra",
+                              year = "2020")
+        @test sizeof(plt) > 0
+    end
+
 end
 
 @testset verbose = true "Plotting with multiple matches" begin
@@ -96,6 +102,18 @@ end
         @test sizeof(plt) > 0
     end
 
+    @testset "plot_box_solar" begin
+        plt = plot_box_solar("Madrid",
+                              2,
+                              year = "2010")
+        @test sizeof(plt) > 0
+
+        plt = plot_box_solar("Madrid",
+                              4,
+                              year = "2014")
+        @test sizeof(plt) > 0
+    end
+
 end
 
 @testset verbose = true "Plotting with lat/long input" begin
@@ -137,6 +155,14 @@ end
         plt = plot_box_windspeed(lat = 55.6759,
                                  long = 12.5655,
                                  year = "2020")
+        @test sizeof(plt) > 0
+    end
+
+    @testset "plot_box_solar" begin
+        # Chennai
+        plt = plot_box_solar(lat = 13.0878,
+                             long = 80.2785,
+                             year = "2020")
         @test sizeof(plt) > 0
     end
 
