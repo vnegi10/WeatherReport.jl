@@ -20,6 +20,18 @@
         @test sizeof(plt) > 0
     end
 
+    @testset "plot_box_humidity" begin
+        plt = plot_box_humidity("Dubrovnik",
+                                 year = "2023")
+        @test sizeof(plt) > 0
+    end
+
+    @testset "plot_box_windspeed" begin
+        plt = plot_box_windspeed("Rotterdam",
+                                 year = "2023")
+        @test sizeof(plt) > 0
+    end
+
 end
 
 @testset verbose = true "Plotting with multiple matches" begin
@@ -60,6 +72,30 @@ end
         @test sizeof(plt) > 0
     end
 
+    @testset "plot_box_humidity" begin
+        plt = plot_box_humidity("Madrid",
+                                2,
+                                year = "2010")
+        @test sizeof(plt) > 0
+
+        plt = plot_box_humidity("Madrid",
+                                 5,
+                                 year = "2012")
+        @test sizeof(plt) > 0
+    end
+
+    @testset "plot_box_windspeed" begin
+        plt = plot_box_windspeed("Madrid",
+                                 2,
+                                 year = "2010")
+        @test sizeof(plt) > 0
+
+        plt = plot_box_windspeed("Madrid",
+                                 4,
+                                 year = "2012")
+        @test sizeof(plt) > 0
+    end
+
 end
 
 @testset verbose = true "Plotting with lat/long input" begin
@@ -82,9 +118,25 @@ end
 
     @testset "plot_box_snow" begin
         # Oslo
-        plt = plot_box_snow(lat = 59.9127, 
+        plt = plot_box_snow(lat = 59.9127,
                             long = 10.746,
                             year = "2022")
+        @test sizeof(plt) > 0
+    end
+
+    @testset "plot_box_humidity" begin
+        # Sydney
+        plt = plot_box_humidity(lat = -33.8678,
+                                long = 151.207,
+                                year = "2020")
+        @test sizeof(plt) > 0
+    end
+
+    @testset "plot_box_windspeed" begin
+        # Copenhagen
+        plt = plot_box_windspeed(lat = 55.6759,
+                                 long = 12.5655,
+                                 year = "2020")
         @test sizeof(plt) > 0
     end
 
