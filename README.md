@@ -202,6 +202,25 @@ julia> plot_box_temp("Haldwani", year = "2023")
              0                                   20                                   40  
 ```
 
+```julia
+julia> plot_box_humidity("Chennai", year = "2023")
+                           Chennai: Relative humidity distribution for 2023               
+             Timezone: Asia/Kolkata                     [Weather data by Open-Meteo.com]  
+            ┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓ 
+            ┃                    ╷              ┌──────────┬─────────┐                ╷ ┃ 
+    January ┃                    ├──────────────┤          │         ├────────────────┤ ┃ 
+            ┃                    ╵              └──────────┴─────────┘                ╵ ┃ 
+            ┃    ╷                          ┌─────────────────┬─────────────┐         ╷ ┃ 
+   February ┃    ├──────────────────────────┤                 │             ├─────────┤ ┃ 
+            ┃    ╵                          └─────────────────┴─────────────┘         ╵ ┃ 
+            ┃    ╷                                ┌───────────────┬────────┐         ╷  ┃ 
+      March ┃    ├────────────────────────────────┤               │        ├─────────┤  ┃ 
+            ┃    ╵                                └───────────────┴────────┘         ╵  ┃ 
+            ┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛ 
+             30                                  65                                  100  
+                                                 [%]                         
+```
+
 Similarly, to investigate variation in monthly temperatures over a given number of years,
 use the `compare_box_temp` as shown below:
 
