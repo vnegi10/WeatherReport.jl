@@ -29,6 +29,7 @@ include("daily.jl")
 include("plots_forecast.jl")
 include("plots_air_quality.jl")
 include("plots_history.jl")
-include("plots_history_distribution.jl")
+include("plots_box_monthly.jl")
+include("plots_box_yearly.jl")
 
 end # module WeatherReport
