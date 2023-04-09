@@ -16,6 +16,13 @@
         @test sizeof(plt) > 0
     end
 
+    @testset "compare_box_snow" begin
+        plt = compare_box_snow("Oslo",
+                                num_years = 5,
+                                month = "Dec")
+        @test sizeof(plt) > 0
+    end
+
 end
 
 @testset verbose = true "Plotting with multiple matches" begin
@@ -48,6 +55,20 @@ end
         @test sizeof(plt) > 0
     end
 
+    @testset "compare_box_snow" begin
+        plt = compare_box_snow("Madrid",
+                               2,
+                               num_years = 4,
+                               month = "Jan")
+        @test sizeof(plt) > 0
+
+        plt = compare_box_snow("Madrid",
+                               3,
+                               num_years = 2,
+                               month = "Dec")
+        @test sizeof(plt) > 0
+    end
+
 end
 
 @testset verbose = true "Plotting with lat/long input" begin
@@ -67,6 +88,15 @@ end
                                long = 80.2785,
                                num_years = 5,
                                month = "March")
+        @test sizeof(plt) > 0
+    end
+
+    @testset "compare_box_snow" begin
+        # Oslo
+        plt = compare_box_snow(lat = 59.9127,
+                               long = 10.746,
+                               num_years = 5,
+                               month = "Dec")
         @test sizeof(plt) > 0
     end
 
