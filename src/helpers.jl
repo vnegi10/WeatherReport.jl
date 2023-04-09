@@ -299,6 +299,44 @@ function get_plotting_data(variable, city, i_row, lat, long, year)
 
 end
 
+function get_plotting_data(variable, city, i_row, lat, long, month, num_years)
+
+    start_date, end_date = get_time_range(num_years)
+
+    df_data = DataFrame()
+    time_zone = ""
+
+    if ~isempty(city)
+        input = CityHistInput(city,
+                              variable,
+                              i_row,
+                              start_date,
+                              end_date)
+        results = get_hourly_forecast(input)
+
+        df_data, location = results[1], results[2]
+        time_zone = location.timezone
+    else
+        input = LocationHistInput(variable,
+                                  lat,
+                                  long,
+                                  start_date,
+                                  end_date)
+        results = get_hourly_forecast(input)
+
+        df_data, time_zone = results[1], results[2]
+    end
+
+    all_years, yearly_data = compare_yearly_data(df_data, month)
+
+    if isempty(city)
+        city = ["lat:", "$(lat)", ", ", "long:", "$(long)"] |> join
+    end
+
+    return all_years, yearly_data, city, time_zone
+
+end
+
 function get_hourly_data(variable, city, i_row, lat, long)
 
     df_data = DataFrame()
