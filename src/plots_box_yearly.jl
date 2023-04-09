@@ -57,37 +57,13 @@ function compare_box_temp(city::String = "",
                           month::String = "Jan",
                           num_years::Int64 = 5)
 
-    start_date, end_date = get_time_range(num_years)
-
-    df_temp = DataFrame()
-    time_zone = ""
-
-    if ~isempty(city)
-        input = CityHistInput(city,
-                              "temperature_2m",
-                              i_row,
-                              start_date,
-                              end_date)
-        results = get_hourly_forecast(input)
-
-        df_temp, location = results[1], results[2]
-        time_zone = location.timezone
-    else
-        input = LocationHistInput("temperature_2m",
-                                  lat,
-                                  long,
-                                  start_date,
-                                  end_date)
-        results = get_hourly_forecast(input)
-
-        df_temp, time_zone = results[1], results[2]
-    end
-
-    all_years, yearly_temp = compare_yearly_data(df_temp, month)
-
-    if isempty(city)
-        city = ["lat:", "$(lat)", ", ", "long:", "$(long)"] |> join
-    end
+    all_years, yearly_temp, city, time_zone = get_plotting_data("temperature_2m",
+                                                                city,
+                                                                i_row,
+                                                                lat,
+                                                                long,
+                                                                month,
+                                                                num_years)
 
     plt = boxplot(
         all_years,
