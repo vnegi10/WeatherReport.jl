@@ -9,6 +9,13 @@
         @test sizeof(plt) > 0
     end
 
+    @testset "compare_box_rain" begin
+        plt = compare_box_rain("Veldhoven",
+                                num_years = 5,
+                                month = "March")
+        @test sizeof(plt) > 0
+    end
+
 end
 
 @testset verbose = true "Plotting with multiple matches" begin
@@ -27,6 +34,20 @@ end
         @test sizeof(plt) > 0
     end
 
+    @testset "compare_box_rain" begin
+        plt = compare_box_rain("Madrid",
+                               2,
+                               num_years = 5,
+                               month = "Jan")
+        @test sizeof(plt) > 0
+
+        plt = compare_box_rain("Madrid",
+                               4,
+                               num_years = 2,
+                               month = "Dec")
+        @test sizeof(plt) > 0
+    end
+
 end
 
 @testset verbose = true "Plotting with lat/long input" begin
@@ -35,6 +56,15 @@ end
         # Denver
         plt = compare_box_temp(lat = 39.7392,
                                long = -104.985,
+                               num_years = 5,
+                               month = "March")
+        @test sizeof(plt) > 0
+    end
+
+    @testset "compare_box_rain" begin
+        # Chennai
+        plt = compare_box_rain(lat = 13.0878,
+                               long = 80.2785,
                                num_years = 5,
                                month = "March")
         @test sizeof(plt) > 0
