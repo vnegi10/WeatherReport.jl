@@ -10,6 +10,7 @@ export plot_hist_humidity, plot_hist_windspeed, plot_hist_solar
 export plot_box_temp, plot_box_rain, plot_box_snow
 export plot_box_humidity, plot_box_windspeed, plot_box_solar
 export compare_box_temp, compare_box_rain, compare_box_snow
+export compare_box_humidity
 
 using CSV
 using DataFrames
