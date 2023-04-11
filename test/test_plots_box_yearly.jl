@@ -23,6 +23,13 @@
         @test sizeof(plt) > 0
     end
 
+    @testset "compare_box_humidity" begin
+        plt = compare_box_humidity("Chandigarh",
+                                    num_years = 5,
+                                    month = "May")
+        @test sizeof(plt) > 0
+    end
+
 end
 
 @testset verbose = true "Plotting with multiple matches" begin
@@ -69,6 +76,20 @@ end
         @test sizeof(plt) > 0
     end
 
+    @testset "compare_box_humidity" begin
+        plt = compare_box_humidity("Madrid",
+                                   2,
+                                   num_years = 5,
+                                   month = "Jan")
+        @test sizeof(plt) > 0
+
+        plt = compare_box_humidity("Madrid",
+                                   3,
+                                   num_years = 7,
+                                   month = "Dec")
+        @test sizeof(plt) > 0
+    end
+
 end
 
 @testset verbose = true "Plotting with lat/long input" begin
@@ -97,6 +118,15 @@ end
                                long = 10.746,
                                num_years = 5,
                                month = "Dec")
+        @test sizeof(plt) > 0
+    end
+
+    @testset "compare_box_humidity" begin
+        # Sydney
+        plt = compare_box_humidity(lat = -33.8678,
+                                   long = 151.207,
+                                   num_years = 5,
+                                   month = "May")
         @test sizeof(plt) > 0
     end
 
