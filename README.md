@@ -181,8 +181,9 @@ julia> plot_hourly_temp(lat = -33.4489, long = -70.6693, days = 3)
              ⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀Time [days]⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀               
 ```
 
-To see a boxplot distribution of historical monthly data for a given year, use the
-`plot_box_temp` function as shown below:
+To see a boxplot distribution of historical monthly data for a given year, use one of the
+`plot_box_*` functions. For example, temperature can be visualized using `plot_box_temp`
+as shown below:
 
 ```julia
 julia> plot_box_temp("Haldwani", year = "2023")
@@ -201,6 +202,8 @@ julia> plot_box_temp("Haldwani", year = "2023")
             ┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛ 
              0                                   20                                   40  
 ```
+
+Similarly, for humidity analysis, use the `plot_box_humidity` function:
 
 ```julia
 julia> plot_box_humidity("Chennai", year = "2023")
@@ -221,8 +224,9 @@ julia> plot_box_humidity("Chennai", year = "2023")
                                                  [%]                         
 ```
 
-Similarly, to investigate variation in monthly temperatures over a given number of years,
-use the `compare_box_temp` as shown below:
+To compare monthly data over a given number of years, use one of the `compare_box_*`
+functions. For example, temperature distribution can be visualized using 
+`compare_box_temp` as shown below:
 
 ```julia
 julia> compare_box_temp("Haldwani", num_years = 10, month = "Feb")
