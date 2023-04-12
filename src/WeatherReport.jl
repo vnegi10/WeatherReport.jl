@@ -1,14 +1,25 @@
 module WeatherReport
 
+# Hourly weather forecast
 export plot_hourly_temp, plot_hourly_rain, plot_hourly_snow
 export plot_hourly_humidity, plot_hourly_windspeed, plot_hourly_solar
 export show_current, show_daily
+
+# Location
 export where_am_i
-export plot_hourly_pm, plot_hourly_dust
+
+# Air quality
+export plot_hourly_pm, plot_hourly_dust, plot_hourly_haze
+
+# Historical weather data
 export plot_hist_temp, plot_hist_rain, plot_hist_snow
 export plot_hist_humidity, plot_hist_windspeed, plot_hist_solar
+
+# Compare historical monthly data
 export plot_box_temp, plot_box_rain, plot_box_snow
 export plot_box_humidity, plot_box_windspeed, plot_box_solar
+
+# Compare historical yearly data
 export compare_box_temp, compare_box_rain, compare_box_snow
 export compare_box_humidity, compare_box_windspeed, compare_box_solar
 

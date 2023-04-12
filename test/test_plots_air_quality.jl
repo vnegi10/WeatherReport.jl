@@ -12,6 +12,11 @@
         @test sizeof(plt) > 0
     end
 
+    @testset "plot_hourly_haze" begin
+        plt = plot_hourly_haze("Haldwani", days = 1)
+        @test sizeof(plt) > 0
+    end
+
 end
 
 @testset verbose = true "Plotting with multiple matches" begin
@@ -32,6 +37,14 @@ end
         @test sizeof(plt) > 0
     end
 
+    @testset "plot_hourly_haze" begin
+        plt = plot_hourly_haze("Cairo", 1, days = 2)
+        @test sizeof(plt) > 0
+
+        plt = plot_hourly_haze("Cairo", 2, days = 4)
+        @test sizeof(plt) > 0
+    end
+
 end
 
 @testset verbose = true "Plotting with lat/long input" begin
@@ -45,6 +58,12 @@ end
     @testset "plot_hourly_dust" begin
         # Delhi
         plt = plot_hourly_dust(lat = 28.6519, long = 77.2315, days = 4)
+        @test sizeof(plt) > 0
+    end
+
+    @testset "plot_hourly_haze" begin
+        # Cairo
+        plt = plot_hourly_haze(lat = 30.0444, long = 31.2357, days = 2)
         @test sizeof(plt) > 0
     end
 

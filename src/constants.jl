@@ -15,7 +15,8 @@ const HOURLY_FORECAST = ["temperature_2m",
 
 const HOURLY_AIR_QUALITY = ["pm10",
                             "pm2_5",
-                            "dust"]
+                            "dust",
+                            "aerosol_optical_depth"]
 
 const DF_CITIES = url_to_df("https://raw.githubusercontent.com/vnegi10/GeoNames_analysis/master/cities500_lat_long.csv")
 
