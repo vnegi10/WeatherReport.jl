@@ -20,10 +20,10 @@ function generate_dict(city::String, i_row::Int64)
 
 end
 
-function get_forecast(city::String, i_row::Int64, param_type::String)
+function get_forecast(input::CityInput)
 
-    params_dict = generate_dict(city, i_row)
-    params = params_dict[param_type]
+    params_dict = generate_dict(input.city, input.i_row)
+    params = params_dict[input.forecast_type]
     current_dict = get_api_response(join(params), URL_FORECAST)
 
     return current_dict
