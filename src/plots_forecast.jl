@@ -162,7 +162,7 @@ julia> show_current("Lisbon")
 """
 function show_current(city::String, i_row::Int64 = 1)
 
-    current_dict = get_current(city, i_row)
+    current_dict = get_forecast(city, i_row, "current")
 
     timezone     = current_dict["timezone"]
     timezone_abb = current_dict["timezone_abbreviation"]
@@ -227,7 +227,7 @@ Europe/Amsterdam CET
 """
 function show_daily(city::String, i_row::Int64 = 1)
 
-    daily_dict  = get_daily(city, i_row)
+    daily_dict  = get_forecast(city, i_row, "daily")
 
     timezone     = daily_dict["timezone"]
     timezone_abb = daily_dict["timezone_abbreviation"]
