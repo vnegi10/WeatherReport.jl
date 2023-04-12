@@ -1,6 +1,7 @@
 @testset "Check if current weather conditions are available" begin
 
-    current_dict = WeatherReport.get_current("Tokyo", 1)
+    input = WeatherReport.CityInput("Tokyo", "current", 1)
+    current_dict = WeatherReport.get_forecast(input)
 
     @test current_dict["latitude"] ≈ 35.7
     @test isapprox(current_dict["longitude"], 139.688, atol = 1e-2)
@@ -12,7 +13,8 @@ end
 
 @testset "Check if daily weather conditions are available" begin
 
-    daily_dict =  WeatherReport.get_daily("Madrid", 2)
+    input = WeatherReport.CityInput("Madrid", "daily", 2)
+    daily_dict = WeatherReport.get_forecast(input)
 
     @test daily_dict["latitude"] ≈ 40.42
     @test isapprox(daily_dict["longitude"], -3.7, atol = 1e-2)
