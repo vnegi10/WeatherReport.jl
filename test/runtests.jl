@@ -1,6 +1,8 @@
-using Test, Suppressor, WeatherReport
+using ReTestItems, WeatherReport
 
-errors = false
+@time runtests(WeatherReport)
+
+#=errors = false
 all_tests = false
 
 # Run all tests when no arguments or "all" is specified
@@ -47,6 +49,6 @@ end
 
 if errors
     throw("Some tests have failed! Check the results summary above.")
-end
+end=#
 
 ###################################################

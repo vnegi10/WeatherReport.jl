@@ -1,6 +1,8 @@
 # Run tests on plotting functions for weather forecast API
 
-@testset verbose = true "Plotting with default selection" begin
+@testitem "Plotting with default selection" begin
+
+    using Suppressor
 
     @testset "plot_hourly_temp" begin
         plt = plot_hourly_temp("Veldhoven", days = 3)
@@ -44,7 +46,9 @@
 
 end
 
-@testset verbose = true "Plotting with multiple matches" begin
+@testitem "Plotting with multiple matches" begin
+
+    using Suppressor
 
     @testset "plot_hourly_temp" begin
         plt = plot_hourly_temp("Madrid", 2, days = 3)
@@ -112,7 +116,7 @@ end
 
 end
 
-@testset verbose = true "Plotting with lat/long input" begin
+@testitem "Plotting with lat/long input" begin
 
     @testset "plot_hourly_temp" begin
         # Denver
@@ -152,7 +156,9 @@ end
 
 end
 
-@testset verbose = true "Self location" begin
+@testitem "Self location" begin
+
+    using Suppressor
 
     @testset "where_am_i" begin
         result = @capture_out where_am_i()

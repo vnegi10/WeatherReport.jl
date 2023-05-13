@@ -1,4 +1,4 @@
-@testset "Check if current weather conditions are available" begin
+@testitem "Check if current weather conditions are available" begin
 
     input = WeatherReport.CityInput("Tokyo", "current", 1)
     current_dict = WeatherReport.get_forecast(input)
@@ -11,7 +11,7 @@
 
 end
 
-@testset "Check if daily weather conditions are available" begin
+@testitem "Check if daily weather conditions are available" begin
 
     input = WeatherReport.CityInput("Madrid", "daily", 2)
     daily_dict = WeatherReport.get_forecast(input)
