@@ -6,7 +6,7 @@ num_workers = 1
 if num_threads == 1
     @info "Using only 1 thread, try starting the Julia session with more threads!"
 else
-    # Each worker uses two threads by default
+    # Each worker uses two threads, set via nworker_threads
     num_workers = floor(Int, num_threads/2)
 end
 
@@ -19,7 +19,9 @@ if isempty(ARGS) || "all" in ARGS
 end
 
 if all_tests
-    @time WeatherReport.execute_test(runtests(WeatherReport, nworkers = num_workers))
+    @time WeatherReport.execute_test(runtests(WeatherReport,
+                                              nworkers = num_workers,
+                                              nworker_threads = 2))
 else
     @time for find_match in ARGS
         WeatherReport.execute_test(runtests(WeatherReport;
