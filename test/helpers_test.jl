@@ -1,4 +1,4 @@
-@testset "Check if cities database is accessible" begin
+@testitem "Check if cities database is accessible" begin
 
     url = "https://raw.githubusercontent.com/vnegi10/GeoNames_analysis/master/cities500_lat_long.csv"
 

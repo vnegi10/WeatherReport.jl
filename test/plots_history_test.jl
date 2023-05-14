@@ -1,6 +1,6 @@
 # Run tests on plotting functions for historical data API
 
-@testset verbose = true "Plotting with default selection" begin
+@testitem "Plotting historical data with default selection" begin
 
     @testset "plot_hist_temp" begin
         plt = plot_hist_temp("Veldhoven",
@@ -46,7 +46,7 @@
 
 end
 
-@testset verbose = true "Plotting with multiple matches" begin
+@testitem "Plotting historical data with multiple matches" begin
 
     @testset "plot_hist_temp" begin
         plt = plot_hist_temp("Madrid",
@@ -134,7 +134,7 @@ end
 
 end
 
-@testset verbose = true "Plotting with lat/long input" begin
+@testitem "Plotting historical data with lat/long input" begin
 
     @testset "plot_hist_temp" begin
         # Denver

@@ -1,6 +1,6 @@
 # Run tests on plotting functions for air quality API
 
-@testset verbose = true "Plotting with default selection" begin
+@testitem "Plotting hourly air quality data with default selection" begin
 
     @testset "plot_hourly_pm" begin
         plt = plot_hourly_pm("Veldhoven", days = 3)
@@ -19,7 +19,7 @@
 
 end
 
-@testset verbose = true "Plotting with multiple matches" begin
+@testitem "Plotting hourly air quality data with multiple matches" begin
 
     @testset "plot_hourly_pm" begin
         plt = plot_hourly_pm("Madrid", 2, days = 3)
@@ -47,7 +47,7 @@ end
 
 end
 
-@testset verbose = true "Plotting with lat/long input" begin
+@testitem "Plotting hourly air quality data with lat/long input" begin
 
     @testset "plot_hourly_pm" begin
         # Denver

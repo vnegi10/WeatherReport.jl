@@ -387,6 +387,19 @@ function get_hist_data(variable, city, i_row, lat, long, start_date, end_date)
 
 end
 
+# Execute test in a try-catch block
+function execute_test(call_func)
+
+    try
+        call_func
+    catch e
+        global errors = true
+        showerror(stdout, e, backtrace())
+        println()
+    end
+
+end
+
 #=function get_cities_lat_long(file::String)
 
 	all_lines  = readlines(file)

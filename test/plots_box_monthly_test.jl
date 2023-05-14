@@ -1,6 +1,6 @@
 # Run tests on monthly plotting functions (box plots) for historical data API
 
-@testset verbose = true "Plotting with default selection" begin
+@testitem "Box plots of monthly data with default selection" begin
 
     @testset "plot_box_temp" begin
         plt = plot_box_temp("Veldhoven",
@@ -40,7 +40,7 @@
 
 end
 
-@testset verbose = true "Plotting with multiple matches" begin
+@testitem "Box plots of monthly data with multiple matches" begin
 
     @testset "plot_box_temp" begin
         plt = plot_box_temp("Madrid",
@@ -116,7 +116,7 @@ end
 
 end
 
-@testset verbose = true "Plotting with lat/long input" begin
+@testitem "Box plots of monthly data with lat/long input" begin
 
     @testset "plot_box_temp" begin
         # Denver
