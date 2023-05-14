@@ -1,6 +1,6 @@
 # Run tests on plotting functions for weather forecast API
 
-@testitem "Plotting with default selection" begin
+@testitem "Plotting hourly forecast data with default selection" begin
 
     using Suppressor
 
@@ -46,7 +46,7 @@
 
 end
 
-@testitem "Plotting with multiple matches" begin
+@testitem "Plotting hourly forecast data with multiple matches" begin
 
     using Suppressor
 
@@ -116,7 +116,7 @@ end
 
 end
 
-@testitem "Plotting with lat/long input" begin
+@testitem "Plotting hourly forecast data with lat/long input" begin
 
     @testset "plot_hourly_temp" begin
         # Denver

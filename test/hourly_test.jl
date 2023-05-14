@@ -1,4 +1,4 @@
-@testitem "Check if temperature forecast is available" begin
+@testitem "Check if hourly temperature forecast is available" begin
 
     for city in ["Eindhoven", "Veldhoven", "Groningen"]
 
@@ -32,7 +32,7 @@
 
 end
 
-@testitem "Check if rain forecast is available" begin
+@testitem "Check if hourly rain forecast is available" begin
 
     for city in ["Eindhoven", "Veldhoven", "Groningen"]
 
@@ -66,7 +66,7 @@ end
 
 end
 
-@testitem "Check if snow forecast is available" begin
+@testitem "Check if hourly snow forecast is available" begin
 
     for city in ["Oslo", "Tromso", "Trondheim"]
 

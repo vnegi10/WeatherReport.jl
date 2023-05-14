@@ -1,6 +1,6 @@
 # Run tests on yearly plotting functions (box plots) for historical data API
 
-@testitem "Plotting with default selection" begin
+@testitem "Box plots of yearly data with default selection" begin
 
     @testset "compare_box_temp" begin
         plt = compare_box_temp("Veldhoven",
@@ -46,7 +46,7 @@
 
 end
 
-@testitem "Plotting with multiple matches" begin
+@testitem "Box plots of yearly data with multiple matches" begin
 
     @testset "compare_box_temp" begin
         plt = compare_box_temp("Madrid",
@@ -134,7 +134,7 @@ end
 
 end
 
-@testitem "Plotting with lat/long input" begin
+@testitem "Box plots of yearly data with lat/long input" begin
 
     @testset "compare_box_temp" begin
         # Denver
