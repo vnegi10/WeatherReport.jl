@@ -7,44 +7,29 @@ function export_to_sqlite(city::String = "",
                           start_date::String = "2023-01-01",
                           end_date::String = "2023-01-10")
 
-    # Vector of DataFrames to store all the data
-    df_all = DataFrame[]
+    df_all = collect_all_data(city,
+                              i_row,
+                              lat,
+                              long,
+                              start_date,
+                              end_date)
 
-    # Temp. data uses a different function, so we add it first
-    # to df_all
-    df_temp = DataFrame()
+    save_dir = joinpath(@__DIR__, "..", "export")
 
-    try
-        df_temp, _ = get_hist_temp_data(city,
-                                        i_row,
-                                        lat,
-                                        long,
-                                        start_date,
-                                        end_date)
-    catch
-        @info "Unable to fetch historical data for hourly temperature"
+    if ~isdir(save_dir)
+        mkdir(save_dir)
     end
 
-    push!(df_all, df_temp)
-
-    variables = ["rain",
-                 "snowfall",
-                 "relativehumidity_2m",
-                 "windspeed_10m",
-                 "shortwave_radiation"]
-
-    for variable in variables
-        df_data = try_catch_hist_data(variable,
-                                      city,
-                                      i_row,
-                                      lat,
-                                      long,
-                                      start_date,
-                                      end_date)
-
-        push!(df_all, df_data)
+    db_name = ""
+    if ~isempty(city)
+        db_name = "$(city)_all.sqlite"
+    else
+        db_name = "$(lat)_$(long)_all.sqlite"
     end
 
-    return df_all
+    for df_input in df_all
+        table_name = names(df_input)[2]
+        save_to_db(df_input, joinpath(save_dir, db_name), table_name)
+    end
 
 end

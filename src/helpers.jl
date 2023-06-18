@@ -450,6 +450,70 @@ function try_catch_hist_data(variable, city, i_row, lat, long, start_date, end_d
 
 end
 
+function collect_all_data(city, i_row, lat, long, start_date, end_date)
+
+    # Vector of DataFrames to store all the data
+    df_all = DataFrame[]
+
+    # Temp. data uses a different function, so we add it first
+    # to df_all
+    df_temp = DataFrame()
+
+    try
+        df_temp, _ = get_hist_temp_data(city,
+                                        i_row,
+                                        lat,
+                                        long,
+                                        start_date,
+                                        end_date)
+    catch
+        @info "Unable to fetch historical data for hourly temperature"
+    end
+
+    rename!(df_temp, Dict(:FORECAST => "temperature_2m"))
+    push!(df_all, df_temp)
+
+    variables = ["rain",
+                 "snowfall",
+                 "relativehumidity_2m",
+                 "windspeed_10m",
+                 "shortwave_radiation"]
+
+    for variable in variables
+        df_data = try_catch_hist_data(variable,
+                                      city,
+                                      i_row,
+                                      lat,
+                                      long,
+                                      start_date,
+                                      end_date)
+
+        if ~isempty(df_data)
+            rename!(df_data, Dict(:FORECAST => "$(variable)"))
+        end
+
+        push!(df_all, df_data)
+    end
+
+    return df_all
+
+end
+
+function save_to_db(df_input::DataFrame, db_name::String, table_name::String)
+
+    db_save = SQLite.DB(db_name)
+
+    SQLite.load!(df_input,
+                 db_save,
+                 table_name;
+                 temp = false,
+                 ifnotexists = false,
+                 replace = false,
+                 on_conflict = nothing,
+                 analyze = false)
+
+end
+
 # Execute test in a try-catch block
 function execute_test(call_func)
 

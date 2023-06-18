@@ -33,6 +33,7 @@ using HTTP
 using JSON
 using PrettyTables
 using UnicodePlots
+using SQLite
 
 include("types.jl")
 include("request.jl")
