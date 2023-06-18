@@ -495,6 +495,13 @@ function collect_all_data(city, i_row, lat, long, start_date, end_date)
         push!(df_all, df_data)
     end
 
+    # Convert DateTime to String format for SQLite database since DateTime
+    # ends up being stored as a blob
+    for df_each in df_all
+        df_each[!, :TIME] = map(x -> Dates.format(x, "yyyy-mm-dd HH:MM:SS"),
+                                df_each[!, :TIME])
+    end
+
     return df_all
 
 end
