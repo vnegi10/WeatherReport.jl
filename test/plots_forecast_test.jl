@@ -30,7 +30,7 @@
     end
 
     @testset "plot_hourly_solar" begin
-        plt = plot_hourly_solar("Canberra", days = 3)
+        plt = plot_hourly_solar("Amsterdam", days = 3)
         @test sizeof(plt) > 0
     end
 
@@ -94,7 +94,7 @@ end
         plt = plot_hourly_solar("Madrid", 1, days = 5)
         @test sizeof(plt) > 0
 
-        plt = plot_hourly_solar("Madrid", 3, days = 5)
+        plt = plot_hourly_solar("Madrid", 2, days = 5)
         @test sizeof(plt) > 0
     end
 
@@ -149,8 +149,8 @@ end
     end
 
     @testset "plot_hourly_solar" begin
-        # Chennai
-        plt = plot_hourly_solar(lat = 13.0878, long = 80.2785, days = 1)
+        # Copenhagen
+        plt = plot_hourly_solar(lat = 55.6759, long = 12.5655, days = 1)
         @test sizeof(plt) > 0
     end
 
