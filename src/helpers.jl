@@ -436,6 +436,20 @@ function get_hist_temp_data(city, i_row, lat, long, start_date, end_date)
 
 end
 
+function try_catch_hist_data(variable, city, i_row, lat, long, start_date, end_date)
+
+    df_data = DataFrame()
+
+    try
+        df_data, _ = get_hist_data(variable, city, i_row, lat, long, start_date, end_date)
+    catch
+        @info "Unable to fetch historical data for $(variable)"
+    end
+
+    return df_data
+
+end
+
 # Execute test in a try-catch block
 function execute_test(call_func)
 
