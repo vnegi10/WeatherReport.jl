@@ -11,6 +11,9 @@ terminal. Your location is not tracked, therefore, you need to specify
 a city/town/village or latitude/longitude yourself. Most major locations
 (population > 500) around the world are supported.
 
+Historical weather data can now be saved to a SQLite database. Check the help text for
+`export_to_sqlite` function.
+
 ## How to install?
 
 * Press ']' to enter Pkg prompt
