@@ -23,6 +23,9 @@ export plot_box_humidity, plot_box_windspeed, plot_box_solar
 export compare_box_temp, compare_box_rain, compare_box_snow
 export compare_box_humidity, compare_box_windspeed, compare_box_solar
 
+# Export data
+export export_to_sqlite
+
 using CSV
 using DataFrames
 using Dates
@@ -30,6 +33,7 @@ using HTTP
 using JSON
 using PrettyTables
 using UnicodePlots
+using SQLite
 
 include("types.jl")
 include("request.jl")
@@ -44,5 +48,7 @@ include("plots_air_quality.jl")
 include("plots_history.jl")
 include("plots_box_monthly.jl")
 include("plots_box_yearly.jl")
+
+include("export_history.jl")
 
 end # module WeatherReport

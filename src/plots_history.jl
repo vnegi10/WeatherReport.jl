@@ -55,48 +55,12 @@ function plot_hist_temp(city::String = "",
                         start_date::String = "2023-01-01",
                         end_date::String = "2023-01-10")
 
-    check_dates(start_date, end_date)
-
-    df_temp, df_app_temp = [DataFrame() for i = 1:2]
-    time_zone = ""
-
-    if ~isempty(city)
-        input = CityHistInput(city,
-                              "temperature_2m",
-                              i_row,
-                              start_date,
-                              end_date)
-        results = get_hourly_forecast(input)
-
-        df_temp, location = results[1], results[2]
-        time_zone = location.timezone
-
-        input.forecast_type = "apparent_temperature"
-        df_app_temp = get_hourly_forecast(input)[1]
-    else
-        input = LocationHistInput("temperature_2m",
-                                  lat,
-                                  long,
-                                  start_date,
-                                  end_date)
-        results = get_hourly_forecast(input)
-
-        df_temp, time_zone = results[1], results[2]
-
-        input.forecast_type = "apparent_temperature"
-        df_app_temp = get_hourly_forecast(input)[1]
-    end
-
-    try
-        insertcols!(df_temp,
-                    ncol(df_temp)+1,
-                    :APP_TEMP => df_app_temp[!, :FORECAST])
-    catch
-        @info "Unable to add apparent temperature, value set to zeros!"
-        insertcols!(df_temp,
-                    ncol(df_temp)+1,
-                    :APP_TEMP => fill(0.0, nrow(df_temp)))
-    end
+    df_temp, time_zone = get_hist_temp_data(city,
+                                            i_row,
+                                            lat,
+                                            long,
+                                            start_date,
+                                            end_date)
 
     # Get min, max air temp to show on the plot
     T_min, T_max = minimum(df_temp[!, :FORECAST]), maximum(df_temp[!, :FORECAST])

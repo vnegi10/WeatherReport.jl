@@ -387,6 +387,140 @@ function get_hist_data(variable, city, i_row, lat, long, start_date, end_date)
 
 end
 
+function get_hist_temp_data(city, i_row, lat, long, start_date, end_date)
+
+    check_dates(start_date, end_date)
+
+    df_temp, df_app_temp = [DataFrame() for i = 1:2]
+    time_zone = ""
+
+    if ~isempty(city)
+        input = CityHistInput(city,
+                              "temperature_2m",
+                              i_row,
+                              start_date,
+                              end_date)
+        results = get_hourly_forecast(input)
+
+        df_temp, location = results[1], results[2]
+        time_zone = location.timezone
+
+        input.forecast_type = "apparent_temperature"
+        df_app_temp = get_hourly_forecast(input)[1]
+    else
+        input = LocationHistInput("temperature_2m",
+                                  lat,
+                                  long,
+                                  start_date,
+                                  end_date)
+        results = get_hourly_forecast(input)
+
+        df_temp, time_zone = results[1], results[2]
+
+        input.forecast_type = "apparent_temperature"
+        df_app_temp = get_hourly_forecast(input)[1]
+    end
+
+    try
+        insertcols!(df_temp,
+                    ncol(df_temp)+1,
+                    :APP_TEMP => df_app_temp[!, :FORECAST])
+    catch
+        @info "Unable to add apparent temperature, value set to zeros!"
+        insertcols!(df_temp,
+                    ncol(df_temp)+1,
+                    :APP_TEMP => fill(0.0, nrow(df_temp)))
+    end
+
+    return df_temp, time_zone
+
+end
+
+function try_catch_hist_data(variable, city, i_row, lat, long, start_date, end_date)
+
+    df_data = DataFrame()
+
+    try
+        df_data, _ = get_hist_data(variable, city, i_row, lat, long, start_date, end_date)
+    catch
+        @info "Unable to fetch historical data for $(variable)"
+    end
+
+    return df_data
+
+end
+
+function collect_all_data(city, i_row, lat, long, start_date, end_date)
+
+    # Vector of DataFrames to store all the data
+    df_all = DataFrame[]
+
+    # Temp. data uses a different function, so we add it first
+    # to df_all
+    df_temp = DataFrame()
+
+    try
+        df_temp, _ = get_hist_temp_data(city,
+                                        i_row,
+                                        lat,
+                                        long,
+                                        start_date,
+                                        end_date)
+    catch
+        @info "Unable to fetch historical data for hourly temperature"
+    end
+
+    rename!(df_temp, Dict(:FORECAST => "temperature_2m"))
+    push!(df_all, df_temp)
+
+    variables = ["rain",
+                 "snowfall",
+                 "relativehumidity_2m",
+                 "windspeed_10m",
+                 "shortwave_radiation"]
+
+    for variable in variables
+        df_data = try_catch_hist_data(variable,
+                                      city,
+                                      i_row,
+                                      lat,
+                                      long,
+                                      start_date,
+                                      end_date)
+
+        if ~isempty(df_data)
+            rename!(df_data, Dict(:FORECAST => "$(variable)"))
+        end
+
+        push!(df_all, df_data)
+    end
+
+    # Convert DateTime to String format for SQLite database since DateTime
+    # ends up being stored as a blob
+    for df_each in df_all
+        df_each[!, :TIME] = map(x -> Dates.format(x, "yyyy-mm-dd HH:MM:SS"),
+                                df_each[!, :TIME])
+    end
+
+    return df_all
+
+end
+
+function save_to_db(df_input::DataFrame, db_name::String, table_name::String)
+
+    db_save = SQLite.DB(db_name)
+
+    SQLite.load!(df_input,
+                 db_save,
+                 table_name;
+                 temp = false,
+                 ifnotexists = false,
+                 replace = false,
+                 on_conflict = nothing,
+                 analyze = false)
+
+end
+
 # Execute test in a try-catch block
 function execute_test(call_func)
 
