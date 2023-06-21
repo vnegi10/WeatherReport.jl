@@ -1,4 +1,6 @@
 [deps]
+DataFrames = "a93c6f00-e57d-5684-b7b6-d8193f3e46c0"
 ReTestItems = "817f1d60-ba6b-4fd5-9520-3cf149f6a823"
+SQLite = "0aa819cd-b072-5ff4-a722-6bc24af294d9"
 Suppressor = "fd094767-a336-5f1f-9728-57cf17d0bbfb"
 Test = "8dfed614-e22c-5e08-85e1-65c5234f0b40"
