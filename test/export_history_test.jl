@@ -6,11 +6,17 @@
 
     using WeatherReport, SQLite, DataFrames
 
+    db_path = joinpath(@__DIR__, "..", "export", "Veldhoven_all.sqlite")
+
+    # Remove existing database otherwise new data gets appended to it
+    if isfile(db_path)
+        rm(db_path)
+    end
+
     export_to_sqlite("Veldhoven",
                       start_date = "2022-01-01",
                       end_date = "2022-01-31")
-
-    db_path = joinpath(@__DIR__, "..", "export", "Veldhoven_all.sqlite")
+    
     db = SQLite.DB(db_path)
 
     df_snow = DBInterface.execute(db, "SELECT * FROM snowfall") |> DataFrame
