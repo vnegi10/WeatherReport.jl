@@ -33,7 +33,7 @@ function csv_to_df(path::String)
     try
         df_cities = CSV.read(path, DataFrame)
     catch
-        error("Unable to load cities database, check if $(path) exists!")
+        error("Unable to load cities database, check if $(path) is valid!")
     end
 	
     return df_cities
