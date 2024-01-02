@@ -19,6 +19,20 @@ Historical weather data can now be saved to a SQLite database. Check the help te
 * Press ']' to enter Pkg prompt
 * add WeatherReport
 
+## !!! Attention !!!
+In case you see the below error, please update to version `0.19.0` or above.
+Issue can be tracked [here.](https://github.com/vnegi10/WeatherReport.jl/issues/70)
+
+```julia
+julia> @time using WeatherReport
+ERROR: LoadError: Unable to load cities database, check if https://raw.githubusercontent.com/vnegi10/GeoNames_analysis/master/cities500_lat_long.csv is accessible!
+Stacktrace:
+  [1] error(s::String)
+    @ Base ./error.jl:35
+  [2] url_to_df(url::String)
+    @ WeatherReport ~/.julia/packages/WeatherReport/4QTIq/src/helpers.jl:38
+```
+
 ## Data credits
 
 Weather data is obtained from [Open-Meteo](https://open-meteo.com/en/docs) API,
