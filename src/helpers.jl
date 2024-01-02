@@ -31,7 +31,7 @@ function csv_to_df(path::String)
     df_cities = DataFrame()
 
     try
-        df_cities = CSV.Read(path, DataFrame)
+        df_cities = CSV.read(path, DataFrame)
     catch
         error("Unable to load cities database, check if $(path) exists!")
     end
