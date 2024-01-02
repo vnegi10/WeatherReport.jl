@@ -26,16 +26,14 @@ function fetch_lat_long(city::String, i_row::Int64)
 	
 end
 
-function url_to_df(url::String)
+function csv_to_df(path::String)
 
     df_cities = DataFrame()
 
     try
-        df_cities = CSV.File(HTTP.get(url,
-                             require_ssl_verification = false).body,
-                             header = 1) |> DataFrame
+        df_cities = CSV.read(path, DataFrame)
     catch
-        error("Unable to load cities database, check if $(url) is accessible!")
+        error("Unable to load cities database, check if $(path) is valid!")
     end
 	
     return df_cities

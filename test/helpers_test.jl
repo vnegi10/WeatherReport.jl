@@ -1,8 +1,11 @@
-@testitem "Check if cities database is accessible" begin
+@testitem "Check if cities database is available" begin
 
-    url = "https://raw.githubusercontent.com/vnegi10/GeoNames_analysis/master/cities500_lat_long.csv"
+    path = joinpath(@__DIR__,
+                    "..",
+                    "database",
+                    "cities500_lat_long.csv")
 
-    df_cities = WeatherReport.url_to_df(url)
+    df_cities = WeatherReport.csv_to_df(path)
     rows, cols = size(df_cities)
 
     @test cols == 4

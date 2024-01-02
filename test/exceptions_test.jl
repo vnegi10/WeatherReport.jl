@@ -4,12 +4,15 @@
 
 end
 
-@testitem "Check if expected error appears when URL is not found" begin
+@testitem "Check if expected error appears when path is invalid" begin
 
-    # Incorrect URL
-    url = "https://raw.githubusercontent.com/dummy10/GeoNames_analysis/master/cities500_lat_long.csv"
+    # Incorrect path
+    invalid_path = joinpath(@__DIR__,
+                            "..",
+                            "dummy",
+                            "cities500_lat_long.csv")
 
-    @test_throws ErrorException("Unable to load cities database, check if $(url) is accessible!") WeatherReport.url_to_df(url)
+    @test_throws ErrorException("Unable to load cities database, check if $(invalid_path) is valid!") WeatherReport.csv_to_df(invalid_path)
 
 end
 
