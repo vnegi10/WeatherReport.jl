@@ -18,7 +18,10 @@ const HOURLY_AIR_QUALITY = ["pm10",
                             "dust",
                             "aerosol_optical_depth"]
 
-const DF_CITIES = url_to_df("https://raw.githubusercontent.com/vnegi10/GeoNames_analysis/master/cities500_lat_long.csv")
+const DF_CITIES = joinpath(@__DIR__,
+                           "..",
+                           "database",
+                           "cities500_lat_long.csv") |> csv_to_df
 
 const ATTRIBUTION = "[Weather data by Open-Meteo.com]"
 
