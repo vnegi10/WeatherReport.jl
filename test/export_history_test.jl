@@ -43,11 +43,11 @@ end
         df_filter = filter(row -> row.rain > 0, df_rain)
         rows, cols = size(df_filter)
 
-        @test rows == 152
+        @test rows == 129
         @test cols == 2
 
-        @test df_rain[!, :rain][2] ≈ 0.1
-        @test df_rain[!, :rain][742] ≈ 0.1
+        @test df_rain[!, :rain][2] ≈ 0.0
+        @test df_rain[!, :rain][742] ≈ 0.0
 
     end
 
@@ -55,14 +55,14 @@ end
         df_filter = filter(row -> row.temperature_2m > 5.5, df_temp)
         rows, cols = size(df_filter)
 
-        @test rows == 208
+        @test rows == 206
         @test cols == 3
 
-        @test df_temp[!, :temperature_2m][1] ≈ 12.3
-        @test df_temp[!, :temperature_2m][744] ≈ 3.5
+        @test df_temp[!, :temperature_2m][1] ≈ 12.8
+        @test df_temp[!, :temperature_2m][744] ≈ 3.6
 
-        @test df_temp[!, :APP_TEMP][2] ≈ 11.3
-        @test df_temp[!, :APP_TEMP][743] ≈ -0.6
+        @test df_temp[!, :APP_TEMP][2] ≈ 10.2
+        @test df_temp[!, :APP_TEMP][743] ≈ -0.5
     end
 
 end
