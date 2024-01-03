@@ -159,10 +159,17 @@ end
 
 function dict_to_df(response_dict::Dict, forecast_type::String)
 
-    TIME     = map(x -> parse(DateTime, x),
-                   response_dict["hourly"]["time"])
-    FORECAST = map(x -> convert(Float64, x),
-                   response_dict["hourly"][forecast_type])
+    TIME = map(x -> parse(DateTime, x),
+               response_dict["hourly"]["time"])
+
+    # Filter out absent data marked as nothing
+    all_values = response_dict["hourly"][forecast_type]
+    valid_values = filter(x -> !isnothing(x), all_values)
+
+    FORECAST = map(x -> convert(Float64, x), valid_values)
+
+    # Make sure both columns are of equal length
+    TIME = TIME[1:length(FORECAST)]
 
     df_hourly = DataFrame(TIME = TIME,
                           FORECAST = FORECAST)
