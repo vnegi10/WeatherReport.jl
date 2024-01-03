@@ -42,7 +42,21 @@ end
 
 function fix_input_name(input::String)
 
-	return [uppercase(input[1]), lowercase(input[2:end])] |> join
+    # Check if there is a space in the name, e.g. "The Hague"
+    input_parts = split(input, " ")
+
+    if length(input_parts) == 1
+        fixed_name = [uppercase(input[1]),
+                      lowercase(input[2:end])] |> join
+    else
+        for (i, value) in enumerate(input_parts)
+            input_parts[i] = [uppercase(value[1]),
+                              lowercase(value[2:end])] |> join
+        end
+        fixed_name = join(input_parts, " ")
+    end
+
+    return fixed_name
 
 end
 
