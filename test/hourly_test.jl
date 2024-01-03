@@ -34,7 +34,7 @@ end
 
 @testitem "Check if hourly rain forecast is available" begin
 
-    for city in ["Eindhoven", "Veldhoven", "Groningen"]
+    for city in ["Veldhoven", "Groningen", "The Hague"]
 
         input = WeatherReport.CityInput(city, "rain", 1)
         results = WeatherReport.get_hourly_forecast(input)
