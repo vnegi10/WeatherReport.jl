@@ -20,7 +20,7 @@ Historical weather data can now be saved to a SQLite database. Check the help te
 * add WeatherReport
 
 ## !!! Attention !!!
-In case you see the below error, please update to version `0.19.0` or above.
+- In case you see the below error, please update to version `0.19.0` or above.
 Issue can be tracked [here.](https://github.com/vnegi10/WeatherReport.jl/issues/70)
 
 ```julia
@@ -31,6 +31,20 @@ Stacktrace:
     @ Base ./error.jl:35
   [2] url_to_df(url::String)
     @ WeatherReport ~/.julia/packages/WeatherReport/4QTIq/src/helpers.jl:38
+```
+
+- When the provided city name is not found in the internal database, a message will
+be displayed showing the closest match.
+
+```julia
+julia> plot_hourly_temp("amsteldam", days = 5)
+------------------------------------------------
+[ Info: Amsteldam not found, did you mean Amsterdam?
+------------------------------------------------
+ERROR: Coordinates for city not found!
+Stacktrace:
+ [1] error(s::String)
+   @ Base ./error.jl:35
 ```
 
 ## Data credits
