@@ -1,7 +1,7 @@
 name = "WeatherReport"
 uuid = "3c954167-71e4-4212-9688-830d6b8fcbc2"
 authors = ["Vikas Negi <vikas.negi10@gmail.com>"]
-version = "0.19.2"
+version = "0.20.0"
 
 [deps]
 CSV = "336ed68f-0bac-5ca0-87d4-7b16caf5d00b"
@@ -11,6 +11,7 @@ HTTP = "cd3eb016-35fb-5094-929b-558a96fad6f3"
 JSON = "682c06a0-de6a-54ab-a142-c8b1cf79cde6"
 PrettyTables = "08abe8d2-0d0c-5749-adfa-8a2ac140af0d"
 SQLite = "0aa819cd-b072-5ff4-a722-6bc24af294d9"
+StringDistances = "88034a9c-02f8-509d-84a9-84ec65e18404"
 UnicodePlots = "b8865327-cd53-5732-bb35-84acbb429228"
 
 [compat]
@@ -19,6 +20,7 @@ DataFrames = "1.5"
 HTTP = "1.7"
 JSON = "0.21"
 PrettyTables = "2.2"
-UnicodePlots = "3.4"
 SQLite = "1.6"
+StringDistances = "0.11"
+UnicodePlots = "3.4"
 julia = "1.6"

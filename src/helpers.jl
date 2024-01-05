@@ -15,6 +15,16 @@ function fetch_lat_long(city::String, i_row::Int64)
     timezone  = ""
 
     if isempty(df_city)
+        # Find closest match to inform the user
+        find_match = closest_match(city)
+
+        # Add lines to highlight the message
+        println("------------------------------------------------")
+        @info("$(city) not found, did you mean $(find_match[1])?")
+        println("------------------------------------------------")
+
+        # Better to throw an error and let the user select the closest match if
+        # needed
         error("Coordinates for city not found!")
     else
         lat  = df_city[!, :LATITUDE][i_row]
@@ -24,6 +34,18 @@ function fetch_lat_long(city::String, i_row::Int64)
 
     return GeogCoord(lat, long, timezone)
 	
+end
+
+function closest_match(city::String)
+
+    all_valid_cities = filter(x -> ~ismissing(x), DF_CITIES.CITY)
+
+    # https://en.wikipedia.org/wiki/Levenshtein_distance
+    dist = Levenshtein()
+    find_match = findnearest(city, all_valid_cities, dist)
+
+    return find_match
+
 end
 
 function csv_to_df(path::String)

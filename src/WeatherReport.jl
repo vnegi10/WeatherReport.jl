@@ -34,6 +34,7 @@ using JSON
 using PrettyTables
 using UnicodePlots
 using SQLite
+using StringDistances
 
 include("types.jl")
 include("request.jl")
