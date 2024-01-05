@@ -12,3 +12,10 @@
     @test rows == 199564
 
 end
+
+@testitem "Verify if closest match for an incorrect city name is found" begin
+
+    @test WeatherReport.closest_match("Halwani")[1] == "Haldwani"
+    @test WeatherReport.closest_match("amsteldam")[1] == "Amsterdam"
+
+end
