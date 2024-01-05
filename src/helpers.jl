@@ -116,6 +116,11 @@ function df_to_plot(city::String,
                     color::Symbol,
                     time_zone::String)
 
+    # Get city based on user preference
+    if isempty(city)
+        city = get_city()
+    end
+
     # Filter DataFrame to start from current hour
     df_data = from_current_time(df_data)
 
@@ -124,6 +129,8 @@ function df_to_plot(city::String,
 
     if isempty(city)
         city = ["lat:", "$(lat)", ", ", "long:", "$(long)"] |> join
+    else
+        city = fix_input_name(city)
     end
 
     plt = lineplot(
@@ -159,8 +166,15 @@ function df_to_plot(city::String,
                     color::Symbol,
                     time_zone::String)
 
+    # Get city based on user preference
+    if isempty(city)
+        city = get_city()
+    end
+
     if isempty(city)
         city = ["lat:", "$(lat)", ", ", "long:", "$(long)"] |> join
+    else
+        city = fix_input_name(city)
     end
 
     plt = lineplot(
@@ -390,6 +404,11 @@ function get_hourly_data(variable, city, i_row, lat, long)
 
     df_data = DataFrame()
     time_zone = ""
+
+    # Get city based on user preference
+    if isempty(city)
+        city = get_city()
+    end
 
     if ~isempty(city)
         input = CityInput(city, variable, i_row)
