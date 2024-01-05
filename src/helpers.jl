@@ -1,3 +1,11 @@
+function set_city(city::String)
+    @set_preferences!("city" => city)
+end
+
+function get_city()
+    return @load_preference("city", default = "")
+end
+
 function fetch_lat_long(city::String, i_row::Int64)
 
 	city = fix_input_name(city)

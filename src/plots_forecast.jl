@@ -55,6 +55,9 @@ function plot_hourly_temp(city::String = "",
     df_temp, df_app_temp = [DataFrame() for i = 1:2]
     time_zone = ""
 
+    # Get city based on user preference
+    city = get_city()
+
     if ~isempty(city)
         input = CityInput(city, "temperature_2m", i_row)
         results = get_hourly_forecast(input)
