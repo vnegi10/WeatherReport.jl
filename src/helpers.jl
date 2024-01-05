@@ -26,6 +26,18 @@ function fetch_lat_long(city::String, i_row::Int64)
 	
 end
 
+function closest_match(city::String)
+
+    all_valid_cities = filter(x -> ~ismissing(x), DF_CITIES.CITY)
+
+    # https://en.wikipedia.org/wiki/Levenshtein_distance
+    dist = Levenshtein()
+    find_match = findnearest(city, all_valid_cities, dist)
+
+    return find_match
+
+end
+
 function csv_to_df(path::String)
 
     df_cities = DataFrame()
