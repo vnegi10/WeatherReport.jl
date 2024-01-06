@@ -1,5 +1,6 @@
 function set_city(city::String)
     @set_preferences!("city" => city)
+    @info "$(city) has been set as the preferred location"
 end
 
 function get_city()
