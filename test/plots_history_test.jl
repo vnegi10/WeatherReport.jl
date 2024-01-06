@@ -191,3 +191,14 @@ end
     end
 
 end
+
+@testitem "Plotting historical data with user preference" begin
+
+    @testset "plot_hist_temp" begin
+        set_city("Haldwani")
+        plt = plot_hist_temp(start_date = "2022-01-01",
+                             end_date = "2022-12-31")
+        @test sizeof(plt) > 0
+    end
+
+end
