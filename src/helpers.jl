@@ -331,6 +331,11 @@ function get_plotting_data(variable, city, i_row, lat, long, year)
     df_data = DataFrame()
     time_zone = ""
 
+    # Get city based on user preference
+    if isempty(city)
+        city = get_city()
+    end
+
     if ~isempty(city)
         input = CityHistInput(city,
                               variable,
@@ -356,6 +361,8 @@ function get_plotting_data(variable, city, i_row, lat, long, year)
 
     if isempty(city)
         city = ["lat:", "$(lat)", ", ", "long:", "$(long)"] |> join
+    else
+        city = fix_input_name(city)
     end
 
     return all_months, monthly_data, city, time_zone

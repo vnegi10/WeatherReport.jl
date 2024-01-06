@@ -45,12 +45,13 @@ function plot_box_temp(city::String = "",
                        long::Float64 = 0.0,
                        year::String = "2022")
 
-    all_months, monthly_temp, city, time_zone = get_plotting_data("temperature_2m",
-                                                                  city,
-                                                                  i_row,
-                                                                  lat,
-                                                                  long,
-                                                                  year)
+    all_months, monthly_temp, city, time_zone = get_plotting_data(
+                                                 "temperature_2m",
+                                                 city,
+                                                 i_row,
+                                                 lat,
+                                                 long,
+                                                 year)
 
     plt = boxplot(
         all_months,
