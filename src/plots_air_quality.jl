@@ -56,7 +56,7 @@ function plot_hourly_pm(city::String = "",
     time_zone = ""
 
     # Get city based on user preference
-    if isempty(city)
+    if isempty(city) && (lat == long == 0.0)
         city = get_city()
     end
 

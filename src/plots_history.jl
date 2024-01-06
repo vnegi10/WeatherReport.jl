@@ -56,7 +56,7 @@ function plot_hist_temp(city::String = "",
                         end_date::String = "2023-01-10")
 
     # Get city based on user preference
-    if isempty(city)
+    if isempty(city) && (lat == long == 0.0)
         city = get_city()
     end
 

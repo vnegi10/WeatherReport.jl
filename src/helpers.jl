@@ -118,7 +118,7 @@ function df_to_plot(city::String,
                     time_zone::String)
 
     # Get city based on user preference
-    if isempty(city)
+    if isempty(city) && (lat == long == 0.0)
         city = get_city()
     end
 
@@ -168,7 +168,7 @@ function df_to_plot(city::String,
                     time_zone::String)
 
     # Get city based on user preference
-    if isempty(city)
+    if isempty(city) && (lat == long == 0.0)
         city = get_city()
     end
 
@@ -333,7 +333,7 @@ function get_plotting_data(variable, city, i_row, lat, long, year)
     time_zone = ""
 
     # Get city based on user preference
-    if isempty(city)
+    if isempty(city) && (lat == long == 0.0)
         city = get_city()
     end
 
@@ -378,7 +378,7 @@ function get_plotting_data(variable, city, i_row, lat, long, month, num_years)
     time_zone = ""
 
     # Get city based on user preference
-    if isempty(city)
+    if isempty(city) && (lat == long == 0.0)
         city = get_city()
     end
 
@@ -421,7 +421,7 @@ function get_hourly_data(variable, city, i_row, lat, long)
     time_zone = ""
 
     # Get city based on user preference
-    if isempty(city)
+    if isempty(city) && (lat == long == 0.0)
         city = get_city()
     end
 
@@ -448,7 +448,7 @@ function get_hist_data(variable, city, i_row, lat, long, start_date, end_date)
     time_zone = ""
 
     # Get city based on user preference
-    if isempty(city)
+    if isempty(city) && (lat == long == 0.0)
         city = get_city()
     end
 
