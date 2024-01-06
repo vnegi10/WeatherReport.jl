@@ -77,4 +77,10 @@ end
         @test sizeof(plt) > 0
     end
 
+    @testset "plot_hourly_haze" begin
+        set_city("Haldwani")
+        plt = plot_hourly_haze(days = 1)
+        @test sizeof(plt) > 0
+    end
+
 end

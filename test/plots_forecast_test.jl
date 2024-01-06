@@ -177,6 +177,12 @@ end
         @test sizeof(plt) > 0
     end
 
+    @testset "plot_hourly_snow" begin
+        set_city("Trondheim")
+        plt = plot_hourly_snow()
+        @test sizeof(plt) > 0
+    end
+
     @testset "show_current" begin
         set_city("Madrid")
         result = @capture_out show_current()

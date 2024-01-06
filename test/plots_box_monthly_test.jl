@@ -167,3 +167,13 @@ end
     end
 
 end
+
+@testitem "Box plots of monthly data with user preference" begin
+
+    @testset "plot_box_windspeed" begin
+        set_city("Amsterdam")
+        plt = plot_box_windspeed(year = "2023")
+        @test sizeof(plt) > 0
+    end
+
+end

@@ -201,4 +201,11 @@ end
         @test sizeof(plt) > 0
     end
 
+    @testset "plot_hist_rain" begin
+        set_city("Mumbai")
+        plt = plot_hist_rain(start_date = "2023-07-01",
+                             end_date = "2023-08-31")
+        @test sizeof(plt) > 0
+    end
+
 end
