@@ -68,3 +68,13 @@ end
     end
 
 end
+
+@testitem "Plotting air quality data with user preference" begin
+
+    @testset "plot_hourly_pm" begin
+        set_city("Bengaluru")
+        plt = plot_hourly_pm(days = 1)
+        @test sizeof(plt) > 0
+    end
+
+end
