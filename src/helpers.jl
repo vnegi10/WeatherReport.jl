@@ -432,6 +432,11 @@ function get_hist_data(variable, city, i_row, lat, long, start_date, end_date)
     df_hist = DataFrame()
     time_zone = ""
 
+    # Get city based on user preference
+    if isempty(city)
+        city = get_city()
+    end
+
     if ~isempty(city)
         input = CityHistInput(city,
                               variable,

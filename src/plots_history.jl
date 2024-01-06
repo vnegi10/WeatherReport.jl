@@ -55,6 +55,11 @@ function plot_hist_temp(city::String = "",
                         start_date::String = "2023-01-01",
                         end_date::String = "2023-01-10")
 
+    # Get city based on user preference
+    if isempty(city)
+        city = get_city()
+    end
+
     df_temp, time_zone = get_hist_temp_data(city,
                                             i_row,
                                             lat,
@@ -67,6 +72,8 @@ function plot_hist_temp(city::String = "",
 
     if isempty(city)
         city = ["lat:", "$(lat)", ", ", "long:", "$(long)"] |> join
+    else
+        city = fix_input_name(city)
     end
 
     plt = lineplot(
