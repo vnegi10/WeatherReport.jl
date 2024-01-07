@@ -19,3 +19,13 @@ end
     @test WeatherReport.closest_match("amsteldam")[1] == "Amsterdam"
 
 end
+
+@testitem "Verify if location preference is set correctly" begin
+
+    set_city("Haldwani")
+    @test WeatherReport.get_city() == "Haldwani"
+
+    set_city("Veldhoven")
+    @test WeatherReport.get_city() == "Veldhoven"
+
+end

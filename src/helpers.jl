@@ -1,3 +1,12 @@
+function set_city(city::String)
+    @set_preferences!("city" => city)
+    @info "$(city) has been set as the preferred location"
+end
+
+function get_city()
+    return @load_preference("city", default = "")
+end
+
 function fetch_lat_long(city::String, i_row::Int64)
 
 	city = fix_input_name(city)
@@ -108,6 +117,11 @@ function df_to_plot(city::String,
                     color::Symbol,
                     time_zone::String)
 
+    # Get city based on user preference
+    if isempty(city) && (lat == long == 0.0)
+        city = get_city()
+    end
+
     # Filter DataFrame to start from current hour
     df_data = from_current_time(df_data)
 
@@ -116,6 +130,8 @@ function df_to_plot(city::String,
 
     if isempty(city)
         city = ["lat:", "$(lat)", ", ", "long:", "$(long)"] |> join
+    else
+        city = fix_input_name(city)
     end
 
     plt = lineplot(
@@ -151,8 +167,15 @@ function df_to_plot(city::String,
                     color::Symbol,
                     time_zone::String)
 
+    # Get city based on user preference
+    if isempty(city) && (lat == long == 0.0)
+        city = get_city()
+    end
+
     if isempty(city)
         city = ["lat:", "$(lat)", ", ", "long:", "$(long)"] |> join
+    else
+        city = fix_input_name(city)
     end
 
     plt = lineplot(
@@ -309,6 +332,11 @@ function get_plotting_data(variable, city, i_row, lat, long, year)
     df_data = DataFrame()
     time_zone = ""
 
+    # Get city based on user preference
+    if isempty(city) && (lat == long == 0.0)
+        city = get_city()
+    end
+
     if ~isempty(city)
         input = CityHistInput(city,
                               variable,
@@ -334,6 +362,8 @@ function get_plotting_data(variable, city, i_row, lat, long, year)
 
     if isempty(city)
         city = ["lat:", "$(lat)", ", ", "long:", "$(long)"] |> join
+    else
+        city = fix_input_name(city)
     end
 
     return all_months, monthly_data, city, time_zone
@@ -346,6 +376,11 @@ function get_plotting_data(variable, city, i_row, lat, long, month, num_years)
 
     df_data = DataFrame()
     time_zone = ""
+
+    # Get city based on user preference
+    if isempty(city) && (lat == long == 0.0)
+        city = get_city()
+    end
 
     if ~isempty(city)
         input = CityHistInput(city,
@@ -372,6 +407,8 @@ function get_plotting_data(variable, city, i_row, lat, long, month, num_years)
 
     if isempty(city)
         city = ["lat:", "$(lat)", ", ", "long:", "$(long)"] |> join
+    else
+        city = fix_input_name(city)
     end
 
     return all_years, yearly_data, city, time_zone
@@ -382,6 +419,11 @@ function get_hourly_data(variable, city, i_row, lat, long)
 
     df_data = DataFrame()
     time_zone = ""
+
+    # Get city based on user preference
+    if isempty(city) && (lat == long == 0.0)
+        city = get_city()
+    end
 
     if ~isempty(city)
         input = CityInput(city, variable, i_row)
@@ -404,6 +446,11 @@ function get_hist_data(variable, city, i_row, lat, long, start_date, end_date)
 
     df_hist = DataFrame()
     time_zone = ""
+
+    # Get city based on user preference
+    if isempty(city) && (lat == long == 0.0)
+        city = get_city()
+    end
 
     if ~isempty(city)
         input = CityHistInput(city,

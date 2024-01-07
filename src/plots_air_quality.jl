@@ -55,6 +55,11 @@ function plot_hourly_pm(city::String = "",
     df_pm1, df_pm2 = [DataFrame() for i = 1:2]
     time_zone = ""
 
+    # Get city based on user preference
+    if isempty(city) && (lat == long == 0.0)
+        city = get_city()
+    end
+
     if ~isempty(city)
         input = CityInput(city, "pm10", i_row)
         results = get_hourly_forecast(input)
@@ -93,6 +98,8 @@ function plot_hourly_pm(city::String = "",
 
     if isempty(city)
         city = ["lat:", "$(lat)", ", ", "long:", "$(long)"] |> join
+    else
+        city = fix_input_name(city)
     end
 
     plt = lineplot(

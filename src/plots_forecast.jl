@@ -55,6 +55,11 @@ function plot_hourly_temp(city::String = "",
     df_temp, df_app_temp = [DataFrame() for i = 1:2]
     time_zone = ""
 
+    # Get city based on user preference
+    if isempty(city) && (lat == long == 0.0)
+        city = get_city()
+    end
+
     if ~isempty(city)
         input = CityInput(city, "temperature_2m", i_row)
         results = get_hourly_forecast(input)
@@ -160,7 +165,14 @@ julia> show_current("Lisbon")
 └───────────────┴───────────┴────────────┴─────────────┴───────────┴─────────┴─────────┘
 ```
 """
-function show_current(city::String, i_row::Int64 = 1)
+function show_current(city::String = "", i_row::Int64 = 1)
+
+    # Get city based on user preference
+    if isempty(city)
+        city = get_city()
+    end
+
+    @assert ~isempty(city) "Please provide a city name or set a user preference!"
 
     input = CityInput(city, "current", i_row)
     current_dict = get_forecast(input)
@@ -226,7 +238,14 @@ Europe/Amsterdam CET
 [Weather data by Open-Meteo.com]
 ```
 """
-function show_daily(city::String, i_row::Int64 = 1)
+function show_daily(city::String = "", i_row::Int64 = 1)
+
+    # Get city based on user preference
+    if isempty(city)
+        city = get_city()
+    end
+
+    @assert ~isempty(city) "Please provide a city name or set a user preference!"
 
     input = CityInput(city, "daily", i_row)
     daily_dict = get_forecast(input)

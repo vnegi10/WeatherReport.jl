@@ -166,3 +166,33 @@ end
     end
 
 end
+
+@testitem "Plotting hourly forecast data with user preference" begin
+
+    using Suppressor
+
+    @testset "plot_hourly_temp" begin
+        set_city("Tokyo")
+        plt = plot_hourly_temp()
+        @test sizeof(plt) > 0
+    end
+
+    @testset "plot_hourly_snow" begin
+        set_city("Trondheim")
+        plt = plot_hourly_snow()
+        @test sizeof(plt) > 0
+    end
+
+    @testset "show_current" begin
+        set_city("Madrid")
+        result = @capture_out show_current()
+        @test length(result) > 0
+    end
+
+    @testset "show_daily" begin
+        set_city("London")
+        result = @capture_out show_daily()
+        @test length(result) > 0
+    end
+
+end

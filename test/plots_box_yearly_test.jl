@@ -191,3 +191,13 @@ end
     end
 
 end
+
+@testitem "Box plots of yearly data with user preference" begin
+
+    @testset "compare_box_windspeed" begin
+        set_city("Copenhagen")
+        plt = compare_box_windspeed(month = "March")
+        @test sizeof(plt) > 0
+    end
+
+end

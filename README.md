@@ -88,6 +88,34 @@ Europe/Sofia EET
 [Weather data by Open-Meteo.com]
 ```
 
+**Set preferred location:**
+
+```julia
+julia> set_city("Veldhoven")
+[ Info: Veldhoven has been set as the preferred location
+```
+
+Once a preferred location has been set, it's not necessary to specify it's
+name again.
+
+```julia
+julia> show_daily()
+┌────────────┬────────┬────────┬────────────┬────────────┬───────────┬────────────────┬─────────────┬─────────────────────┐
+│       Time │ Min. T │ Max. T │ App. min T │ App. max T │ Prec. sum │ Prec. duration │ Prec. prob. │           Condition │
+│     [date] │   [°C] │   [°C] │       [°C] │       [°C] │      [mm] │        [hours] │         [%] │                  [] │
+├────────────┼────────┼────────┼────────────┼────────────┼───────────┼────────────────┼─────────────┼─────────────────────┤
+│ 2024-01-06 │    1.6 │    6.8 │       -2.3 │        4.4 │       0.4 │            1.0 │           6 │ Slight rain showers │
+│ 2024-01-07 │   -1.8 │    1.2 │       -6.9 │       -2.7 │       0.2 │            2.0 │          10 │         snow grains │
+│ 2024-01-08 │   -4.1 │   -2.1 │       -9.1 │       -6.9 │       0.0 │            0.0 │           0 │            Overcast │
+│ 2024-01-09 │   -5.7 │   -2.6 │      -10.8 │       -7.9 │       0.0 │            0.0 │           0 │       Partly cloudy │
+│ 2024-01-10 │   -7.0 │   -1.9 │      -11.9 │       -6.8 │       0.0 │            0.0 │           0 │           Clear sky │
+│ 2024-01-11 │   -6.6 │    0.5 │      -10.9 │       -2.2 │       0.0 │            0.0 │           0 │     Slight snowfall │
+│ 2024-01-12 │   -2.6 │    0.6 │       -5.9 │       -1.7 │       0.0 │            0.0 │           0 │     Slight snowfall │
+└────────────┴────────┴────────┴────────────┴────────────┴───────────┴────────────────┴─────────────┴─────────────────────┘
+Europe/Amsterdam CET
+[Weather data by Open-Meteo.com]
+```
+
 To check information about your approximate location:
 
 ```julia
