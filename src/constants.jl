@@ -10,7 +10,8 @@ const HOURLY_FORECAST = ["temperature_2m",
                         "snowfall",
                         "relativehumidity_2m",
                         "windspeed_10m",
-                        "shortwave_radiation"
+                        "shortwave_radiation",
+                        "visibility"
                         ]
 
 const HOURLY_AIR_QUALITY = ["pm10",

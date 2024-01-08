@@ -6,6 +6,7 @@ export set_city
 # Hourly weather forecast
 export plot_hourly_temp, plot_hourly_rain, plot_hourly_snow
 export plot_hourly_humidity, plot_hourly_windspeed, plot_hourly_solar
+export plot_hourly_visibility
 export show_current, show_daily
 
 # Location

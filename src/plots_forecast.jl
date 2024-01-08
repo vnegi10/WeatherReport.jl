@@ -699,6 +699,32 @@ function plot_hourly_solar(city::String = "",
 end
 
 """
+"""
+function plot_hourly_visibility(city::String = "",
+                                i_row::Int64 = 1;
+                                lat::Float64 = 0.0,
+                                long::Float64 = 0.0,
+                                days::Int64 = 6)
+
+    df_vis, time_zone = get_hourly_data("visibility",
+                                         city,
+                                         i_row,
+                                         lat,
+                                         long)
+
+    plt = df_to_plot(city,
+                     df_vis,
+                     days = days,
+                     lat = lat,
+                     long = long,
+                     xlabel = "Time [days]",
+                     ylabel = "Distance [m]",
+                     color = :white,
+                     time_zone = time_zone)
+
+end
+
+"""
     where_am_i()
 
 Shows information about your current location.
