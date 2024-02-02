@@ -21,7 +21,6 @@ jobs:
           - '1.8'
         os:
           - ubuntu-latest
-          - macOS-latest
           - macos-14
           - windows-latest
         arch:
