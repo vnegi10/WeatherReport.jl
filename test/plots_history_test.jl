@@ -1,6 +1,6 @@
 # Run tests on plotting functions for historical data API
 
-@testitem "Plotting historical data with default selection" begin
+@testitem "Plotting historical data with default selection" tags = [:plots, :history] begin
 
     @testset "plot_hist_temp" begin
         plt = plot_hist_temp("Veldhoven",
@@ -46,7 +46,7 @@
 
 end
 
-@testitem "Plotting historical data with multiple matches" begin
+@testitem "Plotting historical data with multiple matches" tags = [:plots, :history] begin
 
     @testset "plot_hist_temp" begin
         plt = plot_hist_temp("Madrid",
@@ -134,7 +134,7 @@ end
 
 end
 
-@testitem "Plotting historical data with lat/long input" begin
+@testitem "Plotting historical data with lat/long input" tags = [:plots, :history] begin
 
     @testset "plot_hist_temp" begin
         # Denver
@@ -192,7 +192,7 @@ end
 
 end
 
-@testitem "Plotting historical data with user preference" begin
+@testitem "Plotting historical data with user preference" tags = [:plots, :history] begin
 
     @testset "plot_hist_temp" begin
         set_city("Haldwani")

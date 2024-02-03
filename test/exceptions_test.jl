@@ -1,10 +1,10 @@
-@testitem "Check if expected error appears when city is not found" begin
+@testitem "Expected error appears when city is not found" tags = [:exceptions] begin
 
     @test_throws ErrorException("Coordinates for city not found!") plot_hourly_temp("EEdinhoven")
 
 end
 
-@testitem "Check if expected error appears when path is invalid" begin
+@testitem "Expected error appears when path is invalid" tags = [:exceptions] begin
 
     # Incorrect path
     invalid_path = joinpath(@__DIR__,
@@ -16,7 +16,7 @@ end
 
 end
 
-@testitem "Check if expected error appears when unknown forecast type is used" begin
+@testitem "Expected error appears when unknown forecast type is used" tags = [:exceptions] begin
 
     # Not supported
     forecast_type = "tempest"
@@ -25,7 +25,7 @@ end
 
 end
 
-@testitem "Check if expected error appears when end date is before start date" begin
+@testitem "Expected error appears when end date is before start date" tags = [:exceptions] begin
 
     @test_throws AssertionError("End date cannot be before start date!") plot_hist_temp("Veldhoven", start_date = "2000-03-01", end_date = "2000-01-01")
 

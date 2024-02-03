@@ -24,7 +24,7 @@
     df_temp = DBInterface.execute(db, "SELECT * FROM temperature_2m") |> DataFrame
 end
 
-@testitem "SQLite database" setup = [TestDatabase] begin
+@testitem "SQLite database" setup = [TestDatabase] tags = [:export] begin
 
     using SQLite
 

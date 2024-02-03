@@ -18,16 +18,29 @@ if isempty(ARGS) || "all" in ARGS
     all_tests = true
 end
 
+# Run a subset of tests by passing tags
+# julia> Pkg.test("WeatherReport", test_args = ["plots"])
+
+# List of tags available
+# :daily, :exceptions, :export, :helpers, :hourly
+# :plots, :air, :box, :forecast, :history, :location
+
 if all_tests
     @time WeatherReport.execute_test(runtests(WeatherReport,
                                               nworkers = num_workers,
                                               nworker_threads = 2))
 else
-    @time for find_match in ARGS
-        WeatherReport.execute_test(runtests(WeatherReport;
-                                            name = Regex("$(find_match)"),
-                                            nworkers = 1))
+    # Convert string input to symbol
+    all_tags = Symbol[]
+    for tag in ARGS
+        push!(all_tags, Symbol(tag))
     end
+
+    @time WeatherReport.execute_test(runtests(WeatherReport;
+                                              tags = all_tags,
+                                              nworkers = num_workers,
+                                              nworker_threads = 2))
+    
 end
 
 if errors

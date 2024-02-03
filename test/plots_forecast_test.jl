@@ -1,6 +1,6 @@
 # Run tests on plotting functions for weather forecast API
 
-@testitem "Plotting hourly forecast data with default selection" begin
+@testitem "Plotting hourly forecast data with default selection" tags = [:plots, :forecast] begin
 
     using Suppressor
 
@@ -46,7 +46,7 @@
 
 end
 
-@testitem "Plotting hourly forecast data with multiple matches" begin
+@testitem "Plotting hourly forecast data with multiple matches" tags = [:plots, :forecast] begin
 
     using Suppressor
 
@@ -116,7 +116,7 @@ end
 
 end
 
-@testitem "Plotting hourly forecast data with lat/long input" begin
+@testitem "Plotting hourly forecast data with lat/long input" tags = [:plots, :forecast] begin
 
     @testset "plot_hourly_temp" begin
         # Denver
@@ -156,7 +156,7 @@ end
 
 end
 
-@testitem "Self location" begin
+@testitem "Self location" tags = [:location] begin
 
     using Suppressor
 
@@ -167,7 +167,7 @@ end
 
 end
 
-@testitem "Plotting hourly forecast data with user preference" begin
+@testitem "Plotting hourly forecast data with user preference" tags = [:plots, :forecast] begin
 
     using Suppressor
 
