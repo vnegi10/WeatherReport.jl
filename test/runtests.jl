@@ -31,7 +31,8 @@ else
 
     @time WeatherReport.execute_test(runtests(WeatherReport;
                                               tags = all_tags,
-                                              nworkers = 1))
+                                              nworkers = num_workers,
+                                              nworker_threads = 2))
     
 end
 
