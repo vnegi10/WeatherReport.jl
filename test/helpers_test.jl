@@ -1,4 +1,4 @@
-@testitem "Check if cities database is available" begin
+@testitem "Check if cities database is available" tags = [:helpers] begin
 
     path = joinpath(@__DIR__,
                     "..",
@@ -13,14 +13,14 @@
 
 end
 
-@testitem "Verify if closest match for an incorrect city name is found" begin
+@testitem "Verify if closest match for an incorrect city name is found" tags = [:helpers] begin
 
     @test WeatherReport.closest_match("Halwani")[1] == "Haldwani"
     @test WeatherReport.closest_match("amsteldam")[1] == "Amsterdam"
 
 end
 
-@testitem "Verify if location preference is set correctly" begin
+@testitem "Verify if location preference is set correctly" tags = [:helpers] begin
 
     set_city("Haldwani")
     @test WeatherReport.get_city() == "Haldwani"

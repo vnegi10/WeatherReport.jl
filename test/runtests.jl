@@ -23,11 +23,16 @@ if all_tests
                                               nworkers = num_workers,
                                               nworker_threads = 2))
 else
-    @time for find_match in ARGS
-        WeatherReport.execute_test(runtests(WeatherReport;
-                                            name = Regex("$(find_match)"),
-                                            nworkers = 1))
+    # Convert string input to symbol
+    all_tags = Symbol[]
+    for tag in ARGS
+        push!(all_tags, Symbol(tag))
     end
+
+    @time WeatherReport.execute_test(runtests(WeatherReport;
+                                              tags = all_tags,
+                                              nworkers = 1))
+    
 end
 
 if errors
