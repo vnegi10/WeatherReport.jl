@@ -18,6 +18,13 @@ if isempty(ARGS) || "all" in ARGS
     all_tests = true
 end
 
+# Run a subset of tests by passing tags
+# julia> Pkg.test("WeatherReport", test_args = ["plots"])
+
+# List of tags available
+# :daily, :exceptions, :export, :helpers, :hourly
+# :plots, :air, :box, :forecast, :history, :location
+
 if all_tests
     @time WeatherReport.execute_test(runtests(WeatherReport,
                                               nworkers = num_workers,
