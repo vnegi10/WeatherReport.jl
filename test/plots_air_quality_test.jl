@@ -1,6 +1,6 @@
 # Run tests on plotting functions for air quality API
 
-@testitem "Plotting hourly air quality data with default selection" begin
+@testitem "Plotting hourly air quality data with default selection" tags = [:plots, :air] begin
 
     @testset "plot_hourly_pm" begin
         plt = plot_hourly_pm("Veldhoven", days = 3)
@@ -19,7 +19,7 @@
 
 end
 
-@testitem "Plotting hourly air quality data with multiple matches" begin
+@testitem "Plotting hourly air quality data with multiple matches" tags = [:plots, :air] begin
 
     @testset "plot_hourly_pm" begin
         plt = plot_hourly_pm("Madrid", 2, days = 3)
@@ -47,7 +47,7 @@ end
 
 end
 
-@testitem "Plotting hourly air quality data with lat/long input" begin
+@testitem "Plotting hourly air quality data with lat/long input" tags = [:plots, :air] begin
 
     @testset "plot_hourly_pm" begin
         # Denver
@@ -69,7 +69,7 @@ end
 
 end
 
-@testitem "Plotting air quality data with user preference" begin
+@testitem "Plotting air quality data with user preference" tags = [:plots, :air] begin
 
     @testset "plot_hourly_pm" begin
         set_city("Bengaluru")
