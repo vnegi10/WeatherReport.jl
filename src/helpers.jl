@@ -26,11 +26,11 @@ function fetch_lat_long(city::String, i_row::Int64)
     if isempty(df_city)
         # Find closest match to inform the user
         all_valid_cities = filter(x -> ~ismissing(x), DF_CITIES.CITY)
-        find_match = closest_match(city, all_valid_cities)
+        found_match = closest_match(city, all_valid_cities)
 
         # Add lines to highlight the message
         println("------------------------------------------------")
-        @info("$(city) not found, did you mean $(find_match[1])?")
+        @info("$(city) not found, did you mean $(found_match[1])?")
         println("------------------------------------------------")
 
         # Better to throw an error and let the user select the closest match if
@@ -50,9 +50,9 @@ function closest_match(search_string, valid_list)
 
     # https://en.wikipedia.org/wiki/Levenshtein_distance
     dist = Levenshtein()
-    find_match = findnearest(search_string, valid_list, dist)
+    found_match = findnearest(search_string, valid_list, dist)
 
-    return find_match
+    return found_match
 
 end
 
@@ -308,7 +308,28 @@ function compare_yearly_data(df_data::DataFrame, month::String)
     # Fix names with improper case, e.g. "jan", "JAn" -> "Jan"
     month = fix_input_name(month)
 
-    df_month = filter(row -> occursin(month, Dates.monthname(row.TIME)), df_data)
+    df_month = filter(row -> occursin(month, 
+                                      Dates.monthname(row.TIME)),
+                                      df_data)
+
+    # Assuming df_month is empty due to incorrect month
+    if isempty(df_month)
+        # Closest match in case of a typo
+        all_months = [Dates.monthname(i) for i in 1:12]
+        found_match = closest_match(month, all_months)
+
+        # Add lines to highlight the message
+        println("------------------------------------------------")
+        @info("$(month) not found, showing data for $(found_match[1])!")
+        println("------------------------------------------------")
+
+        month = found_match[1]
+        df_month = filter(row -> occursin(month,
+                                          Dates.monthname(row.TIME)),
+                                          df_data)
+
+    end
+
     years = map(x -> Dates.year(x), df_month[!, :TIME]) |> unique
 
     all_years = String[]
@@ -320,7 +341,7 @@ function compare_yearly_data(df_data::DataFrame, month::String)
         push!(yearly_data, df_filter[!, :FORECAST])
     end
 
-    return all_years, yearly_data
+    return all_years, yearly_data, month
 
 end
 
@@ -402,7 +423,7 @@ function get_plotting_data(variable, city, i_row, lat, long, month, num_years)
         df_data, time_zone = results[1], results[2]
     end
 
-    all_years, yearly_data = compare_yearly_data(df_data, month)
+    all_years, yearly_data, month = compare_yearly_data(df_data, month)
 
     if isempty(city)
         city = ["lat:", "$(lat)", ", ", "long:", "$(long)"] |> join
@@ -410,7 +431,7 @@ function get_plotting_data(variable, city, i_row, lat, long, month, num_years)
         city = fix_input_name(city)
     end
 
-    return all_years, yearly_data, city, time_zone
+    return all_years, yearly_data, city, time_zone, month
 
 end
 

@@ -57,14 +57,14 @@ function compare_box_temp(city::String = "",
                           month::String = "Jan",
                           num_years::Int64 = 5)
 
-    all_years, yearly_temp, city, time_zone = get_plotting_data(
-                                               "temperature_2m",
-                                               city,
-                                               i_row,
-                                               lat,
-                                               long,
-                                               month,
-                                               num_years)
+    all_years, yearly_temp, city, time_zone, month = get_plotting_data(
+                                                     "temperature_2m",
+                                                      city,
+                                                      i_row,
+                                                      lat,
+                                                      long,
+                                                      month,
+                                                      num_years)
 
     plt = boxplot(
         all_years,
@@ -141,7 +141,7 @@ function compare_box_rain(city::String = "",
                           month::String = "Jan",
                           num_years::Int64 = 5)
 
-    all_years, yearly_rain, city, time_zone = get_plotting_data("rain",
+    all_years, yearly_rain, city, time_zone, month = get_plotting_data("rain",
                                                                 city,
                                                                 i_row,
                                                                 lat,
@@ -224,7 +224,7 @@ function compare_box_snow(city::String = "",
                           month::String = "Jan",
                           num_years::Int64 = 5)
 
-    all_years, yearly_snow, city, time_zone = get_plotting_data("snowfall",
+    all_years, yearly_snow, city, time_zone, month = get_plotting_data("snowfall",
                                                                 city,
                                                                 i_row,
                                                                 lat,
@@ -304,7 +304,7 @@ function compare_box_humidity(city::String = "",
                               month::String = "Jan",
                               num_years::Int64 = 5)
 
-    all_years, yearly_hum, city, time_zone = get_plotting_data(
+    all_years, yearly_hum, city, time_zone, month = get_plotting_data(
                                               "relativehumidity_2m",
                                                city,
                                                i_row,
@@ -393,7 +393,7 @@ function compare_box_windspeed(city::String = "",
                                month::String = "Jan",
                                num_years::Int64 = 5)
 
-    all_years, yearly_wind, city, time_zone = get_plotting_data(
+    all_years, yearly_wind, city, time_zone, month = get_plotting_data(
                                                "windspeed_10m",
                                                city,
                                                i_row,
@@ -472,7 +472,7 @@ function compare_box_solar(city::String = "",
                            month::String = "Jan",
                            num_years::Int64 = 5)
 
-    all_years, yearly_solar, city, time_zone = get_plotting_data(
+    all_years, yearly_solar, city, time_zone, month = get_plotting_data(
                                                 "shortwave_radiation",
                                                 city,
                                                 i_row,
