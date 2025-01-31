@@ -201,3 +201,23 @@ end
     end
 
 end
+
+@testitem "Box plots of yearly data with incorrect month" tags = [:plots, :box] begin
+
+    @testset "compare_box_solar" begin
+        plt = compare_box_solar("Barcelona",
+                                2,
+                                num_years = 5,
+                                month = "Apil")
+        @test sizeof(plt) > 0
+    end
+
+    @testset "compare_box_windspeed" begin
+        plt = compare_box_windspeed("Lisbon",
+                                    1,
+                                    num_years = 5,
+                                    month = "Suptomber")
+        @test sizeof(plt) > 0
+    end
+
+end
