@@ -9,10 +9,10 @@ end
 
 function fetch_lat_long(city::String, i_row::Int64)
 
-	city = fix_input_name(city)
-	
+    city = fix_input_name(city)
+
     df_city = filter(row -> ~ismissing(row.CITY) &&
-                             row.CITY == city, DF_CITIES)
+            row.CITY == city, DF_CITIES)
 
     if nrow(df_city) > 1
         @info "More than one match found, showing report for location in row $(i_row)."
@@ -21,39 +21,38 @@ function fetch_lat_long(city::String, i_row::Int64)
     end
 
     lat, long = 0, 0
-    timezone  = ""
+    timezone = ""
 
     if isempty(df_city)
         # Find closest match to inform the user
-        find_match = closest_match(city)
+        all_valid_cities = filter(x -> ~ismissing(x), DF_CITIES.CITY)
+        found_match = closest_match(city, all_valid_cities)
 
         # Add lines to highlight the message
         println("------------------------------------------------")
-        @info("$(city) not found, did you mean $(find_match[1])?")
+        @info("$(city) not found, did you mean $(found_match[1])?")
         println("------------------------------------------------")
 
         # Better to throw an error and let the user select the closest match if
         # needed
         error("Coordinates for city not found!")
     else
-        lat  = df_city[!, :LATITUDE][i_row]
+        lat = df_city[!, :LATITUDE][i_row]
         long = df_city[!, :LONGITUDE][i_row]
         timezone = df_city[!, :TIMEZONE][i_row]
     end
 
     return GeogCoord(lat, long, timezone)
-	
+
 end
 
-function closest_match(city::String)
-
-    all_valid_cities = filter(x -> ~ismissing(x), DF_CITIES.CITY)
+function closest_match(search_string, valid_list)
 
     # https://en.wikipedia.org/wiki/Levenshtein_distance
     dist = Levenshtein()
-    find_match = findnearest(city, all_valid_cities, dist)
+    found_match = findnearest(search_string, valid_list, dist)
 
-    return find_match
+    return found_match
 
 end
 
@@ -66,9 +65,9 @@ function csv_to_df(path::String)
     catch
         error("Unable to load cities database, check if $(path) is valid!")
     end
-	
+
     return df_cities
-	
+
 end
 
 function fix_input_name(input::String)
@@ -78,11 +77,11 @@ function fix_input_name(input::String)
 
     if length(input_parts) == 1
         fixed_name = [uppercase(input[1]),
-                      lowercase(input[2:end])] |> join
+            lowercase(input[2:end])] |> join
     else
         for (i, value) in enumerate(input_parts)
             input_parts[i] = [uppercase(value[1]),
-                              lowercase(value[2:end])] |> join
+                lowercase(value[2:end])] |> join
         end
         fixed_name = join(input_parts, " ")
     end
@@ -94,10 +93,10 @@ end
 function from_current_time(df_hourly::DataFrame)
 
     time = now()
-    curr_day   = Dates.day(time)
+    curr_day = Dates.day(time)
     curr_month = Dates.month(time)
-    curr_year  = Dates.year(time)
-    curr_hour  = Dates.hour(time)
+    curr_year = Dates.year(time)
+    curr_hour = Dates.hour(time)
 
     time_match = DateTime(curr_year, curr_month, curr_day, curr_hour)
 
@@ -108,14 +107,14 @@ function from_current_time(df_hourly::DataFrame)
 end
 
 function df_to_plot(city::String,
-                    df_data::DataFrame;
-                    days::Int64,
-                    lat::Float64,
-                    long::Float64,
-                    xlabel::String,
-                    ylabel::String,
-                    color::Symbol,
-                    time_zone::String)
+    df_data::DataFrame;
+    days::Int64,
+    lat::Float64,
+    long::Float64,
+    xlabel::String,
+    ylabel::String,
+    color::Symbol,
+    time_zone::String)
 
     # Get city based on user preference
     if isempty(city) && (lat == long == 0.0)
@@ -125,7 +124,7 @@ function df_to_plot(city::String,
     # Filter DataFrame to start from current hour
     df_data = from_current_time(df_data)
 
-    @assert days*24 ≤ nrow(df_data) "Not enough data, try again with less days!"
+    @assert days * 24 ≤ nrow(df_data) "Not enough data, try again with less days!"
     df_data = df_data[1:days*24, :]
 
     if isempty(city)
@@ -137,16 +136,16 @@ function df_to_plot(city::String,
     plt = lineplot(
         df_data[!, :TIME],
         df_data[!, :FORECAST],
-        title  = "$(city)",
-        xlabel = xlabel,
-        ylabel = ylabel,
-        xticks = true,
-        yticks = true,
-        border = :bold,
-        color = color,
-        canvas = BrailleCanvas,
-        width = 75,
-        height = 15,
+        title="$(city)",
+        xlabel=xlabel,
+        ylabel=ylabel,
+        xticks=true,
+        yticks=true,
+        border=:bold,
+        color=color,
+        canvas=BrailleCanvas,
+        width=75,
+        height=15,
     )
 
     label!(plt, :tl, "Timezone: $(time_zone)")
@@ -157,15 +156,15 @@ function df_to_plot(city::String,
 end
 
 function df_to_plot(city::String,
-                    df_data::DataFrame,
-                    start_date::String,
-                    end_date::String;
-                    lat::Float64,
-                    long::Float64,
-                    xlabel::String,
-                    ylabel::String,
-                    color::Symbol,
-                    time_zone::String)
+    df_data::DataFrame,
+    start_date::String,
+    end_date::String;
+    lat::Float64,
+    long::Float64,
+    xlabel::String,
+    ylabel::String,
+    color::Symbol,
+    time_zone::String)
 
     # Get city based on user preference
     if isempty(city) && (lat == long == 0.0)
@@ -181,16 +180,16 @@ function df_to_plot(city::String,
     plt = lineplot(
         df_data[!, :TIME],
         df_data[!, :FORECAST],
-        title  = "$(city) from $(start_date) to $(end_date)",
-        xlabel = xlabel,
-        ylabel = ylabel,
-        xticks = true,
-        yticks = true,
-        border = :bold,
-        color = color,
-        canvas = BrailleCanvas,
-        width = 75,
-        height = 15,
+        title="$(city) from $(start_date) to $(end_date)",
+        xlabel=xlabel,
+        ylabel=ylabel,
+        xticks=true,
+        yticks=true,
+        border=:bold,
+        color=color,
+        canvas=BrailleCanvas,
+        width=75,
+        height=15,
     )
 
     label!(plt, :tl, "Timezone: $(time_zone)")
@@ -200,7 +199,7 @@ function df_to_plot(city::String,
 
 end
 
-function get_url(forecast_type::String, hist::Bool = false)
+function get_url(forecast_type::String, hist::Bool=false)
 
     url = ""
 
@@ -208,7 +207,7 @@ function get_url(forecast_type::String, hist::Bool = false)
         hist ? url = URL_HIST : url = URL_FORECAST
     elseif forecast_type in HOURLY_AIR_QUALITY
         url = URL_AIR
-    else 
+    else
         error("Forecast type is currently not supported!")
     end
 
@@ -219,7 +218,7 @@ end
 function dict_to_df(response_dict::Dict, forecast_type::String)
 
     TIME = map(x -> parse(DateTime, x),
-               response_dict["hourly"]["time"])
+        response_dict["hourly"]["time"])
 
     # Filter out absent data marked as nothing
     all_values = response_dict["hourly"][forecast_type]
@@ -230,8 +229,8 @@ function dict_to_df(response_dict::Dict, forecast_type::String)
     # Make sure both columns are of equal length
     TIME = TIME[1:length(FORECAST)]
 
-    df_hourly = DataFrame(TIME = TIME,
-                          FORECAST = FORECAST)
+    df_hourly = DataFrame(TIME=TIME,
+        FORECAST=FORECAST)
 
     return df_hourly
 
@@ -267,7 +266,7 @@ function convert_dates(year::String)
 
     time = now()
     curr_year = Dates.year(time)
-    
+
     start_date = "$(year)-01-01"
     if year == "$(curr_year)"
         # Historical data has a delay of up to two weeks
@@ -309,7 +308,28 @@ function compare_yearly_data(df_data::DataFrame, month::String)
     # Fix names with improper case, e.g. "jan", "JAn" -> "Jan"
     month = fix_input_name(month)
 
-    df_month = filter(row -> occursin(month, Dates.monthname(row.TIME)), df_data)
+    df_month = filter(row -> occursin(month, 
+                                      Dates.monthname(row.TIME)),
+                                      df_data)
+
+    # Assuming df_month is empty due to incorrect month
+    if isempty(df_month)
+        # Closest match in case of a typo
+        all_months = [Dates.monthname(i) for i in 1:12]
+        found_match = closest_match(month, all_months)
+
+        # Add lines to highlight the message
+        println("------------------------------------------------")
+        @info("$(month) not found, showing data for $(found_match[1])!")
+        println("------------------------------------------------")
+
+        month = found_match[1]
+        df_month = filter(row -> occursin(month,
+                                          Dates.monthname(row.TIME)),
+                                          df_data)
+
+    end
+
     years = map(x -> Dates.year(x), df_month[!, :TIME]) |> unique
 
     all_years = String[]
@@ -321,7 +341,7 @@ function compare_yearly_data(df_data::DataFrame, month::String)
         push!(yearly_data, df_filter[!, :FORECAST])
     end
 
-    return all_years, yearly_data
+    return all_years, yearly_data, month
 
 end
 
@@ -339,20 +359,20 @@ function get_plotting_data(variable, city, i_row, lat, long, year)
 
     if ~isempty(city)
         input = CityHistInput(city,
-                              variable,
-                              i_row,
-                              start_date,
-                              end_date)
+            variable,
+            i_row,
+            start_date,
+            end_date)
         results = get_hourly_forecast(input)
 
         df_data, location = results[1], results[2]
         time_zone = location.timezone
     else
         input = LocationHistInput(variable,
-                                  lat,
-                                  long,
-                                  start_date,
-                                  end_date)
+            lat,
+            long,
+            start_date,
+            end_date)
         results = get_hourly_forecast(input)
 
         df_data, time_zone = results[1], results[2]
@@ -384,26 +404,26 @@ function get_plotting_data(variable, city, i_row, lat, long, month, num_years)
 
     if ~isempty(city)
         input = CityHistInput(city,
-                              variable,
-                              i_row,
-                              start_date,
-                              end_date)
+            variable,
+            i_row,
+            start_date,
+            end_date)
         results = get_hourly_forecast(input)
 
         df_data, location = results[1], results[2]
         time_zone = location.timezone
     else
         input = LocationHistInput(variable,
-                                  lat,
-                                  long,
-                                  start_date,
-                                  end_date)
+            lat,
+            long,
+            start_date,
+            end_date)
         results = get_hourly_forecast(input)
 
         df_data, time_zone = results[1], results[2]
     end
 
-    all_years, yearly_data = compare_yearly_data(df_data, month)
+    all_years, yearly_data, month = compare_yearly_data(df_data, month)
 
     if isempty(city)
         city = ["lat:", "$(lat)", ", ", "long:", "$(long)"] |> join
@@ -411,7 +431,7 @@ function get_plotting_data(variable, city, i_row, lat, long, month, num_years)
         city = fix_input_name(city)
     end
 
-    return all_years, yearly_data, city, time_zone
+    return all_years, yearly_data, city, time_zone, month
 
 end
 
@@ -454,19 +474,19 @@ function get_hist_data(variable, city, i_row, lat, long, start_date, end_date)
 
     if ~isempty(city)
         input = CityHistInput(city,
-                              variable,
-                              i_row,
-                              start_date,
-                              end_date)
+            variable,
+            i_row,
+            start_date,
+            end_date)
         results = get_hourly_forecast(input)
         df_hist, location = results[1], results[2]
         time_zone = location.timezone
     else
         input = LocationHistInput(variable,
-                                  lat,
-                                  long,
-                                  start_date,
-                                  end_date)
+            lat,
+            long,
+            start_date,
+            end_date)
         results = get_hourly_forecast(input)
         df_hist, time_zone = results[1], results[2]
     end
@@ -484,10 +504,10 @@ function get_hist_temp_data(city, i_row, lat, long, start_date, end_date)
 
     if ~isempty(city)
         input = CityHistInput(city,
-                              "temperature_2m",
-                              i_row,
-                              start_date,
-                              end_date)
+            "temperature_2m",
+            i_row,
+            start_date,
+            end_date)
         results = get_hourly_forecast(input)
 
         df_temp, location = results[1], results[2]
@@ -497,10 +517,10 @@ function get_hist_temp_data(city, i_row, lat, long, start_date, end_date)
         df_app_temp = get_hourly_forecast(input)[1]
     else
         input = LocationHistInput("temperature_2m",
-                                  lat,
-                                  long,
-                                  start_date,
-                                  end_date)
+            lat,
+            long,
+            start_date,
+            end_date)
         results = get_hourly_forecast(input)
 
         df_temp, time_zone = results[1], results[2]
@@ -511,13 +531,13 @@ function get_hist_temp_data(city, i_row, lat, long, start_date, end_date)
 
     try
         insertcols!(df_temp,
-                    ncol(df_temp)+1,
-                    :APP_TEMP => df_app_temp[!, :FORECAST])
+            ncol(df_temp) + 1,
+            :APP_TEMP => df_app_temp[!, :FORECAST])
     catch
         @info "Unable to add apparent temperature, value set to zeros!"
         insertcols!(df_temp,
-                    ncol(df_temp)+1,
-                    :APP_TEMP => fill(0.0, nrow(df_temp)))
+            ncol(df_temp) + 1,
+            :APP_TEMP => fill(0.0, nrow(df_temp)))
     end
 
     return df_temp, time_zone
@@ -549,11 +569,11 @@ function collect_all_data(city, i_row, lat, long, start_date, end_date)
 
     try
         df_temp, _ = get_hist_temp_data(city,
-                                        i_row,
-                                        lat,
-                                        long,
-                                        start_date,
-                                        end_date)
+            i_row,
+            lat,
+            long,
+            start_date,
+            end_date)
     catch
         @info "Unable to fetch historical data for hourly temperature"
     end
@@ -562,19 +582,19 @@ function collect_all_data(city, i_row, lat, long, start_date, end_date)
     push!(df_all, df_temp)
 
     variables = ["rain",
-                 "snowfall",
-                 "relativehumidity_2m",
-                 "windspeed_10m",
-                 "shortwave_radiation"]
+        "snowfall",
+        "relativehumidity_2m",
+        "windspeed_10m",
+        "shortwave_radiation"]
 
     for variable in variables
         df_data = try_catch_hist_data(variable,
-                                      city,
-                                      i_row,
-                                      lat,
-                                      long,
-                                      start_date,
-                                      end_date)
+            city,
+            i_row,
+            lat,
+            long,
+            start_date,
+            end_date)
 
         if ~isempty(df_data)
             rename!(df_data, Dict(:FORECAST => "$(variable)"))
@@ -587,7 +607,7 @@ function collect_all_data(city, i_row, lat, long, start_date, end_date)
     # ends up being stored as a blob
     for df_each in df_all
         df_each[!, :TIME] = map(x -> Dates.format(x, "yyyy-mm-dd HH:MM:SS"),
-                                df_each[!, :TIME])
+            df_each[!, :TIME])
     end
 
     return df_all
@@ -599,13 +619,13 @@ function save_to_db(df_input::DataFrame, db_name::String, table_name::String)
     db_save = SQLite.DB(db_name)
 
     SQLite.load!(df_input,
-                 db_save,
-                 table_name;
-                 temp = false,
-                 ifnotexists = false,
-                 replace = false,
-                 on_conflict = nothing,
-                 analyze = false)
+        db_save,
+        table_name;
+        temp=false,
+        ifnotexists=false,
+        replace=false,
+        on_conflict=nothing,
+        analyze=false)
 
 end
 
@@ -625,12 +645,12 @@ end
 #=function get_cities_lat_long(file::String)
 
 	all_lines  = readlines(file)
-	
+
 	city_name, time_zone = [String[] for i = 1:2]
 	lat, long  = [Float64[] for i = 1:2]
 
 	for line in all_lines
-		
+
 		line_parts = split(line, "\t")
 
 		# City name
@@ -651,5 +671,5 @@ end
 	                      LONGITUDE = long)
 
 	return df_cities
-	
+
 end=#
