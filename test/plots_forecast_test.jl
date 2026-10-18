@@ -10,8 +10,9 @@
     end
 
     @testset "plot_hourly_rain" begin
-        plt = plot_hourly_rain("Osaka", days = 3)
+        plt = plot_hourly_rain("Pas de la Casa", days = 3)
         @test sizeof(plt) > 0
+        @test occursin("Pas de la Casa", sprint(show, plt))
     end
 
     @testset "plot_hourly_snow" begin
@@ -167,7 +168,7 @@ end
 
 end
 
-@testitem "Plotting hourly forecast data with user preference" tags = [:plots, :forecast] begin
+@testitem "Plotting hourly forecast data with user preference" tags = [:plots, :forecast, :preferences] begin
 
     using Suppressor
 

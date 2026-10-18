@@ -192,7 +192,7 @@ end
 
 end
 
-@testitem "Plotting historical data with user preference" tags = [:plots, :history] begin
+@testitem "Plotting historical data with user preference" tags = [:plots, :history, :preferences] begin
 
     @testset "plot_hist_temp" begin
         set_city("Haldwani")

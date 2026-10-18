@@ -72,8 +72,6 @@ function plot_hist_temp(city::String = "",
 
     if isempty(city)
         city = ["lat:", "$(lat)", ", ", "long:", "$(long)"] |> join
-    else
-        city = fix_input_name(city)
     end
 
     plt = lineplot(
