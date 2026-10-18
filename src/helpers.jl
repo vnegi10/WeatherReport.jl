@@ -9,10 +9,7 @@ end
 
 function fetch_lat_long(city::String, i_row::Int64)
 
-    city = fix_input_name(city)
-
-    df_city = filter(row -> ~ismissing(row.CITY) &&
-            row.CITY == city, DF_CITIES)
+    df_city = match_city_rows(city)
 
     if nrow(df_city) > 1
         @info "More than one match found, showing report for location in row $(i_row)."
@@ -46,6 +43,22 @@ function fetch_lat_long(city::String, i_row::Int64)
 
 end
 
+function match_city_rows(city::String)
+
+    # Prefer exact matches so database entries that differ only by case remain distinct.
+    df_city = filter(row -> ~ismissing(row.CITY) &&
+            row.CITY == city, DF_CITIES)
+
+    if isempty(df_city)
+        normalized_city = lowercase(city)
+        df_city = filter(row -> ~ismissing(row.CITY) &&
+                lowercase(row.CITY) == normalized_city, DF_CITIES)
+    end
+
+    return df_city
+
+end
+
 function closest_match(search_string, valid_list)
 
     # https://en.wikipedia.org/wiki/Levenshtein_distance
@@ -70,23 +83,9 @@ function csv_to_df(path::String)
 
 end
 
-function fix_input_name(input::String)
+function normalize_month_name(month::String)
 
-    # Check if there is a space in the name, e.g. "The Hague"
-    input_parts = split(input, " ")
-
-    if length(input_parts) == 1
-        fixed_name = [uppercase(input[1]),
-            lowercase(input[2:end])] |> join
-    else
-        for (i, value) in enumerate(input_parts)
-            input_parts[i] = [uppercase(value[1]),
-                lowercase(value[2:end])] |> join
-        end
-        fixed_name = join(input_parts, " ")
-    end
-
-    return fixed_name
+    return uppercasefirst(lowercase(month))
 
 end
 
@@ -129,8 +128,6 @@ function df_to_plot(city::String,
 
     if isempty(city)
         city = ["lat:", "$(lat)", ", ", "long:", "$(long)"] |> join
-    else
-        city = fix_input_name(city)
     end
 
     plt = lineplot(
@@ -173,8 +170,6 @@ function df_to_plot(city::String,
 
     if isempty(city)
         city = ["lat:", "$(lat)", ", ", "long:", "$(long)"] |> join
-    else
-        city = fix_input_name(city)
     end
 
     plt = lineplot(
@@ -306,7 +301,7 @@ end
 function compare_yearly_data(df_data::DataFrame, month::String)
 
     # Fix names with improper case, e.g. "jan", "JAn" -> "Jan"
-    month = fix_input_name(month)
+    month = normalize_month_name(month)
 
     df_month = filter(row -> occursin(month, 
                                       Dates.monthname(row.TIME)),
@@ -382,8 +377,6 @@ function get_plotting_data(variable, city, i_row, lat, long, year)
 
     if isempty(city)
         city = ["lat:", "$(lat)", ", ", "long:", "$(long)"] |> join
-    else
-        city = fix_input_name(city)
     end
 
     return all_months, monthly_data, city, time_zone
@@ -427,8 +420,6 @@ function get_plotting_data(variable, city, i_row, lat, long, month, num_years)
 
     if isempty(city)
         city = ["lat:", "$(lat)", ", ", "long:", "$(long)"] |> join
-    else
-        city = fix_input_name(city)
     end
 
     return all_years, yearly_data, city, time_zone, month

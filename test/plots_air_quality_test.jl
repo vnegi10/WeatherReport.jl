@@ -69,7 +69,7 @@ end
 
 end
 
-@testitem "Plotting air quality data with user preference" tags = [:plots, :air] begin
+@testitem "Plotting air quality data with user preference" tags = [:plots, :air, :preferences] begin
 
     @testset "plot_hourly_pm" begin
         set_city("Bengaluru")

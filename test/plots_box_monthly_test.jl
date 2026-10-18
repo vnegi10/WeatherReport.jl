@@ -168,7 +168,7 @@ end
 
 end
 
-@testitem "Box plots of monthly data with user preference" tags = [:plots, :box] begin
+@testitem "Box plots of monthly data with user preference" tags = [:plots, :box, :preferences] begin
 
     @testset "plot_box_windspeed" begin
         set_city("Amsterdam")

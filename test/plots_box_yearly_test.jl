@@ -192,7 +192,7 @@ end
 
 end
 
-@testitem "Box plots of yearly data with user preference" tags = [:plots, :box] begin
+@testitem "Box plots of yearly data with user preference" tags = [:plots, :box, :preferences] begin
 
     @testset "compare_box_windspeed" begin
         set_city("Copenhagen")
